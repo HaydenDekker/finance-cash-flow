@@ -14,5 +14,9 @@ public record Transaction(
 		return formatter.format(localDate) + "-" + amount() + "-" + description();
 	}
 	
+	public String dateString() {
+		return localDate.format(formatter);
+	}
+	
 	
 }

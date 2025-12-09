@@ -21,10 +21,11 @@ A personal finance management tool for tracking expenses, analyzing historical d
 
 ## Testing Strategy
 Initial tests for the `historical averaging` feature:
-- (complete) **Data Import**: Validates CSV import from bank transactions list.
+- (complete) **Data Import**: Validates CSV import from bank transactions list. Validate CSV files can be split into a list of CSV lines as string.
 - (complete) **Category Allocation** Tests categorization. Inputs: Transactions without categories (e.g., 'groceries'); outputs: Correctly assigned to Food & Groceries.
 - (complete) **Average Calculation** Interpolate historical spend for set of transactions. Check that a reasonable estimate is produced given set of test data.
-- **System Test - Historical Averaging** importing data, then assessing the average over a time.
+- (In progress) **System Test - Historical Averaging** importing data, then assessing the average over a time.
+- (In progress) View Data Import - Display raw transaction data in UI grid. Upload CSV files.
 
 ## Future Goals
 - Enhanced LLM-powered expense categorization
