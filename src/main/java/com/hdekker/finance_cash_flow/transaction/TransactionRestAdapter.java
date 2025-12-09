@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.hdekker.finance_cash_flow.Transaction;
+import com.hdekker.finance_cash_flow.TransactionPersister;
+import com.hdekker.finance_cash_flow.TransactionReader;
 
 @RestController
 public class TransactionRestAdapter {

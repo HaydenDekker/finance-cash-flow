@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.hdekker.finance_cash_flow.Transaction;
+import com.hdekker.finance_cash_flow.TransactionPersister;
+import com.hdekker.finance_cash_flow.TransactionReader;
 
 @SpringBootTest
 public class TransactionDatabaseTest {

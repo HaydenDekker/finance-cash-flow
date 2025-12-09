@@ -8,7 +8,7 @@ public class TransactionTestData {
 	
 	String stubDescription = "sweets";
 	LocalDate date = LocalDate.now();
-	Transaction stub = new Transaction(
+	public Transaction stub = new Transaction(
 			date, 
 			0.0, 
 			stubDescription);

@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.hdekker.finance_cash_flow.Transaction;
+import com.hdekker.finance_cash_flow.TransactionPersister;
 import com.hdekker.finance_cash_flow.transaction.database.TransactionEntitiy;
 import com.hdekker.finance_cash_flow.transaction.database.TransactionEntityRepository;
 
