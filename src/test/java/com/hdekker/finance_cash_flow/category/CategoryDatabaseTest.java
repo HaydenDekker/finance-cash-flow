@@ -12,7 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import com.hdekker.finance_cash_flow.CategorisedTransactionDeleter;
 import com.hdekker.finance_cash_flow.CategorisedTransactionReader;
 import com.hdekker.finance_cash_flow.CategoryAllocator;
-import com.hdekker.finance_cash_flow.CatorgarisedTransaction;
+import com.hdekker.finance_cash_flow.CatorgorisedTransaction;
 import com.hdekker.finance_cash_flow.TransactionCategory;
 import com.hdekker.finance_cash_flow.TransactionPersister;
 import com.hdekker.finance_cash_flow.transaction.TransactionTestData;
@@ -36,7 +36,7 @@ public class CategoryDatabaseTest {
 	public void canWrtieReadCategoryData() {
 		
 		TransactionTestData data = new TransactionTestData();
-		CatorgarisedTransaction ct = new CatorgarisedTransaction(
+		CatorgorisedTransaction ct = new CatorgorisedTransaction(
 				data.stub, 
 				TransactionCategory.ENTERTAINMENT, 
 				LocalDateTime.now());
@@ -48,12 +48,12 @@ public class CategoryDatabaseTest {
 		assertThat(ct)
 			.isNotNull();
 		
-		List<CatorgarisedTransaction> list = categorisedTransactionReader.list();
+		List<CatorgorisedTransaction> list = categorisedTransactionReader.list();
 		assertThat(list)
 			.hasSizeGreaterThan(0);
 		
 		categorisedTransactionDeleter.delete(ct);
-		List<CatorgarisedTransaction> listAfterDeletion = categorisedTransactionReader.list();
+		List<CatorgorisedTransaction> listAfterDeletion = categorisedTransactionReader.list();
 		assertThat(listAfterDeletion.size())
 			.isLessThan(list.size());
 		

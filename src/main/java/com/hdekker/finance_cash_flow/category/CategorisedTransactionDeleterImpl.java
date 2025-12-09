@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.hdekker.finance_cash_flow.CategorisedTransactionDeleter;
-import com.hdekker.finance_cash_flow.CatorgarisedTransaction;
+import com.hdekker.finance_cash_flow.CatorgorisedTransaction;
 import com.hdekker.finance_cash_flow.category.database.CatorgarisedTransactionEntity;
 import com.hdekker.finance_cash_flow.category.database.CatorgarisedTransactionRepository;
 
@@ -15,7 +15,7 @@ public class CategorisedTransactionDeleterImpl implements CategorisedTransaction
 	CatorgarisedTransactionRepository repo;
 	
 	@Override
-	public void delete(CatorgarisedTransaction transaction) {
+	public void delete(CatorgorisedTransaction transaction) {
 		repo.delete(CatorgarisedTransactionEntity.from(transaction));
 	}
 

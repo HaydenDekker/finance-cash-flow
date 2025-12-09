@@ -2,7 +2,6 @@ package com.hdekker.finance_cash_flow.transaction;
 
 import static org.assertj.core.api.Assertions.*;
 
-import java.time.LocalDate;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;

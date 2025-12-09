@@ -1,15 +1,12 @@
 package com.hdekker.finance_cash_flow.category.database;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-import com.hdekker.finance_cash_flow.CatorgarisedTransaction;
+import com.hdekker.finance_cash_flow.CatorgorisedTransaction;
 import com.hdekker.finance_cash_flow.TransactionCategory;
 import com.hdekker.finance_cash_flow.transaction.database.TransactionEntitiy;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToOne;
 
@@ -61,7 +58,7 @@ public class CatorgarisedTransactionEntity {
 		this.categoryTimeStamp = categoryTimeStamp;
 	}
 
-	public static CatorgarisedTransactionEntity from(CatorgarisedTransaction ct) {
+	public static CatorgarisedTransactionEntity from(CatorgorisedTransaction ct) {
 		
 	    CatorgarisedTransactionEntity e = new CatorgarisedTransactionEntity();
 	    e.setId(ct.transaction().createId());
@@ -72,9 +69,9 @@ public class CatorgarisedTransactionEntity {
 	    
 	}
 	
-	public CatorgarisedTransaction toCatorgarisedTransaction() {
+	public CatorgorisedTransaction toCatorgarisedTransaction() {
 		
-	    return new CatorgarisedTransaction(
+	    return new CatorgorisedTransaction(
 	    		getTransaction().toTransaction(), 
 	    		getCategory(), 
 	    		getCategoryTimeStamp());

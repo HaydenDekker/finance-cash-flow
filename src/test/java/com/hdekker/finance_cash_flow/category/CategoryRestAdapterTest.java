@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.hdekker.finance_cash_flow.CategorisedTransactionDeleter;
-import com.hdekker.finance_cash_flow.CatorgarisedTransaction;
+import com.hdekker.finance_cash_flow.CatorgorisedTransaction;
 import com.hdekker.finance_cash_flow.TransactionCategory;
 import com.hdekker.finance_cash_flow.TransactionPersister;
 import com.hdekker.finance_cash_flow.transaction.TransactionTestData;
@@ -35,8 +35,8 @@ class CategoryRestAdapterTest {
     	
     	transactionPersister.persist(data.stub);
     	
-    	CatorgarisedTransaction tran = categoryRestAdapter.set(
-    			new CatorgarisedTransaction(
+    	CatorgorisedTransaction tran = categoryRestAdapter.set(
+    			new CatorgorisedTransaction(
     					data.stub, 
     					TransactionCategory.ENTERTAINMENT, 
     					dateTime));
@@ -47,7 +47,7 @@ class CategoryRestAdapterTest {
     	assertThat(dateTime)
     		.isEqualTo(tran.assignmentTimeStamp());
     	
-    	List<CatorgarisedTransaction> listAssignements = categoryRestAdapter.list();
+    	List<CatorgorisedTransaction> listAssignements = categoryRestAdapter.list();
     	assertThat(listAssignements)
     		.hasSize(1);
     	

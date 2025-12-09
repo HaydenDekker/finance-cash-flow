@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.hdekker.finance_cash_flow.CategorisedTransactionReader;
 import com.hdekker.finance_cash_flow.CategoryAllocator;
-import com.hdekker.finance_cash_flow.CatorgarisedTransaction;
+import com.hdekker.finance_cash_flow.CatorgorisedTransaction;
 
 @RestController
 public class CategoryRestAdapter {
@@ -22,13 +22,13 @@ public class CategoryRestAdapter {
 	CategorisedTransactionReader categorisedTransactionReader;
 
 	@PostMapping("/category")
-	public CatorgarisedTransaction set(
-			@RequestBody CatorgarisedTransaction transaction) {
+	public CatorgorisedTransaction set(
+			@RequestBody CatorgorisedTransaction transaction) {
 		return allocator.allocate(transaction);
 	}
 
 	@GetMapping("/category")
-	public List<CatorgarisedTransaction> list() {
+	public List<CatorgorisedTransaction> list() {
 		return categorisedTransactionReader.list();
 	}
 
