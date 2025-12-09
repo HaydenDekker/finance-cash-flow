@@ -3,22 +3,20 @@ package com.hdekker.finance_cash_flow.category;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.hdekker.finance_cash_flow.CategoryAllocator;
+import com.hdekker.finance_cash_flow.CategorisedTransactionDeleter;
 import com.hdekker.finance_cash_flow.CatorgarisedTransaction;
 import com.hdekker.finance_cash_flow.category.database.CatorgarisedTransactionEntity;
 import com.hdekker.finance_cash_flow.category.database.CatorgarisedTransactionRepository;
 
 @Component
-public class CategoryAllocatorImpl implements CategoryAllocator{
-	
+public class CategorisedTransactionDeleterImpl implements CategorisedTransactionDeleter{
+
 	@Autowired
 	CatorgarisedTransactionRepository repo;
-
+	
 	@Override
-	public CatorgarisedTransaction allocate(CatorgarisedTransaction transaction) {
-		return repo.save(CatorgarisedTransactionEntity.from(transaction)).toCatorgarisedTransaction();
+	public void delete(CatorgarisedTransaction transaction) {
+		repo.delete(CatorgarisedTransactionEntity.from(transaction));
 	}
 
-	
-	
 }

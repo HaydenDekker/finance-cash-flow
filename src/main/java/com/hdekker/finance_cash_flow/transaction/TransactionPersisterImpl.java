@@ -17,9 +17,9 @@ public class TransactionPersisterImpl implements TransactionPersister {
 	@Override
 	public Transaction persist(Transaction transaction) {
 		
-		return TransactionEntitiy.to(
-				repo.save(
-					TransactionEntitiy.from(transaction)));
+		return repo.save(
+					TransactionEntitiy.from(transaction))
+				.toTransaction();
 	}
 	
 	

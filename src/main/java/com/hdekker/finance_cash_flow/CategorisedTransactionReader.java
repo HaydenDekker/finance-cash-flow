@@ -2,6 +2,6 @@ package com.hdekker.finance_cash_flow;
 
 import java.util.List;
 
-public interface CategorgarisedTransactionReader {
+public interface CategorisedTransactionReader {
 	List<CatorgarisedTransaction> list();
 }

@@ -19,7 +19,7 @@ public class TransactionReaderImpl implements TransactionReader{
 	@Override
 	public List<Transaction> list() {
 		return repo.findAll().stream()
-				.map(te-> TransactionEntitiy.to(te))
+				.map(TransactionEntitiy::toTransaction)
 				.toList();
 	}
 

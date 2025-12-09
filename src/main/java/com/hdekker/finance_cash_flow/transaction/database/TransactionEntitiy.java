@@ -77,11 +77,11 @@ public class TransactionEntitiy {
 		return te;
 	}
 
-	public static Transaction to(TransactionEntitiy entity) {
+	public Transaction toTransaction() {
 		return new Transaction(
-				entity.getLocalDate(),
-				entity.getAmount(), 
-				entity.getDescription());
+				getLocalDate(),
+				getAmount(), 
+				getDescription());
 	}
 	
 	

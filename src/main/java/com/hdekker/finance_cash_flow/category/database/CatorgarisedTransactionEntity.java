@@ -4,60 +4,45 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import com.hdekker.finance_cash_flow.CatorgarisedTransaction;
-import com.hdekker.finance_cash_flow.Transaction;
 import com.hdekker.finance_cash_flow.TransactionCategory;
+import com.hdekker.finance_cash_flow.transaction.database.TransactionEntitiy;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
 
 @Entity
 public class CatorgarisedTransactionEntity {
 	
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    
+	@Id
+    private String id;
 
     public CatorgarisedTransactionEntity() {}
     
-    String transactionId;
-    LocalDate date;
-    Double amount;
-    String description;
+    @OneToOne
+    TransactionEntitiy transaction;
     TransactionCategory category;
     LocalDateTime categoryTimeStamp;
     
-	public String getTransactionId() {
-		return transactionId;
+    
+    
+	public String getId() {
+		return id;
 	}
 
-	public void setTransactionId(String transactionId) {
-		this.transactionId = transactionId;
+	public void setId(String id) {
+		this.id = id;
 	}
 
-	public LocalDate getDate() {
-		return date;
+	public TransactionEntitiy getTransaction() {
+		return transaction;
 	}
 
-	public void setDate(LocalDate date) {
-		this.date = date;
-	}
-
-	public Double getAmount() {
-		return amount;
-	}
-
-	public void setAmount(Double amount) {
-		this.amount = amount;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
+	public void setTransaction(TransactionEntitiy transaction) {
+		this.transaction = transaction;
 	}
 
 	public TransactionCategory getCategory() {
@@ -77,26 +62,23 @@ public class CatorgarisedTransactionEntity {
 	}
 
 	public static CatorgarisedTransactionEntity from(CatorgarisedTransaction ct) {
+		
 	    CatorgarisedTransactionEntity e = new CatorgarisedTransactionEntity();
-	    String transactionId = ct.transaction().createId();
-	    e.setTransactionId(transactionId);
+	    e.setId(ct.transaction().createId());
+	    e.setTransaction(TransactionEntitiy.from(ct.transaction()));
 	    e.setCategoryTimeStamp(ct.assignmentTimeStamp());
-	    e.setDescription(ct.transaction().description());
-	    e.setAmount(ct.transaction().amount());
-	    e.setDate(ct.transaction().localDate());
 	    e.setCategory(ct.category());
 	    return e;
+	    
 	}
 	
-	public static CatorgarisedTransaction to(CatorgarisedTransactionEntity entity) {
-	    Transaction tx = new Transaction(
-	            entity.getDate(),
-	            entity.getAmount(),
-	            entity.getDescription());
+	public CatorgarisedTransaction toCatorgarisedTransaction() {
+		
 	    return new CatorgarisedTransaction(
-	    		tx, 
-	    		entity.getCategory(), 
-	    		entity.getCategoryTimeStamp());
+	    		getTransaction().toTransaction(), 
+	    		getCategory(), 
+	    		getCategoryTimeStamp());
+	    
 	}
 
 }
