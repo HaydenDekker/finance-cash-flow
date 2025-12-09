@@ -7,6 +7,11 @@ A personal finance management tool for tracking expenses, analyzing historical d
 - **7 Core Expense Categories**:
   - Housing, Utilities & Services, Food & Groceries, Transportation
   - Personal Care & Health, Entertainment, Savings & Debt
+- **Category Attribute***
+  - Frequency: Expenses have a transaction frequency associated
+  - Type: transactions expenses have a type of truly fixed, known variable, truly variable
+  - Necessity: Required, Discretionary
+
 - **Forecasting System**:
   - Historical averaging (3, 6, 12 months)
   - Zero-Based Budget Check
@@ -18,7 +23,8 @@ A personal finance management tool for tracking expenses, analyzing historical d
 Initial tests for the `historical averaging` feature:
 - (complete) **Data Import**: Validates CSV import from bank transactions list.
 - (complete) **Category Allocation** Tests categorization. Inputs: Transactions without categories (e.g., 'groceries'); outputs: Correctly assigned to Food & Groceries.
-- **Average Calculation** Confirms 1-month average. Inputs: 30 days of mock transactions; validates sum ÷ 30 = daily average.
+- (complete) **Average Calculation** Interpolate historical spend for set of transactions. Check that a reasonable estimate is produced given set of test data.
+- **System Test - Historical Averaging** importing data, then assessing the average over a time should.
 
 ## Future Goals
 - Enhanced LLM-powered expense categorization
