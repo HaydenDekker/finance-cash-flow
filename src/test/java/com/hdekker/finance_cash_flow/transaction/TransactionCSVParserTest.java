@@ -15,13 +15,19 @@ class TransactionCSVParserTest {
     void givenCSVTransactionString_parsesCsvTransaction() {
     	
     	TransactionCSVParser parser = new TransactionCSVParser();
-    	String descriptionStub = "PAYMENT TO TELSTRA SERVICES 0PME5S2S";
-        String mockData = "\"3/12/2025\",\"-80.2\",\"" + descriptionStub + "\"";
-        Optional<Transaction> actual = parser.importTransaction(mockData);
+    	TransactionTestData testData = new TransactionTestData();
+    	
+        Optional<Transaction> actual = parser.importTransaction(testData.mockCSVData);
         assertTrue(actual.isPresent());
-        assertEquals(descriptionStub, actual.get().description());
+        assertEquals(testData.descriptionStub, actual.get().description());
         assertThat(actual.get().localDate())
         	.isEqualTo(LocalDate.of(2025, 12, 3));
+        
+        actual = parser.importTransaction(testData.mockCSVDataDoubleDigitDay);
+        assertTrue(actual.isPresent());
+        assertEquals(testData.descriptionStub, actual.get().description());
+        assertThat(actual.get().localDate())
+        	.isEqualTo(LocalDate.of(2025, 12, 24));
         
     }
     

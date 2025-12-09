@@ -8,7 +8,7 @@ public record Transaction(
 	    double amount,
 	    String description) {
 	
-	final public static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+	final public static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/M/yyyy");
 	
 	public String createId() {
 		return formatter.format(localDate) + "-" + amount() + "-" + description();

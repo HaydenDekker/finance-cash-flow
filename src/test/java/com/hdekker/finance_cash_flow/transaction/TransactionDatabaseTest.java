@@ -20,24 +20,19 @@ public class TransactionDatabaseTest {
 	@Autowired
 	TransactionReader transactionReader;
 	
-	String stubDescription = "sweets";
-	LocalDate date = LocalDate.now();
-	Transaction stub = new Transaction(
-			date, 
-			0.0, 
-			stubDescription);
+	TransactionTestData transactionTestData = new TransactionTestData();
 	
 	@Test
 	public void givenTransaction_ExpectCanBeSavedAndReadFromDatabase() {
 		
-		Transaction transaction = transactionPersistor.persist(stub);
+		Transaction transaction = transactionPersistor.persist(transactionTestData.stub);
 		assertThat(transaction)
 			.isNotNull();
 		
 		List<Transaction> allTransactions = transactionReader.list();
 		
 		assertThat(allTransactions.stream()
-				.filter(t->t.description().contains(stubDescription))
+				.filter(t->t.description().contains(transactionTestData.stubDescription))
 				.findFirst())
 			.isPresent();
 		
