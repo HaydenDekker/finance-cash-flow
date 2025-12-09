@@ -1,25 +1,26 @@
 package com.hdekker.finance_cash_flow.category;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.hdekker.finance_cash_flow.CategoryAllocator;
+import com.hdekker.finance_cash_flow.CategorgarisedTransactionReader;
 import com.hdekker.finance_cash_flow.CatorgarisedTransaction;
 import com.hdekker.finance_cash_flow.category.database.CatorgarisedTransactionEntity;
 import com.hdekker.finance_cash_flow.category.database.CatorgarisedTransactionRepository;
 
 @Component
-public class CategoryAllocatorImpl implements CategoryAllocator{
-	
+public class CategorgarisedTransactionReaderImpl implements CategorgarisedTransactionReader {
+
 	@Autowired
 	CatorgarisedTransactionRepository repo;
-
+	
 	@Override
-	public CatorgarisedTransaction allocate(CatorgarisedTransaction transaction) {
-		return CatorgarisedTransactionEntity.to(
-				repo.save(CatorgarisedTransactionEntity.from(transaction)));
+	public List<CatorgarisedTransaction> list() {
+		return repo.findAll().stream()
+					.map(e-> CatorgarisedTransactionEntity.to(e))
+					.toList();
 	}
 
-	
-	
 }

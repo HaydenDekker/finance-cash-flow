@@ -17,7 +17,7 @@ A personal finance management tool for tracking expenses, analyzing historical d
 ## Testing Strategy
 Initial tests for the `historical averaging` feature:
 - (complete) **Data Import**: Validates CSV import from bank transactions list.
-- **Category Allocation** Tests categorization. Inputs: Transactions without categories (e.g., 'groceries'); outputs: Correctly assigned to Food & Groceries.
+- (complete) **Category Allocation** Tests categorization. Inputs: Transactions without categories (e.g., 'groceries'); outputs: Correctly assigned to Food & Groceries.
 - **Average Calculation** Confirms 1-month average. Inputs: 30 days of mock transactions; validates sum ÷ 30 = daily average.
 
 ## Future Goals
