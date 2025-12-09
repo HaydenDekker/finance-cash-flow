@@ -1,5 +1,7 @@
 package com.hdekker.finance_cash_flow.transaction.database;
 
+import java.time.LocalDate;
+
 import com.hdekker.finance_cash_flow.Transaction;
 
 import jakarta.persistence.Entity;
@@ -24,12 +26,20 @@ public class TransactionEntitiy {
 	
 	String date;
 	
+	LocalDate localDate;
+	
 	Double amount;
 	
 	String description;
 	
-	
-	
+	public LocalDate getLocalDate() {
+		return localDate;
+	}
+
+	public void setLocalDate(LocalDate localDate) {
+		this.localDate = localDate;
+	}
+
 	public String getDate() {
 		return date;
 	}
@@ -54,16 +64,12 @@ public class TransactionEntitiy {
 		this.description = description;
 	}
 
-	private static String createId(Transaction transaction) {
-		return transaction.date() + "-" + transaction.amount() + "-" + transaction.description();
-	}
-
 	public static TransactionEntitiy from(Transaction transaction) {
 		
-		String id = createId(transaction);
+		String id = transaction.createId();
 		
 		TransactionEntitiy te = new TransactionEntitiy();
-		te.setDate(transaction.date());
+		te.setLocalDate(transaction.localDate());
 		te.setDescription(transaction.description());
 		te.setAmount(transaction.amount());
 		te.setId(id);
@@ -72,7 +78,10 @@ public class TransactionEntitiy {
 	}
 
 	public static Transaction to(TransactionEntitiy entity) {
-		return new Transaction(entity.getDate(), entity.getAmount(), entity.getDescription());
+		return new Transaction(
+				entity.getLocalDate(),
+				entity.getAmount(), 
+				entity.getDescription());
 	}
 	
 	

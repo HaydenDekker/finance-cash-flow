@@ -2,6 +2,7 @@ package com.hdekker.finance_cash_flow.transaction;
 
 import java.io.IOException;
 import java.io.StringReader;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -39,8 +40,8 @@ public class TransactionCSVParser {
                 CSVRecord record = records.get(0);
                 
                 return Optional.of(
-                		new Transaction(
-                				record.get(0), 
+                		new Transaction( 
+                				LocalDate.from(Transaction.formatter.parse(record.get(0))),
                 				Double.valueOf(record.get(1)), 
                 				record.get(2)));
               
