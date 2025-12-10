@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.hdekker.finance_cash_flow.Transaction;
 import com.hdekker.finance_cash_flow.TransactionReader;
+import com.hdekker.finance_cash_flow.transaction.TransactionRestAdapter;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -34,22 +35,29 @@ public class TransactionViewer extends VerticalLayout implements AfterNavigation
 	
 	Grid<Transaction> transactionGrid = new Grid<Transaction>();
 	
+	@Autowired
+	TransactionRestAdapter restAdapter;
 	
 	Upload upload = new Upload(UploadHandler.toTempFile(
 			(UploadMetadata metadata, File file) -> {
 				log.info("Uploaded document.");
+				restAdapter.upload(file);
 			}
 		));
 
 
 	public TransactionViewer() {
+		
 		add(new H2("Transactions"));
 		add(upload);
 		add(transactionGrid);
+		setHeightFull();
 		
 		transactionGrid.addColumn(Transaction::dateString).setHeader("Date");
 		transactionGrid.addColumn(Transaction::amount).setHeader("Amount");
 		transactionGrid.addColumn(Transaction::description).setHeader("Payee Description");
+		
+		transactionGrid.setHeightFull();
 		
 	}
 

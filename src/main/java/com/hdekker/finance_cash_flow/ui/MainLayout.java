@@ -12,7 +12,8 @@ public class MainLayout extends VerticalLayout implements RouterLayout {
 	private static final long serialVersionUID = 1L;
 
 	public MainLayout() {
-        add(new H1("Cash Flow Budgeter"));
+		setHeightFull();
+        add(new H1("Cash Flow Banana"));
     }
 
 }

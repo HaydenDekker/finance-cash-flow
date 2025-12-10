@@ -1,5 +1,8 @@
 package com.hdekker.finance_cash_flow.transaction;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.List;
 import java.util.Optional;
 
@@ -44,11 +47,16 @@ public class TransactionRestAdapter {
 		Optional<Transaction> transaction = transactionCSVParser.importTransaction(transactionCSVItem);
 		if(transaction.isEmpty()) {	
 			throw new ResponseStatusException(
-					HttpStatus.BAD_REQUEST, 
-					"The provided CSV item could not be parsed into a valid Transaction."
+					HttpStatus.BAD_REQUEST,
+					"The provided CSV item could not be parsed into a valid Transaction. Item: " + transactionCSVItem
 				);
 		}
 		return transactionPersister.persist(transaction.get());
+	}
+
+	public void upload(File file) throws FileNotFoundException {
+		List<String> csvItems = TransactionCSVFileReader.readAll(new FileInputStream(file));
+		csvItems.forEach(item-> save(item));
 	}
 	
 }

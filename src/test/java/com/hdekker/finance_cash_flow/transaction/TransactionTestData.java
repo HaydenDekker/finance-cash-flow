@@ -14,6 +14,11 @@ public class TransactionTestData {
 			0.0, 
 			stubDescription);
 	
+	public Transaction stub2 = new Transaction(
+			date.plusDays(1), 
+			10.0, 
+			stubDescription + " second.");
+	
 	String descriptionStub = "PAYMENT TO TELSTRA SERVICES 0PME5S2S";
     String mockCSVData = "\"3/12/2025\",\"-80.2\",\"" + descriptionStub + "\"";
     String mockCSVDataDoubleDigitDay = "\"24/12/2025\",\"-80.2\",\"" + descriptionStub + "\"";

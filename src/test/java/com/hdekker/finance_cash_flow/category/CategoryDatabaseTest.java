@@ -13,6 +13,8 @@ import com.hdekker.finance_cash_flow.CategorisedTransactionDeleter;
 import com.hdekker.finance_cash_flow.CategorisedTransactionReader;
 import com.hdekker.finance_cash_flow.CategoryAllocator;
 import com.hdekker.finance_cash_flow.CatorgorisedTransaction;
+import com.hdekker.finance_cash_flow.MissingCategorisedTransactionReader;
+import com.hdekker.finance_cash_flow.Transaction;
 import com.hdekker.finance_cash_flow.TransactionCategory;
 import com.hdekker.finance_cash_flow.TransactionPersister;
 import com.hdekker.finance_cash_flow.transaction.TransactionTestData;
@@ -31,6 +33,9 @@ public class CategoryDatabaseTest {
 	
 	@Autowired
 	CategorisedTransactionDeleter categorisedTransactionDeleter;
+	
+	@Autowired
+	MissingCategorisedTransactionReader missingCategorisedTransactionReader;
 	
 	@Test
 	public void canWrtieReadCategoryData() {
@@ -57,6 +62,29 @@ public class CategoryDatabaseTest {
 		assertThat(listAfterDeletion.size())
 			.isLessThan(list.size());
 		
+		
+	}
+	
+	@Test
+	public void canGetTransactionsWithoutACategoryAllocation() {
+		
+		TransactionTestData data = new TransactionTestData();
+		CatorgorisedTransaction ct = new CatorgorisedTransaction(
+				data.stub, 
+				TransactionCategory.ENTERTAINMENT, 
+				LocalDateTime.now());
+		
+		// need transient saved beforehand
+		transactionPersister.persist(data.stub);
+		transactionPersister.persist(data.stub2); // will have no associated CT
+		ct = categoryAllocator.allocate(ct);
+		
+		List<Transaction> listMissing = missingCategorisedTransactionReader.findAll();
+		assertThat(listMissing)
+			.hasSize(1);
+		assertThat(listMissing.get(0)
+				.description())
+			.isEqualTo(data.stub2.description());
 		
 	}
 

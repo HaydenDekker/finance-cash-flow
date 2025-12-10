@@ -25,7 +25,8 @@ Initial tests for the `historical averaging` feature:
 - (complete) **Category Allocation** Tests categorization. Inputs: Transactions without categories (e.g., 'groceries'); outputs: Correctly assigned to Food & Groceries.
 - (complete) **Average Calculation** Interpolate historical spend for set of transactions. Check that a reasonable estimate is produced given set of test data.
 - (In progress) **System Test - Historical Averaging** importing data, then assessing the average over a time.
-- (In progress) View Data Import - Display raw transaction data in UI grid. Upload CSV files.
+- (Complete) View Data Import - Display raw transaction data in UI grid. Upload CSV files.
+- View - Transaction Classification - classify transactions to category, frequency, necessity.
 
 ## Future Goals
 - Enhanced LLM-powered expense categorization
