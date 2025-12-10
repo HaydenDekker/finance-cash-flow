@@ -19,6 +19,7 @@ import com.hdekker.finance_cash_flow.CategorisedTransaction.Necessity;
 import com.hdekker.finance_cash_flow.MissingCategorisedTransactionReader;
 import com.hdekker.finance_cash_flow.Transaction;
 import com.hdekker.finance_cash_flow.TransactionCategory;
+import com.hdekker.finance_cash_flow.TransactionDeleter;
 import com.hdekker.finance_cash_flow.TransactionPersister;
 import com.hdekker.finance_cash_flow.transaction.TestData;
 
@@ -33,6 +34,9 @@ public class CategoryDatabaseTest {
 	
 	@Autowired
 	TransactionPersister transactionPersister;
+	
+	@Autowired
+	TransactionDeleter transactionDeleter;
 	
 	@Autowired
 	CategorisedTransactionDeleter categorisedTransactionDeleter;
@@ -68,6 +72,7 @@ public class CategoryDatabaseTest {
 		assertThat(listAfterDeletion.size())
 			.isLessThan(list.size());
 		
+		transactionDeleter.delete(data.stub);
 		
 	}
 	
@@ -81,7 +86,7 @@ public class CategoryDatabaseTest {
 				Necessity.REQUIRED,
 				FinancialFrequency.AD_HOC,
 				ExpenseType.FIXED,
-				LocalDateTime.now());
+				LocalDateTime.now()); 
 		
 		// need transient saved beforehand
 		transactionPersister.persist(data.stub);
@@ -95,6 +100,10 @@ public class CategoryDatabaseTest {
 		assertThat(listMissing.get(0)
 				.description())
 			.isEqualTo(data.stub2.description());
+		
+		categorisedTransactionDeleter.delete(ct);
+		transactionDeleter.delete(data.stub);
+		transactionDeleter.delete(data.stub2);
 		
 	}
 

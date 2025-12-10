@@ -9,12 +9,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.hdekker.finance_cash_flow.Transaction;
+import com.hdekker.finance_cash_flow.TransactionDeleter;
 
 @SpringBootTest
 public class TransactionRestAdapterTest {
 	
 	@Autowired
 	TransactionRestAdapter transactionRestAdapter;
+	
+	@Autowired
+	TransactionDeleter transactionDeleter;
 	
 	@Test
 	public void canAddTransaction() {
@@ -28,6 +32,8 @@ public class TransactionRestAdapterTest {
 		assertThat(all)
 			.hasSize(1);
 		
+		transactionDeleter.delete(saved);
+		
 	}
 	
 	@Test
@@ -38,6 +44,8 @@ public class TransactionRestAdapterTest {
 		Transaction saved = transactionRestAdapter.save(csvItem);
 		assertThat(saved)
 			.isNotNull();
+		
+		transactionDeleter.delete(saved);
 		
 	}
 

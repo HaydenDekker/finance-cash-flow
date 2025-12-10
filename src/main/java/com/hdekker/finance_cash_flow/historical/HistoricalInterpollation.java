@@ -8,6 +8,7 @@ import java.util.TreeMap;
 
 import com.hdekker.finance_cash_flow.Transaction;
 import com.hdekker.finance_cash_flow.app.actual.HistoricalSummer;
+import com.hdekker.finance_cash_flow.app.actual.HistoricalSummer.SummedTransactions;
 import com.hdekker.finance_cash_flow.app.forecast.HistoricalInterpollationResult;
 import com.hdekker.finance_cash_flow.app.forecast.HistoricalInterpollationResult.QuadraticCoefficients;
 import com.hdekker.finance_cash_flow.app.forecast.HistoricalInterpollationResult.QuadraticResult;
@@ -16,9 +17,9 @@ public class HistoricalInterpollation {
 
     public static HistoricalInterpollationResult interpollate(List<Transaction> transactions) {
     	
-    	Map<YearMonth, Double> data = HistoricalSummer.calculateTotal(transactions);
+    	Map<YearMonth, SummedTransactions> data = HistoricalSummer.calculateTotal(transactions);
     	
-    	TreeMap<YearMonth, Double> sortedData = new TreeMap<>(data);
+    	TreeMap<YearMonth, SummedTransactions> sortedData = new TreeMap<>(data);
         if (sortedData.size() < 3) {
             throw new IllegalArgumentException("Quadratic fit requires at least 3 data points.");
         }
@@ -36,10 +37,10 @@ public class HistoricalInterpollation {
         double sum_x2y = 0;
         
         // 2. Calculate Summations by converting YearMonth to Time Index (x)
-        for (Map.Entry<YearMonth, Double> entry : sortedData.entrySet()) {
+        for (Map.Entry<YearMonth, SummedTransactions> entry : sortedData.entrySet()) {
             // x: The index (number of months since the start month)
             double x = ChronoUnit.MONTHS.between(startMonth, entry.getKey()); 
-            double y = entry.getValue();
+            double y = entry.getValue().amount();
 
             double x2 = x * x;
             double x3 = x2 * x;

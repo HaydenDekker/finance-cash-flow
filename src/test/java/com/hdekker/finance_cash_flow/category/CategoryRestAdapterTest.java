@@ -11,6 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import com.hdekker.finance_cash_flow.CategorisedTransactionDeleter;
 import com.hdekker.finance_cash_flow.CategorisedTransaction;
 import com.hdekker.finance_cash_flow.TransactionCategory;
+import com.hdekker.finance_cash_flow.TransactionDeleter;
 import com.hdekker.finance_cash_flow.TransactionPersister;
 import com.hdekker.finance_cash_flow.CategorisedTransaction.ExpenseType;
 import com.hdekker.finance_cash_flow.CategorisedTransaction.FinancialFrequency;
@@ -28,6 +29,9 @@ class CategoryRestAdapterTest {
 	
 	@Autowired
 	CategorisedTransactionDeleter categorisedTransactionDeleter;
+	
+	@Autowired
+	TransactionDeleter transactionDeleter;
 	
     @Test
     void givenTransaction_ExpectCanAssignToCategory() {
@@ -58,6 +62,7 @@ class CategoryRestAdapterTest {
     		.hasSize(1);
     	
     	categorisedTransactionDeleter.delete(tran);
+    	transactionDeleter.delete(data.stub);
     	
     }
     

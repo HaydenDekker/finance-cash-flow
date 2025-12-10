@@ -10,6 +10,7 @@ import java.util.Map;
 import org.junit.jupiter.api.Test;
 
 import com.hdekker.finance_cash_flow.Transaction;
+import com.hdekker.finance_cash_flow.app.actual.HistoricalSummer.SummedTransactions;
 
 public class HistoricalSummerTest {
     
@@ -24,9 +25,9 @@ public class HistoricalSummerTest {
 
     @Test
     public void givenListOfTransactions_ExpectMapProduced() {
-        Map<YearMonth, Double> result = HistoricalSummer.calculateTotal(testTransactions());
+        Map<YearMonth, SummedTransactions> result = HistoricalSummer.calculateTotal(testTransactions());
         assertThat(result.containsKey(YearMonth.of(2025, 4)));
-        assertThat(result.get(YearMonth.of(2025, 4)))
+        assertThat(result.get(YearMonth.of(2025, 4)).amount())
         	.isEqualTo(150.0);
     }
 }
