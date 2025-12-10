@@ -8,10 +8,10 @@ import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.hdekker.finance_cash_flow.CatorgorisedTransaction;
-import com.hdekker.finance_cash_flow.CatorgorisedTransaction.ExpenseType;
-import com.hdekker.finance_cash_flow.CatorgorisedTransaction.FinancialFrequency;
-import com.hdekker.finance_cash_flow.CatorgorisedTransaction.Necessity;
+import com.hdekker.finance_cash_flow.CategorisedTransaction;
+import com.hdekker.finance_cash_flow.CategorisedTransaction.ExpenseType;
+import com.hdekker.finance_cash_flow.CategorisedTransaction.FinancialFrequency;
+import com.hdekker.finance_cash_flow.CategorisedTransaction.Necessity;
 import com.hdekker.finance_cash_flow.TransactionCategory;
 import com.hdekker.finance_cash_flow.category.CategoryRestAdapter;
 import com.vaadin.flow.component.button.Button;
@@ -38,43 +38,43 @@ public class TransactionClassifier extends VerticalLayout implements AfterNaviga
 	 */
 	private static final long serialVersionUID = -774997510488454028L;
 
-	Grid<CatorgorisedTransaction> catorgorisedTransaction = new Grid<CatorgorisedTransaction>();
+	Grid<CategorisedTransaction> categorisedTransaction = new Grid<CategorisedTransaction>();
 	
 	@Autowired
 	CategoryRestAdapter categoryRestAdapter;
 	
 	public TransactionClassifier() {
 		add(new H2("Transaction Classifier"));
-		add(catorgorisedTransaction);	
+		add(categorisedTransaction);	
 		setHeightFull();
 		
-		catorgorisedTransaction.addColumn(ct->{
+		categorisedTransaction.addColumn(ct->{
 			return ct.transaction().dateString() + " " + ct.transaction().amount() + " " + ct.transaction().description();
 		}).setHeader("Transaction");
 		
-		catorgorisedTransaction.addColumn(ct->{
+		categorisedTransaction.addColumn(ct->{
 			if(ct.category()==null) return "";
 			return ct.category().name();
 		}).setHeader("Category");
 		
-		catorgorisedTransaction.addColumn(ct->{
+		categorisedTransaction.addColumn(ct->{
 			if(ct.necessity()==null) return "";
 			return ct.necessity().name();
 		}).setHeader("Necessity");
 		
-		catorgorisedTransaction.addColumn(ct->{
+		categorisedTransaction.addColumn(ct->{
 			if(ct.expenseType()==null) return "";
 			return ct.expenseType().name();
 		}).setHeader("Expense Type");
 		
-		catorgorisedTransaction.addColumn(ct->{
+		categorisedTransaction.addColumn(ct->{
 			if(ct.financialFrequency()==null) return "";
 			return ct.financialFrequency().name();
 		}).setHeader("Financial Frequency");
 		
-		catorgorisedTransaction.setHeightFull();
+		categorisedTransaction.setHeightFull();
 		
-		catorgorisedTransaction.setItemDetailsRenderer(new ComponentRenderer<FormLayout, CatorgorisedTransaction>(FormLayout::new, (div, ct)->{
+		categorisedTransaction.setItemDetailsRenderer(new ComponentRenderer<FormLayout, CategorisedTransaction>(FormLayout::new, (div, ct)->{
 			
 			ComboBox<TransactionCategory> tc = new ComboBox<TransactionCategory>("Transaction Category");
 			div.add(tc);
@@ -100,7 +100,7 @@ public class TransactionClassifier extends VerticalLayout implements AfterNaviga
 			
 			save.addClickListener(e->{
 				
-				CatorgorisedTransaction newCT = new CatorgorisedTransaction(
+				CategorisedTransaction newCT = new CategorisedTransaction(
 						ct.transaction(), 
 						tc.getValue(),
 						discretionary.getValue()==true? Necessity.DISCRETIONARY: Necessity.REQUIRED,
@@ -121,7 +121,7 @@ public class TransactionClassifier extends VerticalLayout implements AfterNaviga
 		
 		Mono.delay(ofSeconds)
 			.subscribe(l->{
-				catorgorisedTransaction.getUI().ifPresent(ui->{
+				categorisedTransaction.getUI().ifPresent(ui->{
 					ui.access(()->{
 						setTransactions();
 						ui.push();
@@ -131,16 +131,16 @@ public class TransactionClassifier extends VerticalLayout implements AfterNaviga
 		
 	}
 
-	public void saveCategoryTransaction(CatorgorisedTransaction categorisedTransaction) {
+	public void saveCategoryTransaction(CategorisedTransaction categorisedTransaction) {
 		categoryRestAdapter.set(categorisedTransaction);
 	}
 	
 	void setTransactions() {
 		
-		List<CatorgorisedTransaction> list = categoryRestAdapter.list();
-		List<CatorgorisedTransaction> withoutAllocation = categoryRestAdapter.listIncomplete();
+		List<CategorisedTransaction> list = categoryRestAdapter.list();
+		List<CategorisedTransaction> withoutAllocation = categoryRestAdapter.listIncomplete();
 		
-		catorgorisedTransaction.setItems(Stream.concat(list.stream(), withoutAllocation.stream()).toList());
+		categorisedTransaction.setItems(Stream.concat(list.stream(), withoutAllocation.stream()).toList());
 		
 	}
 	

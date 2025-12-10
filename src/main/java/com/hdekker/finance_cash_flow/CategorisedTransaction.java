@@ -3,7 +3,7 @@ package com.hdekker.finance_cash_flow;
 import java.time.LocalDateTime;
 import java.time.Period;
 
-public record CatorgorisedTransaction(
+public record CategorisedTransaction(
 		Transaction transaction,
 		TransactionCategory category,
 		Necessity necessity,

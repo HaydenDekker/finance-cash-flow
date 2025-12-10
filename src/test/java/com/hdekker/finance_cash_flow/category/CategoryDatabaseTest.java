@@ -12,10 +12,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import com.hdekker.finance_cash_flow.CategorisedTransactionDeleter;
 import com.hdekker.finance_cash_flow.CategorisedTransactionReader;
 import com.hdekker.finance_cash_flow.CategoryAllocator;
-import com.hdekker.finance_cash_flow.CatorgorisedTransaction;
-import com.hdekker.finance_cash_flow.CatorgorisedTransaction.ExpenseType;
-import com.hdekker.finance_cash_flow.CatorgorisedTransaction.FinancialFrequency;
-import com.hdekker.finance_cash_flow.CatorgorisedTransaction.Necessity;
+import com.hdekker.finance_cash_flow.CategorisedTransaction;
+import com.hdekker.finance_cash_flow.CategorisedTransaction.ExpenseType;
+import com.hdekker.finance_cash_flow.CategorisedTransaction.FinancialFrequency;
+import com.hdekker.finance_cash_flow.CategorisedTransaction.Necessity;
 import com.hdekker.finance_cash_flow.MissingCategorisedTransactionReader;
 import com.hdekker.finance_cash_flow.Transaction;
 import com.hdekker.finance_cash_flow.TransactionCategory;
@@ -44,7 +44,7 @@ public class CategoryDatabaseTest {
 	public void canWrtieReadCategoryData() {
 		
 		TransactionTestData data = new TransactionTestData();
-		CatorgorisedTransaction ct = new CatorgorisedTransaction(
+		CategorisedTransaction ct = new CategorisedTransaction(
 				data.stub,
 				TransactionCategory.ENTERTAINMENT, 
 				Necessity.REQUIRED,
@@ -59,12 +59,12 @@ public class CategoryDatabaseTest {
 		assertThat(ct)
 			.isNotNull();
 		
-		List<CatorgorisedTransaction> list = categorisedTransactionReader.list();
+		List<CategorisedTransaction> list = categorisedTransactionReader.list();
 		assertThat(list)
 			.hasSizeGreaterThan(0);
 		
 		categorisedTransactionDeleter.delete(ct);
-		List<CatorgorisedTransaction> listAfterDeletion = categorisedTransactionReader.list();
+		List<CategorisedTransaction> listAfterDeletion = categorisedTransactionReader.list();
 		assertThat(listAfterDeletion.size())
 			.isLessThan(list.size());
 		
@@ -75,7 +75,7 @@ public class CategoryDatabaseTest {
 	public void canGetTransactionsWithoutACategoryAllocation() {
 		
 		TransactionTestData data = new TransactionTestData();
-		CatorgorisedTransaction ct = new CatorgorisedTransaction(
+		CategorisedTransaction ct = new CategorisedTransaction(
 				data.stub, 
 				TransactionCategory.ENTERTAINMENT, 
 				Necessity.REQUIRED,

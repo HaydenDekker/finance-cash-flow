@@ -9,12 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.hdekker.finance_cash_flow.CategorisedTransactionDeleter;
-import com.hdekker.finance_cash_flow.CatorgorisedTransaction;
+import com.hdekker.finance_cash_flow.CategorisedTransaction;
 import com.hdekker.finance_cash_flow.TransactionCategory;
 import com.hdekker.finance_cash_flow.TransactionPersister;
-import com.hdekker.finance_cash_flow.CatorgorisedTransaction.ExpenseType;
-import com.hdekker.finance_cash_flow.CatorgorisedTransaction.FinancialFrequency;
-import com.hdekker.finance_cash_flow.CatorgorisedTransaction.Necessity;
+import com.hdekker.finance_cash_flow.CategorisedTransaction.ExpenseType;
+import com.hdekker.finance_cash_flow.CategorisedTransaction.FinancialFrequency;
+import com.hdekker.finance_cash_flow.CategorisedTransaction.Necessity;
 import com.hdekker.finance_cash_flow.transaction.TransactionTestData;
 
 @SpringBootTest
@@ -38,8 +38,8 @@ class CategoryRestAdapterTest {
     	
     	transactionPersister.persist(data.stub);
     	
-    	CatorgorisedTransaction tran = categoryRestAdapter.set(
-    			new CatorgorisedTransaction(
+    	CategorisedTransaction tran = categoryRestAdapter.set(
+    			new CategorisedTransaction(
     					data.stub, 
     					TransactionCategory.ENTERTAINMENT, 
     					Necessity.REQUIRED,
@@ -53,7 +53,7 @@ class CategoryRestAdapterTest {
     	assertThat(dateTime)
     		.isEqualTo(tran.assignmentTimeStamp());
     	
-    	List<CatorgorisedTransaction> listAssignements = categoryRestAdapter.list();
+    	List<CategorisedTransaction> listAssignements = categoryRestAdapter.list();
     	assertThat(listAssignements)
     		.hasSize(1);
     	

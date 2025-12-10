@@ -10,9 +10,9 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import com.hdekker.finance_cash_flow.CatorgorisedTransaction.ExpenseType;
-import com.hdekker.finance_cash_flow.CatorgorisedTransaction.FinancialFrequency;
-import com.hdekker.finance_cash_flow.CatorgorisedTransaction.Necessity;
+import com.hdekker.finance_cash_flow.CategorisedTransaction.ExpenseType;
+import com.hdekker.finance_cash_flow.CategorisedTransaction.FinancialFrequency;
+import com.hdekker.finance_cash_flow.CategorisedTransaction.Necessity;
 import com.hdekker.finance_cash_flow.category.CategoryRestAdapter;
 import com.hdekker.finance_cash_flow.historical.HistoricalInterpollationRestAdapter;
 import com.hdekker.finance_cash_flow.transaction.TransactionRestAdapter;
@@ -32,7 +32,7 @@ public class SystemIntegrationTest {
 	
 	public record TransactionAssignement(
 			Transaction transaction, 
-			CatorgorisedTransaction categorisedTransaction) {}
+			CategorisedTransaction categorisedTransaction) {}
 	
 	public record ExpectedResults() {}
 	
@@ -48,7 +48,7 @@ public class SystemIntegrationTest {
 	public TransactionAssignement assign(Transaction transaction) {
 		return new TransactionAssignement(
 				transaction, 
-				new CatorgorisedTransaction(
+				new CategorisedTransaction(
 						transaction, 
 						categoryMap.get(transaction.description()), 
 						Necessity.DISCRETIONARY,

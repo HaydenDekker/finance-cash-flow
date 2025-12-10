@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.hdekker.finance_cash_flow.CategorisedTransactionReader;
 import com.hdekker.finance_cash_flow.CategoryAllocator;
-import com.hdekker.finance_cash_flow.CatorgorisedTransaction;
+import com.hdekker.finance_cash_flow.CategorisedTransaction;
 import com.hdekker.finance_cash_flow.MissingCategorisedTransactionReader;
 
 @RestController
@@ -27,21 +27,21 @@ public class CategoryRestAdapter {
 	MissingCategorisedTransactionReader missingCategorisedTransactionReader;
 
 	@PostMapping("/category")
-	public CatorgorisedTransaction set(
-			@RequestBody CatorgorisedTransaction transaction) {
+	public CategorisedTransaction set(
+			@RequestBody CategorisedTransaction transaction) {
 		return allocator.allocate(transaction);
 	}
 
 	@GetMapping("/category")
-	public List<CatorgorisedTransaction> list() {
+	public List<CategorisedTransaction> list() {
 		return categorisedTransactionReader.list();
 	}
 
 	@GetMapping("/category/incomplete")
-	public List<CatorgorisedTransaction> listIncomplete() {
+	public List<CategorisedTransaction> listIncomplete() {
 		return missingCategorisedTransactionReader.findAll()
 					.stream()
-					.map(t->new CatorgorisedTransaction(t, null, null, null, null, LocalDateTime.now()))
+					.map(t->new CategorisedTransaction(t, null, null, null, null, LocalDateTime.now()))
 					.toList();
 	}
 

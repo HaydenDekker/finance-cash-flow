@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.hdekker.finance_cash_flow.CategoryAllocator;
-import com.hdekker.finance_cash_flow.CatorgorisedTransaction;
+import com.hdekker.finance_cash_flow.CategorisedTransaction;
 import com.hdekker.finance_cash_flow.category.database.CatorgarisedTransactionEntity;
 import com.hdekker.finance_cash_flow.category.database.CatorgarisedTransactionRepository;
 
@@ -15,7 +15,7 @@ public class CategoryAllocatorImpl implements CategoryAllocator{
 	CatorgarisedTransactionRepository repo;
 
 	@Override
-	public CatorgorisedTransaction allocate(CatorgorisedTransaction transaction) {
+	public CategorisedTransaction allocate(CategorisedTransaction transaction) {
 		return repo.save(CatorgarisedTransactionEntity.from(transaction))
 				.toCatorgarisedTransaction();
 	}

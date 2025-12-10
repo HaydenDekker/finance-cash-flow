@@ -2,11 +2,11 @@ package com.hdekker.finance_cash_flow.category.database;
 
 import java.time.LocalDateTime;
 
-import com.hdekker.finance_cash_flow.CatorgorisedTransaction;
+import com.hdekker.finance_cash_flow.CategorisedTransaction;
 import com.hdekker.finance_cash_flow.TransactionCategory;
-import com.hdekker.finance_cash_flow.CatorgorisedTransaction.ExpenseType;
-import com.hdekker.finance_cash_flow.CatorgorisedTransaction.FinancialFrequency;
-import com.hdekker.finance_cash_flow.CatorgorisedTransaction.Necessity;
+import com.hdekker.finance_cash_flow.CategorisedTransaction.ExpenseType;
+import com.hdekker.finance_cash_flow.CategorisedTransaction.FinancialFrequency;
+import com.hdekker.finance_cash_flow.CategorisedTransaction.Necessity;
 import com.hdekker.finance_cash_flow.transaction.database.TransactionEntitiy;
 
 import jakarta.persistence.Entity;
@@ -29,8 +29,6 @@ public class CatorgarisedTransactionEntity {
     FinancialFrequency financialFrequency;
 	ExpenseType expenseType;
     LocalDateTime categoryTimeStamp;
-    
-    
     
     
 	public FinancialFrequency getFinancialFrequency() {
@@ -89,7 +87,7 @@ public class CatorgarisedTransactionEntity {
 		this.categoryTimeStamp = categoryTimeStamp;
 	}
 
-	public static CatorgarisedTransactionEntity from(CatorgorisedTransaction ct) {
+	public static CatorgarisedTransactionEntity from(CategorisedTransaction ct) {
 		
 	    CatorgarisedTransactionEntity e = new CatorgarisedTransactionEntity();
 	    e.setId(ct.transaction().createId());
@@ -103,9 +101,9 @@ public class CatorgarisedTransactionEntity {
 	    
 	}
 	
-	public CatorgorisedTransaction toCatorgarisedTransaction() {
+	public CategorisedTransaction toCatorgarisedTransaction() {
 		
-	    return new CatorgorisedTransaction(
+	    return new CategorisedTransaction(
 	    		getTransaction().toTransaction(), 
 	    		getCategory(), 
 	    		getNecessity(),
