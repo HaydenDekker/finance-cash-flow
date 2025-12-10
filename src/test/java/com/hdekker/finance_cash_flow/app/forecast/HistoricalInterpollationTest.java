@@ -8,7 +8,7 @@ import static org.assertj.core.api.Assertions.offset;
 import org.junit.jupiter.api.Test;
 
 import com.hdekker.finance_cash_flow.historical.HistoricalInterpollation;
-import com.hdekker.finance_cash_flow.transaction.TransactionTestData;
+import com.hdekker.finance_cash_flow.transaction.TestData;
 
 public class HistoricalInterpollationTest {
 	
@@ -16,8 +16,8 @@ public class HistoricalInterpollationTest {
 	@Test
 	public void givenListOfTransactions_ExpectPredictsNextValue() {
 		
-		TransactionTestData transactionTestData = new TransactionTestData();
-		HistoricalInterpollationResult result = HistoricalInterpollation.interpollate(transactionTestData.testTransactions());
+		TestData testData = new TestData();
+		HistoricalInterpollationResult result = HistoricalInterpollation.interpollate(testData.testTransactions());
 		double estimate = result.quadraticResult().evaluate(YearMonth.of(2025, 07));
 		assertThat(estimate)
 				.isCloseTo(127, offset(2.0));

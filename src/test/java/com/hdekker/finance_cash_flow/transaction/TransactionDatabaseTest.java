@@ -21,19 +21,19 @@ public class TransactionDatabaseTest {
 	@Autowired
 	TransactionReader transactionReader;
 	
-	TransactionTestData transactionTestData = new TransactionTestData();
+	TestData testData = new TestData();
 	
 	@Test
 	public void givenTransaction_ExpectCanBeSavedAndReadFromDatabase() {
 		
-		Transaction transaction = transactionPersistor.persist(transactionTestData.stub);
+		Transaction transaction = transactionPersistor.persist(testData.stub);
 		assertThat(transaction)
 			.isNotNull();
 		
 		List<Transaction> allTransactions = transactionReader.list();
 		
 		assertThat(allTransactions.stream()
-				.filter(t->t.description().contains(transactionTestData.stubDescription))
+				.filter(t->t.description().contains(testData.stubDescription))
 				.findFirst())
 			.isPresent();
 		

@@ -15,7 +15,7 @@ import com.hdekker.finance_cash_flow.TransactionPersister;
 import com.hdekker.finance_cash_flow.CategorisedTransaction.ExpenseType;
 import com.hdekker.finance_cash_flow.CategorisedTransaction.FinancialFrequency;
 import com.hdekker.finance_cash_flow.CategorisedTransaction.Necessity;
-import com.hdekker.finance_cash_flow.transaction.TransactionTestData;
+import com.hdekker.finance_cash_flow.transaction.TestData;
 
 @SpringBootTest
 class CategoryRestAdapterTest {
@@ -34,7 +34,7 @@ class CategoryRestAdapterTest {
     	
     	LocalDateTime dateTime = LocalDateTime.now();
     	
-    	TransactionTestData data = new TransactionTestData();
+    	TestData data = new TestData();
     	
     	transactionPersister.persist(data.stub);
     	

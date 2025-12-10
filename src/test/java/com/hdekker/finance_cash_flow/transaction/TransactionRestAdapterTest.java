@@ -19,7 +19,7 @@ public class TransactionRestAdapterTest {
 	@Test
 	public void canAddTransaction() {
 		
-		TransactionTestData testData = new TransactionTestData();
+		TestData testData = new TestData();
 		Transaction saved = transactionRestAdapter.save(testData.stub);
 		assertThat(saved)
 			.isNotNull();
@@ -33,7 +33,7 @@ public class TransactionRestAdapterTest {
 	@Test
 	public void canAddTransactionCSVItem() {
 		
-		TransactionTestData testData = new TransactionTestData();
+		TestData testData = new TestData();
 		String csvItem = testData.mockCSVData;
 		Transaction saved = transactionRestAdapter.save(csvItem);
 		assertThat(saved)

@@ -20,7 +20,7 @@ import com.hdekker.finance_cash_flow.MissingCategorisedTransactionReader;
 import com.hdekker.finance_cash_flow.Transaction;
 import com.hdekker.finance_cash_flow.TransactionCategory;
 import com.hdekker.finance_cash_flow.TransactionPersister;
-import com.hdekker.finance_cash_flow.transaction.TransactionTestData;
+import com.hdekker.finance_cash_flow.transaction.TestData;
 
 @SpringBootTest
 public class CategoryDatabaseTest {
@@ -43,7 +43,7 @@ public class CategoryDatabaseTest {
 	@Test
 	public void canWrtieReadCategoryData() {
 		
-		TransactionTestData data = new TransactionTestData();
+		TestData data = new TestData();
 		CategorisedTransaction ct = new CategorisedTransaction(
 				data.stub,
 				TransactionCategory.ENTERTAINMENT, 
@@ -74,7 +74,7 @@ public class CategoryDatabaseTest {
 	@Test
 	public void canGetTransactionsWithoutACategoryAllocation() {
 		
-		TransactionTestData data = new TransactionTestData();
+		TestData data = new TestData();
 		CategorisedTransaction ct = new CategorisedTransaction(
 				data.stub, 
 				TransactionCategory.ENTERTAINMENT, 

@@ -15,7 +15,7 @@ class TransactionCSVParserTest {
     void givenCSVTransactionString_parsesCsvTransaction() {
     	
     	TransactionCSVParser parser = new TransactionCSVParser();
-    	TransactionTestData testData = new TransactionTestData();
+    	TestData testData = new TestData();
     	
         Optional<Transaction> actual = parser.importTransaction(testData.mockCSVData);
         assertTrue(actual.isPresent());

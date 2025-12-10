@@ -2,6 +2,7 @@ package com.hdekker.finance_cash_flow;
 
 import java.time.LocalDateTime;
 import java.time.Period;
+import java.time.YearMonth;
 
 public record CategorisedTransaction(
 		Transaction transaction,
@@ -41,6 +42,10 @@ public record CategorisedTransaction(
 		FIXED,
 		KNOWN_VARIABLE,
 		VARIABLE
+	}
+	
+	public YearMonth getTransactionYearMonth() {
+	    return YearMonth.from(this.transaction().localDate()); 
 	}
 	
 	
