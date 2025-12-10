@@ -12,6 +12,9 @@ import com.hdekker.finance_cash_flow.CategorisedTransactionDeleter;
 import com.hdekker.finance_cash_flow.CatorgorisedTransaction;
 import com.hdekker.finance_cash_flow.TransactionCategory;
 import com.hdekker.finance_cash_flow.TransactionPersister;
+import com.hdekker.finance_cash_flow.CatorgorisedTransaction.ExpenseType;
+import com.hdekker.finance_cash_flow.CatorgorisedTransaction.FinancialFrequency;
+import com.hdekker.finance_cash_flow.CatorgorisedTransaction.Necessity;
 import com.hdekker.finance_cash_flow.transaction.TransactionTestData;
 
 @SpringBootTest
@@ -39,6 +42,9 @@ class CategoryRestAdapterTest {
     			new CatorgorisedTransaction(
     					data.stub, 
     					TransactionCategory.ENTERTAINMENT, 
+    					Necessity.REQUIRED,
+    					FinancialFrequency.AD_HOC,
+    					ExpenseType.FIXED,
     					dateTime));
     
     	assertThat(tran)

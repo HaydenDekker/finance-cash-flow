@@ -16,7 +16,8 @@ public class CategoryAllocatorImpl implements CategoryAllocator{
 
 	@Override
 	public CatorgorisedTransaction allocate(CatorgorisedTransaction transaction) {
-		return repo.save(CatorgarisedTransactionEntity.from(transaction)).toCatorgarisedTransaction();
+		return repo.save(CatorgarisedTransactionEntity.from(transaction))
+				.toCatorgarisedTransaction();
 	}
 
 	

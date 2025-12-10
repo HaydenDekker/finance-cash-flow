@@ -24,9 +24,13 @@ Initial tests for the `historical averaging` feature:
 - (complete) **Data Import**: Validates CSV import from bank transactions list. Validate CSV files can be split into a list of CSV lines as string.
 - (complete) **Category Allocation** Tests categorization. Inputs: Transactions without categories (e.g., 'groceries'); outputs: Correctly assigned to Food & Groceries.
 - (complete) **Average Calculation** Interpolate historical spend for set of transactions. Check that a reasonable estimate is produced given set of test data.
-- (In progress) **System Test - Historical Averaging** importing data, then assessing the average over a time.
 - (Complete) View Data Import - Display raw transaction data in UI grid. Upload CSV files.
-- View - Transaction Classification - classify transactions to category, frequency, necessity.
+- (Complete) View - Transaction Classification - Classify transactions to category, frequency, necessity.
+- (In progress) **System Test - Historical Averaging** importing data, then assessing the average over a time.
+  Calculate category actuals, calculate forecasts. Forecasts depend on expense type. Need to produce, Set of all Months in actuals and forecasts.  
+  List<Category, Map<Month, MonthActual | MonthForcast> two lists. MonthForcasts have 3 components, Fixed forcast (summed), Known Variable (summed, Variable (linear inerpollation)
+- (In Progress) View - Historical Average - Initially a table will do. Category (row) by YearMonth (column) and cost is the value. Display historical averages, filtered by category. Graph should be cost by month. Stacked Bar chart for individual categories, line chart for total expense. 
+
 
 ## Future Goals
 - Enhanced LLM-powered expense categorization

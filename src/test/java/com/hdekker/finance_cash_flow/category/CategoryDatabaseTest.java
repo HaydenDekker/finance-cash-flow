@@ -13,6 +13,9 @@ import com.hdekker.finance_cash_flow.CategorisedTransactionDeleter;
 import com.hdekker.finance_cash_flow.CategorisedTransactionReader;
 import com.hdekker.finance_cash_flow.CategoryAllocator;
 import com.hdekker.finance_cash_flow.CatorgorisedTransaction;
+import com.hdekker.finance_cash_flow.CatorgorisedTransaction.ExpenseType;
+import com.hdekker.finance_cash_flow.CatorgorisedTransaction.FinancialFrequency;
+import com.hdekker.finance_cash_flow.CatorgorisedTransaction.Necessity;
 import com.hdekker.finance_cash_flow.MissingCategorisedTransactionReader;
 import com.hdekker.finance_cash_flow.Transaction;
 import com.hdekker.finance_cash_flow.TransactionCategory;
@@ -42,8 +45,11 @@ public class CategoryDatabaseTest {
 		
 		TransactionTestData data = new TransactionTestData();
 		CatorgorisedTransaction ct = new CatorgorisedTransaction(
-				data.stub, 
+				data.stub,
 				TransactionCategory.ENTERTAINMENT, 
+				Necessity.REQUIRED,
+				FinancialFrequency.AD_HOC,
+				ExpenseType.FIXED,
 				LocalDateTime.now());
 		
 		// need transient saved beforehand
@@ -72,6 +78,9 @@ public class CategoryDatabaseTest {
 		CatorgorisedTransaction ct = new CatorgorisedTransaction(
 				data.stub, 
 				TransactionCategory.ENTERTAINMENT, 
+				Necessity.REQUIRED,
+				FinancialFrequency.AD_HOC,
+				ExpenseType.FIXED,
 				LocalDateTime.now());
 		
 		// need transient saved beforehand
@@ -80,6 +89,7 @@ public class CategoryDatabaseTest {
 		ct = categoryAllocator.allocate(ct);
 		
 		List<Transaction> listMissing = missingCategorisedTransactionReader.findAll();
+		
 		assertThat(listMissing)
 			.hasSize(1);
 		assertThat(listMissing.get(0)

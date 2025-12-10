@@ -13,7 +13,7 @@ public class MainLayout extends VerticalLayout implements RouterLayout {
 
 	public MainLayout() {
 		setHeightFull();
-        add(new H1("Cash Flow Banana"));
+        add(new H1("Cash Flow Kabana"));
     }
 
 }
