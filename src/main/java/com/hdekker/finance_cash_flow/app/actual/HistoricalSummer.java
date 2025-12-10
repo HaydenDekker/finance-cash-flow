@@ -1,4 +1,4 @@
-package com.hdekker.finance_cash_flow.historical;
+package com.hdekker.finance_cash_flow.app.actual;
 
 import java.time.YearMonth;
 import java.util.List;
@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 
 import com.hdekker.finance_cash_flow.Transaction;
 
-public class HistoricalSummariser {
+public class HistoricalSummer {
 
     public static Map<YearMonth, Double> calculateTotal(List<Transaction> transactions){
         return transactions.stream()

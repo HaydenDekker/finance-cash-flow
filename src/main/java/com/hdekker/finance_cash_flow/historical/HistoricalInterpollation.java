@@ -7,14 +7,16 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import com.hdekker.finance_cash_flow.Transaction;
-import com.hdekker.finance_cash_flow.historical.HistoricalInterpollationResult.QuadraticCoefficients;
-import com.hdekker.finance_cash_flow.historical.HistoricalInterpollationResult.QuadraticResult;
+import com.hdekker.finance_cash_flow.app.actual.HistoricalSummer;
+import com.hdekker.finance_cash_flow.app.forecast.HistoricalInterpollationResult;
+import com.hdekker.finance_cash_flow.app.forecast.HistoricalInterpollationResult.QuadraticCoefficients;
+import com.hdekker.finance_cash_flow.app.forecast.HistoricalInterpollationResult.QuadraticResult;
 
 public class HistoricalInterpollation {
 
     public static HistoricalInterpollationResult interpollate(List<Transaction> transactions) {
     	
-    	Map<YearMonth, Double> data = HistoricalSummariser.calculateTotal(transactions);
+    	Map<YearMonth, Double> data = HistoricalSummer.calculateTotal(transactions);
     	
     	TreeMap<YearMonth, Double> sortedData = new TreeMap<>(data);
         if (sortedData.size() < 3) {

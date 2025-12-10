@@ -1,4 +1,4 @@
-package com.hdekker.finance_cash_flow.historical;
+package com.hdekker.finance_cash_flow.app.forecast;
 
 import java.time.YearMonth;
 import java.time.temporal.ChronoUnit;

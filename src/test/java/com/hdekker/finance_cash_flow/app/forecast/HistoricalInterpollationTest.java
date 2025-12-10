@@ -1,4 +1,4 @@
-package com.hdekker.finance_cash_flow.historical;
+package com.hdekker.finance_cash_flow.app.forecast;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -7,6 +7,7 @@ import java.time.YearMonth;
 import static org.assertj.core.api.Assertions.offset;
 import org.junit.jupiter.api.Test;
 
+import com.hdekker.finance_cash_flow.historical.HistoricalInterpollation;
 import com.hdekker.finance_cash_flow.transaction.TransactionTestData;
 
 public class HistoricalInterpollationTest {

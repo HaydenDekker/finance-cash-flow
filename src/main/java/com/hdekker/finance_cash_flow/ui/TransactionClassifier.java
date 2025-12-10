@@ -12,16 +12,13 @@ import com.hdekker.finance_cash_flow.CatorgorisedTransaction;
 import com.hdekker.finance_cash_flow.CatorgorisedTransaction.ExpenseType;
 import com.hdekker.finance_cash_flow.CatorgorisedTransaction.FinancialFrequency;
 import com.hdekker.finance_cash_flow.CatorgorisedTransaction.Necessity;
-import com.hdekker.finance_cash_flow.Transaction;
 import com.hdekker.finance_cash_flow.TransactionCategory;
 import com.hdekker.finance_cash_flow.category.CategoryRestAdapter;
-import com.hdekker.finance_cash_flow.transaction.TransactionRestAdapter;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
@@ -33,6 +30,13 @@ import reactor.core.publisher.Mono;
 
 @Route(value = "transaction-calssifier", layout = MainLayout.class)
 public class TransactionClassifier extends VerticalLayout implements AfterNavigationObserver{
+
+	
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -774997510488454028L;
 
 	Grid<CatorgorisedTransaction> catorgorisedTransaction = new Grid<CatorgorisedTransaction>();
 	

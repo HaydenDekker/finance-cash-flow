@@ -1,4 +1,4 @@
-package com.hdekker.finance_cash_flow.historical;
+package com.hdekker.finance_cash_flow.app.actual;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 
 import com.hdekker.finance_cash_flow.Transaction;
 
-public class HistoricalSummariserTest {
+public class HistoricalSummerTest {
     
     List<Transaction> testTransactions(){
         return List.of(
@@ -24,7 +24,7 @@ public class HistoricalSummariserTest {
 
     @Test
     public void givenListOfTransactions_ExpectMapProduced() {
-        Map<YearMonth, Double> result = HistoricalSummariser.calculateTotal(testTransactions());
+        Map<YearMonth, Double> result = HistoricalSummer.calculateTotal(testTransactions());
         assertThat(result.containsKey(YearMonth.of(2025, 4)));
         assertThat(result.get(YearMonth.of(2025, 4)))
         	.isEqualTo(150.0);
