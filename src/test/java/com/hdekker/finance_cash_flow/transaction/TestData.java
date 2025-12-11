@@ -9,6 +9,7 @@ import java.util.Map;
 import com.hdekker.finance_cash_flow.CategorisedTransaction;
 import com.hdekker.finance_cash_flow.Transaction;
 import com.hdekker.finance_cash_flow.TransactionCategory;
+import com.hdekker.finance_cash_flow.app.actual.ExpenseFilter;
 import com.hdekker.finance_cash_flow.CategorisedTransaction.ExpenseType;
 import com.hdekker.finance_cash_flow.CategorisedTransaction.FinancialFrequency;
 import com.hdekker.finance_cash_flow.CategorisedTransaction.Necessity;
@@ -31,8 +32,9 @@ public class TestData {
     String mockCSVData = "\"3/12/2025\",\"-80.2\",\"" + descriptionStub + "\"";
     String mockCSVDataDoubleDigitDay = "\"24/12/2025\",\"-80.2\",\"" + descriptionStub + "\"";
     
-    public List<Transaction> testTransactions(){
+    public static List<Transaction> testTransactions(){
     	return List.of(
+    		new Transaction(LocalDate.of(2024,5,14), 300.0, "Income"),
     		new Transaction(LocalDate.of(2024,5,15), 3.0, "Groceries"),
     		new Transaction(LocalDate.of(2024,6,15), 6.0, "Fuel"),
     		new Transaction(LocalDate.of(2024,7,15), 11.0, "Fuel"),
@@ -54,14 +56,31 @@ public class TestData {
 	
 	public record ExpectedOutput(YearMonth yearMonth, Double amount, Double difference) {}
 	
-	public record TestCase(List<TransactionAssignement> transactions, ExpectedOutput expectedOutput) {}
+	public record TestCase(List<TransactionAssignement> transactions, ExpectedOutput expectedOutput) {
+
+		public List<CategorisedTransaction> trans() {
+			return transactions().stream().map(ta->ta.categorisedTransaction()).toList();
+		}
+		
+		public List<Transaction> transactionExpenses() {
+			return ExpenseFilter.filter(
+					trans())
+					.stream()
+						.map(ct->ct.transaction())
+						.toList();
+		}
+		
+	}
 	
-	Map<String, TransactionCategory> categoryMap = Map.of(
+	
+	
+	static Map<String, TransactionCategory> categoryMap = Map.of(
 			"Groceries", TransactionCategory.FOOD_GROCERIES,
 			"Fuel", TransactionCategory.TRANSPORTATION,
-			"Rego", TransactionCategory.TRANSPORTATION);
+			"Rego", TransactionCategory.TRANSPORTATION,
+			"Income", TransactionCategory.INCOME);
 	
-	public TransactionAssignement assign(Transaction transaction) {
+	static TransactionAssignement assign(Transaction transaction) {
 		return new TransactionAssignement(
 				transaction, 
 				new CategorisedTransaction(
@@ -73,13 +92,14 @@ public class TestData {
 						LocalDateTime.now()));
 	}
 
-	public List<TestCase> testCases() {
+	public static List<TestCase> testCases() {
 		return List.of(
 				new TestCase(
-						testTransactions().stream().map(this::assign).toList(),
+						testTransactions().stream().map(TestData::assign).toList(),
 						new ExpectedOutput(YearMonth.of(2025, 07), 127.0, 5.0)
 						)
 				);
 	}
+
 
 }

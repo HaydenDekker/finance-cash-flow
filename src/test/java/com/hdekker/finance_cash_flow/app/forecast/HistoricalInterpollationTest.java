@@ -16,8 +16,11 @@ public class HistoricalInterpollationTest {
 	@Test
 	public void givenListOfTransactions_ExpectPredictsNextValue() {
 		
-		TestData testData = new TestData();
-		HistoricalInterpollationResult result = HistoricalInterpollation.interpollate(testData.testTransactions());
+		HistoricalInterpollationResult result = HistoricalInterpollation.interpollate(
+				TestData.testCases()
+					.get(0)
+					.transactionExpenses());
+		
 		double estimate = result.quadraticResult().evaluate(YearMonth.of(2025, 07));
 		assertThat(estimate)
 				.isCloseTo(127, offset(2.0));

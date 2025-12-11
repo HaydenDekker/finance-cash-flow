@@ -9,11 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.hdekker.finance_cash_flow.CategorisedTransaction;
 import com.hdekker.finance_cash_flow.category.CategoryRestAdapter;
-import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.html.NativeLabel;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
@@ -27,6 +25,11 @@ import com.vaadin.flow.router.WildcardParameter;
 @Route("transaction-classifier-autocomplete")
 public class TransactionClassifierAutocomplete extends VerticalLayout implements AfterNavigationObserver, HasUrlParameter<String> {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 8205446985281792544L;
+
 	Logger log = LoggerFactory.getLogger(TransactionClassifierAutocomplete.class);
 	
 	@Autowired
