@@ -14,12 +14,14 @@ import com.hdekker.finance_cash_flow.CategorisedTransaction.FinancialFrequency;
 import com.hdekker.finance_cash_flow.CategorisedTransaction.Necessity;
 import com.hdekker.finance_cash_flow.TransactionCategory;
 import com.hdekker.finance_cash_flow.category.CategoryRestAdapter;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.H2;
+import com.vaadin.flow.component.html.NativeLabel;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.router.AfterNavigationEvent;
@@ -76,6 +78,9 @@ public class TransactionClassifier extends VerticalLayout implements AfterNaviga
 		
 		categorisedTransaction.setItemDetailsRenderer(new ComponentRenderer<FormLayout, CategorisedTransaction>(FormLayout::new, (div, ct)->{
 			
+			NativeLabel transactionInfo = new NativeLabel(ct.transaction().toString());
+			div.add(transactionInfo);
+			
 			ComboBox<TransactionCategory> tc = new ComboBox<TransactionCategory>("Transaction Category");
 			div.add(tc);
 			tc.setItems(Arrays.asList(TransactionCategory.values()));
@@ -112,6 +117,14 @@ public class TransactionClassifier extends VerticalLayout implements AfterNaviga
 				saveCategoryTransaction(newCT);
 				refreshItems(Duration.ofSeconds(1));
 				
+			});
+			
+			Button autoComplete = new Button("Autocomplete");
+			div.add(autoComplete);
+			
+			autoComplete.addClickListener(e->{
+				UI.getCurrent()
+					.navigate("transaction-classifier-autocomplete/" + ct.transaction().createId());
 			});
 			
 		}));

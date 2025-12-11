@@ -38,6 +38,8 @@ public class BudgeterView extends VerticalLayout implements AfterNavigationObser
 	
 	public BudgeterView() {
 		
+		setHeightFull();
+		
 		add(new H2("Budgeter"));
 		add(grid);
 		
@@ -45,6 +47,8 @@ public class BudgeterView extends VerticalLayout implements AfterNavigationObser
 		    .setHeader("Category")
 		    .setSortable(true)
 		    .setKey("categoryName");
+		
+		grid.setHeightFull();
 		
 	}
 

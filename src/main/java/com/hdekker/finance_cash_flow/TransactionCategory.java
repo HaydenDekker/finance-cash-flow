@@ -8,8 +8,11 @@ public enum TransactionCategory {
 	FOOD_GROCERIES("Food & Groceries"), 
 	TRANSPORTATION("Transportation"), 
 	PERSONAL_CARE_HEALTH("Personal Care & Health"), 
-	ENTERTAINMENT("Entertainment & Discretionary"), 
-	SAVINGS_AND_DEBT("Savings & Debt");
+	ENTERTAINMENT("Entertainment & Discretionary"),
+	GIFTS_AND_DONATIONS("Gifts and donations"),
+	CHILDCARE_AND_SCHOOLING("Childcare and Schooling"),
+	SAVINGS_AND_DEBT("Savings & Debt"),
+	UNKNOWN("Unknown");
 	
 	String displayName;
 	

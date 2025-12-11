@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import com.hdekker.finance_cash_flow.transaction.database.TransactionEntitiy;
 
-public interface CatorgarisedTransactionRepository extends JpaRepository<CatorgarisedTransactionEntity, Long> {
+public interface CatorgarisedTransactionRepository extends JpaRepository<CatorgarisedTransactionEntity, String> {
     
 	/**
      * Finds all TransactionEntitiy records that do not have an associated

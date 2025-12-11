@@ -28,8 +28,12 @@ Initial tests for the `historical averaging` feature:
 - (Complete) View - Transaction Classification - Classify transactions to category, frequency, necessity.
 - (In progress) **System Test - Historical Averaging** importing data, then assessing the average over a time.
   Calculate category actuals, calculate forecasts. Forecasts depend on expense type. Need to produce, Set of all Months in actuals and forecasts.  
-  List<Category, Map<Month, MonthActual | MonthForcast> two lists. MonthForcasts have 3 components, Fixed forcast (summed), Known Variable (summed, Variable (linear inerpollation)
-- (In Progress) View - Historical Average - Initially a table will do. Category (row) by YearMonth (column) and cost is the value. Display historical averages, filtered by category. Graph should be cost by month. Stacked Bar chart for individual categories, line chart for total expense. 
+  List<Category, Map<Month, MonthActual | MonthForcast> two lists. MonthForcasts have 3 components, Fixed forecast (summed), Known Variable (summed, Variable (linear interpolation)
+- (Complete) - Display actuals - Category (row) by YearMonth (column) and cost is the value. Display historical averages, filtered by category. Graph should be cost by month. 
+- Display total monthly spend across all categories
+- Display total monthly income
+- Display monthly net position
+- (In Progress) View - Historical Average - Initially a table will do. Stacked Bar chart for individual categories, line chart for total expense. 
 
 
 ## Future Goals
