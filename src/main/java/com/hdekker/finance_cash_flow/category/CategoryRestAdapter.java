@@ -11,13 +11,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.hdekker.finance_cash_flow.CategorisedTransactionReader;
+import com.hdekker.finance_cash_flow.CategorisedTransactionLister;
 import com.hdekker.finance_cash_flow.CategoryAllocator;
 import com.hdekker.finance_cash_flow.CategorisedTransaction;
 import com.hdekker.finance_cash_flow.MissingCategorisedTransactionReader;
 import com.hdekker.finance_cash_flow.TransactionCategory;
-import com.hdekker.finance_cash_flow.app.actual.HistoricalSummer.SummedTransactions;
 import com.hdekker.finance_cash_flow.app.category.CategoryGroup;
+import com.hdekker.finance_cash_flow.app.category.CategoryGroup.SummedTransactionCategory;
 
 @RestController
 public class CategoryRestAdapter {
@@ -26,7 +26,7 @@ public class CategoryRestAdapter {
 	CategoryAllocator allocator;
 	
 	@Autowired
-	CategorisedTransactionReader categorisedTransactionReader;
+	CategorisedTransactionLister categorisedTransactionLister;
 	
 	@Autowired
 	MissingCategorisedTransactionReader missingCategorisedTransactionReader;
@@ -39,7 +39,7 @@ public class CategoryRestAdapter {
 
 	@GetMapping("/category")
 	public List<CategorisedTransaction> list() {
-		return categorisedTransactionReader.list();
+		return categorisedTransactionLister.list();
 	}
 
 	@GetMapping("/category/incomplete")
@@ -56,7 +56,7 @@ public class CategoryRestAdapter {
 	}
 	
 	@GetMapping("/category/grouped-and-summed")
-	public Map<TransactionCategory, Map<YearMonth, SummedTransactions>> groupedAndSummed(){
+	public List<SummedTransactionCategory> groupedAndSummed(){
 		return CategoryGroup.groupByCategoryAndByYearMonthAndSum(list());
 	}
 

@@ -17,7 +17,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.hdekker.finance_cash_flow.Transaction;
 import com.hdekker.finance_cash_flow.TransactionPersister;
-import com.hdekker.finance_cash_flow.TransactionReader;
+import com.hdekker.finance_cash_flow.TransactionLister;
 
 @RestController
 public class TransactionRestAdapter {
@@ -26,7 +26,7 @@ public class TransactionRestAdapter {
 	TransactionPersister transactionPersister;
 	
 	@Autowired
-	TransactionReader transactionReader;
+	TransactionLister transactionLister;
 	
 	TransactionCSVParser transactionCSVParser = new TransactionCSVParser();
 
@@ -38,7 +38,7 @@ public class TransactionRestAdapter {
 
 	@GetMapping(path = "/transaction")
 	public List<Transaction> list() {
-		return transactionReader.list();
+		return transactionLister.list();
 	}
 	
 	@PostMapping(path = "/transaction", consumes = "text/csv")

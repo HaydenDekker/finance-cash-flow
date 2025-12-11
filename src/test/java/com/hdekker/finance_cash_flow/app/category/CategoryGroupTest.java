@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 
 import com.hdekker.finance_cash_flow.CategorisedTransaction;
 import com.hdekker.finance_cash_flow.TransactionCategory;
-import com.hdekker.finance_cash_flow.app.actual.HistoricalSummer.SummedTransactions;
+import com.hdekker.finance_cash_flow.app.category.CategoryGroup.SummedTransactionCategory;
 import com.hdekker.finance_cash_flow.transaction.TestData;
 
 public class CategoryGroupTest {
@@ -38,9 +38,9 @@ public class CategoryGroupTest {
 				.map(ta-> ta.categorisedTransaction())
 				.toList();
 		
-		Map<TransactionCategory, Map<YearMonth, SummedTransactions>> groupedTransactions = CategoryGroup.groupByCategoryAndByYearMonthAndSum(transactions);
+		List<SummedTransactionCategory> groupedTransactions = CategoryGroup.groupByCategoryAndByYearMonthAndSum(transactions);
 		
-		assertThat(groupedTransactions.keySet())
+		assertThat(groupedTransactions)
 			.hasSize(2);
 		
 	}

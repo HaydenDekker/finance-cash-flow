@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.hdekker.finance_cash_flow.CategorisedTransactionDeleter;
-import com.hdekker.finance_cash_flow.CategorisedTransactionReader;
+import com.hdekker.finance_cash_flow.CategorisedTransactionLister;
 import com.hdekker.finance_cash_flow.CategoryAllocator;
 import com.hdekker.finance_cash_flow.CategorisedTransaction;
 import com.hdekker.finance_cash_flow.CategorisedTransaction.ExpenseType;
@@ -30,7 +30,7 @@ public class CategoryDatabaseTest {
 	CategoryAllocator categoryAllocator;
 	
 	@Autowired
-	CategorisedTransactionReader categorisedTransactionReader;
+	CategorisedTransactionLister categorisedTransactionLister;
 	
 	@Autowired
 	TransactionPersister transactionPersister;
@@ -63,12 +63,12 @@ public class CategoryDatabaseTest {
 		assertThat(ct)
 			.isNotNull();
 		
-		List<CategorisedTransaction> list = categorisedTransactionReader.list();
+		List<CategorisedTransaction> list = categorisedTransactionLister.list();
 		assertThat(list)
 			.hasSizeGreaterThan(0);
 		
 		categorisedTransactionDeleter.delete(ct);
-		List<CategorisedTransaction> listAfterDeletion = categorisedTransactionReader.list();
+		List<CategorisedTransaction> listAfterDeletion = categorisedTransactionLister.list();
 		assertThat(listAfterDeletion.size())
 			.isLessThan(list.size());
 		

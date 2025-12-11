@@ -6,12 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.hdekker.finance_cash_flow.Transaction;
-import com.hdekker.finance_cash_flow.TransactionReader;
+import com.hdekker.finance_cash_flow.TransactionLister;
 import com.hdekker.finance_cash_flow.transaction.database.TransactionEntitiy;
 import com.hdekker.finance_cash_flow.transaction.database.TransactionEntityRepository;
 
 @Component
-public class TransactionReaderImpl implements TransactionReader{
+public class TransactionReaderImpl implements TransactionLister{
 	
 	@Autowired
 	TransactionEntityRepository repo;

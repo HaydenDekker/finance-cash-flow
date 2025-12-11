@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.hdekker.finance_cash_flow.Transaction;
-import com.hdekker.finance_cash_flow.TransactionReader;
+import com.hdekker.finance_cash_flow.TransactionLister;
 import com.hdekker.finance_cash_flow.transaction.TransactionRestAdapter;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.H2;
@@ -31,7 +31,7 @@ public class TransactionViewer extends VerticalLayout implements AfterNavigation
 	private static final long serialVersionUID = -8101501973560695910L;
 	
 	@Autowired
-	TransactionReader transactionReader;
+	TransactionLister transactionLister;
 	
 	Grid<Transaction> transactionGrid = new Grid<Transaction>();
 	
@@ -65,7 +65,7 @@ public class TransactionViewer extends VerticalLayout implements AfterNavigation
 	@Override
 	public void afterNavigation(AfterNavigationEvent event) {
 		
-		List<Transaction> transactions = transactionReader.list();
+		List<Transaction> transactions = transactionLister.list();
 		transactionGrid.setItems(transactions);
 		
 	}

@@ -27,8 +27,10 @@ public class CategoryGroup {
 	                    )
 	                );
 	}
+	
+	public record SummedTransactionCategory (TransactionCategory category, Map<YearMonth, SummedTransactions> summedMonths) {}
 
-	public static Map<TransactionCategory, Map<YearMonth, SummedTransactions>> groupByCategoryAndByYearMonthAndSum(
+	public static List<SummedTransactionCategory> groupByCategoryAndByYearMonthAndSum(
 			List<CategorisedTransaction> transactions) {
 		return transactions.stream()
 	            .collect(
@@ -55,7 +57,11 @@ public class CategoryGroup {
                                 }
                             )
 	                    )
-	                );
+	                )
+	            .entrySet()
+	            .stream()
+	            .map(es->new SummedTransactionCategory(es.getKey(), es.getValue()))
+	            .toList();
 	}
 	
 }

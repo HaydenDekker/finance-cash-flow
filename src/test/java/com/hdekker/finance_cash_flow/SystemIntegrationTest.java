@@ -1,6 +1,8 @@
 package com.hdekker.finance_cash_flow;
 
 import java.util.List;
+
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +13,7 @@ import com.hdekker.finance_cash_flow.historical.HistoricalInterpollationRestAdap
 import com.hdekker.finance_cash_flow.transaction.TransactionRestAdapter;
 import com.hdekker.finance_cash_flow.transaction.TestData;
 import com.hdekker.finance_cash_flow.transaction.TestData.TestCase;
+import com.hdekker.finance_cash_flow.transaction.TestData.TransactionAssignement;
 
 @SpringBootTest
 public class SystemIntegrationTest {
@@ -24,20 +27,37 @@ public class SystemIntegrationTest {
 	@Autowired
 	HistoricalInterpollationRestAdapter historicalInterpollationRestAdapter;
 	
-	public List<TestCase> testCases(){
+	@Autowired
+	TransactionDeleter transactionDeleter;
+	
+	@Autowired
+	CategorisedTransactionDeleter categorisedTransactionDeleter;
+	
+	public static List<TestCase> testCases(){
 		
 		TestData td = new TestData();
 		return td.testCases();
 	}
 	
+	List<TransactionAssignement> transactions;
+	
 	@ParameterizedTest
 	@MethodSource("testCases")
 	public void givenCategorisedData_ExpectAverageCalculated(TestCase testCase) {
 	
+		transactions = testCase.transactions();
 		testCase.transactions().forEach(t->transactionRestAdapter.save(t.transaction()));
 		testCase.transactions().forEach(ta-> categoryRestAdapter.set(ta.categorisedTransaction()));
 		historicalInterpollationRestAdapter.listAll();
 		
+	}
+	
+	@AfterEach
+	public void cleanUpDatabase() {
+		transactions.forEach(t->{
+			categorisedTransactionDeleter.delete(t.categorisedTransaction());
+			transactionDeleter.delete(t.transaction());
+		});
 	}
 
 }

@@ -10,7 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import com.hdekker.finance_cash_flow.Transaction;
 import com.hdekker.finance_cash_flow.TransactionPersister;
-import com.hdekker.finance_cash_flow.TransactionReader;
+import com.hdekker.finance_cash_flow.TransactionLister;
 
 @SpringBootTest
 public class TransactionDatabaseTest {
@@ -19,7 +19,7 @@ public class TransactionDatabaseTest {
 	TransactionPersister transactionPersistor;
 	
 	@Autowired
-	TransactionReader transactionReader;
+	TransactionLister transactionLister;
 	
 	TestData testData = new TestData();
 	
@@ -30,7 +30,7 @@ public class TransactionDatabaseTest {
 		assertThat(transaction)
 			.isNotNull();
 		
-		List<Transaction> allTransactions = transactionReader.list();
+		List<Transaction> allTransactions = transactionLister.list();
 		
 		assertThat(allTransactions.stream()
 				.filter(t->t.description().contains(testData.stubDescription))
