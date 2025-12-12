@@ -30,12 +30,13 @@ Initial tests for the `historical averaging` feature:
   Calculate category actuals, calculate forecasts. Forecasts depend on expense type. Need to produce, Set of all Months in actuals and forecasts.  
   List<Category, Map<Month, MonthActual | MonthForcast> two lists. MonthForcasts have 3 components, Fixed forecast (summed), Known Variable (summed, Variable (linear interpolation)
 - (Complete) - Display actuals - Category (row) by YearMonth (column) and cost is the value. Display historical averages, filtered by category. Graph should be cost by month. 
-- Display total monthly spend across all categories
-- Display total monthly income
+- (done) Display total monthly spend across all categories
+- (done) Display total monthly income
 - Display monthly net position
-- (In Progress) View - Historical Average - Initially a table will do. Stacked Bar chart for individual categories, line chart for total expense. 
-
+- (In Progress) View - Historical Average - Initially a table will do. Stacked Bar chart for individual categories, line chart for total expense.
+ 
 
 ## Future Goals
+- Use a grouping attribute to collect or differentiate like expenses. e.g All SE W payee's can be South East Water group. When searching by group all expenses can be displayed.
 - Enhanced LLM-powered expense categorization
 - Web-based dashboard with interactive graphs

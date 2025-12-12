@@ -5,13 +5,16 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.stream.Stream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.hdekker.finance_cash_flow.TransactionCategory;
 import com.hdekker.finance_cash_flow.app.category.CategoryGroup.SummedTransactionCategory;
 import com.hdekker.finance_cash_flow.category.CategoryRestAdapter;
+import com.hdekker.finance_cash_flow.category.CategoryRestAdapter.HistoricalOverview;
 import com.vaadin.flow.component.grid.ColumnTextAlign;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.H2;
@@ -33,8 +36,10 @@ public class BudgeterView extends VerticalLayout implements AfterNavigationObser
 	@Autowired
 	CategoryRestAdapter adapter;
 	
+	public record DisplaySummedTransactionCategory(String rowName, SummedTransactionCategory categoryItem) {}
 	
-	Grid<SummedTransactionCategory> grid = new Grid<>(SummedTransactionCategory.class, false);
+	
+	Grid<DisplaySummedTransactionCategory> grid = new Grid<>(DisplaySummedTransactionCategory.class, false);
 	
 	public BudgeterView() {
 		
@@ -43,7 +48,7 @@ public class BudgeterView extends VerticalLayout implements AfterNavigationObser
 		add(new H2("Budgeter"));
 		add(grid);
 		
-		grid.addColumn(SummedTransactionCategory::category)
+		grid.addColumn(DisplaySummedTransactionCategory::rowName)
 		    .setHeader("Category")
 		    .setSortable(true)
 		    .setKey("categoryName");
@@ -55,31 +60,36 @@ public class BudgeterView extends VerticalLayout implements AfterNavigationObser
 	@Override
 	public void afterNavigation(AfterNavigationEvent event) {
 		
-		List<SummedTransactionCategory> summedTransactions = adapter.groupedAndSummed();
-		Set<YearMonth> yearMonths = yearMonths(summedTransactions);
+		HistoricalOverview historicalOverview = adapter.historicalOverview();
+		Set<YearMonth> yearMonths = historicalOverview.yearMonths();
 		log.info("" + yearMonths.size() + " months in dataset.");
 		
 		for (YearMonth month : yearMonths) {
-		    grid.addColumn(category -> Optional.ofNullable(category.summedMonths().get(month)).map(st->st.amount()).orElse(0.0))
+		    grid.addColumn(category -> Optional.ofNullable(category.categoryItem().summedMonths().get(month)).map(st->st.amount()).orElse(0.0))
 		        .setHeader(month.toString())
 		        .setKey(month.toString()) // Use the month name as the key
 		        .setTextAlign(ColumnTextAlign.END); // Align values nicely
 		}
 		
-		grid.setItems(summedTransactions);
+		Stream<DisplaySummedTransactionCategory> expenseTotal = Stream.of(
+				new DisplaySummedTransactionCategory(
+						"Expense Total",
+				new SummedTransactionCategory(TransactionCategory.INCOME, historicalOverview.monthlyExpensesTotal()))
+				);
 		
-	}
-	
-	Set<YearMonth> yearMonths(List<SummedTransactionCategory> data){
-	
-		// 1. Collect all unique month keys
-		Set<YearMonth> uniqueMonths = new TreeSet<>();
+		Stream<DisplaySummedTransactionCategory> items = historicalOverview.summedTransactionsByCategory().stream()
+			.map(st-> new DisplaySummedTransactionCategory(st.category().name(), st));
+			
+		
+		List<DisplaySummedTransactionCategory> combined = Stream.concat(
+				 expenseTotal,
+				 items
+				)
+				.toList();
+		
+		grid.setItems(combined);
 
-		for (SummedTransactionCategory category : data) {
-		    uniqueMonths.addAll(category.summedMonths().keySet());
-		}
-		
-		return uniqueMonths;
 	}
+	
 
 }

@@ -12,6 +12,8 @@ public enum TransactionCategory {
 	GIFTS_AND_DONATIONS("Gifts and donations"),
 	CHILDCARE_AND_SCHOOLING("Childcare and Schooling"),
 	SAVINGS_AND_DEBT("Savings & Debt"),
+	PROFESSIONAL("Professional"),
+	CLOTHING("Clothing"),
 	UNKNOWN("Unknown");
 	
 	String displayName;
