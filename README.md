@@ -32,7 +32,7 @@ Initial tests for the `historical averaging` feature:
 - (Complete) - Display actuals - Category (row) by YearMonth (column) and cost is the value. Display historical averages, filtered by category. Graph should be cost by month. 
 - (done) Display total monthly spend across all categories
 - (done) Display total monthly income
-- Display monthly net position
+- (done) Display monthly net position
 - (In Progress) View - Historical Average - Initially a table will do. Stacked Bar chart for individual categories, line chart for total expense.
  
 

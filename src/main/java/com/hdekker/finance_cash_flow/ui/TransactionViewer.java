@@ -54,7 +54,7 @@ public class TransactionViewer extends VerticalLayout implements AfterNavigation
 		setHeightFull();
 		
 		transactionGrid.addColumn(Transaction::dateString).setHeader("Date");
-		transactionGrid.addColumn(Transaction::amount).setHeader("Amount");
+		transactionGrid.addColumn(Transaction::amount).setHeader("Amount").setSortable(true);
 		transactionGrid.addColumn(Transaction::description).setHeader("Payee Description");
 		
 		transactionGrid.setHeightFull();

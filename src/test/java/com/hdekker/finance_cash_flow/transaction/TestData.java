@@ -63,8 +63,9 @@ public class TestData {
 		}
 		
 		public List<Transaction> transactionExpenses() {
-			return ExpenseFilter.filter(
+			return ExpenseFilter.breakdown(
 					trans())
+					.expense()
 					.stream()
 						.map(ct->ct.transaction())
 						.toList();

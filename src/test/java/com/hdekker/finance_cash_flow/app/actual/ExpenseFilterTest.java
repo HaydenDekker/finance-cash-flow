@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import com.hdekker.finance_cash_flow.CategorisedTransaction;
 import com.hdekker.finance_cash_flow.TransactionCategory;
+import com.hdekker.finance_cash_flow.app.actual.ExpenseFilter.ExpenseIncomeBreakdown;
 import com.hdekker.finance_cash_flow.transaction.TestData;
 
 public class ExpenseFilterTest {
@@ -21,9 +22,9 @@ public class ExpenseFilterTest {
 		assertThat(transactions.stream().filter(ct-> ct.category().equals(TransactionCategory.INCOME)).findAny())
 			.isPresent();
 			
-		List<CategorisedTransaction> expenses = ExpenseFilter.filter(transactions);
+		ExpenseIncomeBreakdown breakdown = ExpenseFilter.breakdown(transactions);
 		
-		assertThat(expenses.stream().filter(ct-> ct.category().equals(TransactionCategory.INCOME)).findAny())
+		assertThat(breakdown.expense().stream().filter(ct-> ct.category().equals(TransactionCategory.INCOME)).findAny())
 			.isEmpty();
 		
 	}

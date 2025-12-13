@@ -57,7 +57,7 @@ public class TransactionClassifier extends VerticalLayout implements AfterNaviga
 		categorisedTransaction.addColumn(ct->{
 			if(ct.category()==null) return "";
 			return ct.category().name();
-		}).setHeader("Category");
+		}).setHeader("Category").setSortable(true);
 		
 		categorisedTransaction.addColumn(ct->{
 			if(ct.necessity()==null) return "";
@@ -154,6 +154,10 @@ public class TransactionClassifier extends VerticalLayout implements AfterNaviga
 		List<CategorisedTransaction> withoutAllocation = categoryRestAdapter.listIncomplete();
 		
 		categorisedTransaction.setItems(Stream.concat(list.stream(), withoutAllocation.stream()).toList());
+		
+		if(withoutAllocation.size()>0) {
+			categorisedTransaction.scrollToItem(withoutAllocation.get(0));
+		}
 		
 	}
 	

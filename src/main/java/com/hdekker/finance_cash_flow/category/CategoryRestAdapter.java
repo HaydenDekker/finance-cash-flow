@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,7 +21,9 @@ import com.hdekker.finance_cash_flow.CategorisedTransactionReader;
 import com.hdekker.finance_cash_flow.CategoryAllocator;
 import com.hdekker.finance_cash_flow.CategorisedTransaction;
 import com.hdekker.finance_cash_flow.MissingCategorisedTransactionReader;
+import com.hdekker.finance_cash_flow.Transaction;
 import com.hdekker.finance_cash_flow.app.actual.ExpenseFilter;
+import com.hdekker.finance_cash_flow.app.actual.ExpenseFilter.ExpenseIncomeBreakdown;
 import com.hdekker.finance_cash_flow.app.actual.HistoricalSummer;
 import com.hdekker.finance_cash_flow.app.actual.HistoricalSummer.SummedTransactions;
 import com.hdekker.finance_cash_flow.app.category.CategoryGroup;
@@ -71,8 +75,9 @@ public class CategoryRestAdapter {
 	}
 	
 	public record HistoricalOverview(
-			//Map<YearMonth, SummedTransactions> monthlyIncomeTotal,
+			SummedTransactionCategory monthlyIncomeTotal,
 			Map<YearMonth, SummedTransactions> monthlyExpensesTotal,
+			Map<YearMonth, SummedTransactions> difference,
 			List<SummedTransactionCategory> summedTransactionsByCategory) {
 		
 		public Set<YearMonth> yearMonths(){
@@ -94,12 +99,24 @@ public class CategoryRestAdapter {
 	public HistoricalOverview historicalOverview() {
 		
 		List<CategorisedTransaction> trans = list();
-		List<CategorisedTransaction> expenses = ExpenseFilter.filter(trans);
-		List<SummedTransactionCategory> summed = CategoryGroup.groupByCategoryAndByYearMonthAndSum(trans);
+		ExpenseIncomeBreakdown breakdown = ExpenseFilter.breakdown(trans);
+		List<SummedTransactionCategory> summed = CategoryGroup.groupByCategoryAndByYearMonthAndSum(breakdown.expense());
+		List<Transaction> expenseTransactions = breakdown.expense().stream().map(ct->ct.transaction()).toList();
+		Stream<Transaction> incomeTransactions = breakdown.income().stream().map(ct->ct.transaction());
 		Map<YearMonth, SummedTransactions> monthlyExpensesTotal = HistoricalSummer.calculateTotal(
-				expenses.stream().map(ct->ct.transaction()).toList()
+				expenseTransactions
 			);
-		return new HistoricalOverview(monthlyExpensesTotal, summed);
+		List<SummedTransactionCategory> income = CategoryGroup.groupByCategoryAndByYearMonthAndSum(breakdown.income());
+		
+		Map<YearMonth, SummedTransactions> difference = HistoricalSummer.calculateTotal(
+				Stream.concat(incomeTransactions, expenseTransactions.stream()).toList()
+			);
+		
+		return new HistoricalOverview(income.get(0), 
+				monthlyExpensesTotal, 
+				difference,
+				summed);
+		
 	}
 
 }
