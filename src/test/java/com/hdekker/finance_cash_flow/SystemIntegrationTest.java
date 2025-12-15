@@ -13,8 +13,8 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import com.hdekker.finance_cash_flow.app.actual.HistoricalOverviewFilter.HistoricalOverview;
 import com.hdekker.finance_cash_flow.category.CategoryRestAdapter;
-import com.hdekker.finance_cash_flow.category.CategoryRestAdapter.HistoricalOverview;
 import com.hdekker.finance_cash_flow.historical.HistoricalInterpollationRestAdapter;
 import com.hdekker.finance_cash_flow.transaction.TransactionRestAdapter;
 import com.hdekker.finance_cash_flow.transaction.TestData;

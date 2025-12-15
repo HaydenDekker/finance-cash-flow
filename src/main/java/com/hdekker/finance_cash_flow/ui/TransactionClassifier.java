@@ -1,14 +1,17 @@
 package com.hdekker.finance_cash_flow.ui;
 
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.hdekker.finance_cash_flow.CategorisedTransaction;
+import com.hdekker.finance_cash_flow.Transaction;
 import com.hdekker.finance_cash_flow.CategorisedTransaction.ExpenseType;
 import com.hdekker.finance_cash_flow.CategorisedTransaction.FinancialFrequency;
 import com.hdekker.finance_cash_flow.CategorisedTransaction.Necessity;
@@ -45,13 +48,28 @@ public class TransactionClassifier extends VerticalLayout implements AfterNaviga
 	@Autowired
 	CategoryRestAdapter categoryRestAdapter;
 	
+	Comparator<CategorisedTransaction> dateStringComparator = (dateString1, dateString2) -> {
+	    try {
+	        LocalDate date1 = LocalDate.parse(dateString1.transaction().dateString(), Transaction.formatter);
+	        LocalDate date2 = LocalDate.parse(dateString2.transaction().dateString(), Transaction.formatter);
+	        return date1.compareTo(date2); // Compare the LocalDate objects
+	    } catch (Exception e) {
+	        // Handle potential parsing errors (e.g., empty or malformed strings)
+	        return 0;
+	    }
+	};
+	
 	public TransactionClassifier() {
+		
 		add(new H2("Transaction Classifier"));
 		add(categorisedTransaction);	
 		setHeightFull();
 		
+		categorisedTransaction.addColumn(ct-> ct.transaction().dateString())
+			.setHeader("Date").setSortable(true).setComparator(dateStringComparator);
+		
 		categorisedTransaction.addColumn(ct->{
-			return ct.transaction().dateString() + " " + ct.transaction().amount() + " " + ct.transaction().description();
+			return ct.transaction().amount() + " " + ct.transaction().description();
 		}).setHeader("Transaction");
 		
 		categorisedTransaction.addColumn(ct->{

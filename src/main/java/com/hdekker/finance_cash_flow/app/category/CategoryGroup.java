@@ -6,16 +6,23 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import com.hdekker.finance_cash_flow.CategorisedTransaction;
+import com.hdekker.finance_cash_flow.Transaction;
 import com.hdekker.finance_cash_flow.TransactionCategory;
 import com.hdekker.finance_cash_flow.app.actual.HistoricalSummer;
 import com.hdekker.finance_cash_flow.app.actual.HistoricalSummer.SummedTransactions;
 
+import reactor.util.function.Tuples;
+
 public class CategoryGroup {
 	
-	public record SummedTransactionCategory (TransactionCategory category, Map<YearMonth, SummedTransactions> summedMonths) {}
+	public record SummedTransactionCategory (
+			TransactionCategory category, 
+			List<CategorisedTransaction> categorisedTransaction,
+			Map<YearMonth, SummedTransactions> summedMonths) {}
 
 	public static List<SummedTransactionCategory> groupByCategoryAndByYearMonthAndSum(
 			List<CategorisedTransaction> transactions) {
+		
 		return transactions.stream()
 	            .collect(
 	                    Collectors.groupingBy(
@@ -31,20 +38,23 @@ public class CategoryGroup {
                                     
                                     // Map the CategorisedTransaction list to a Transaction list 
                                     // as required by HistoricalSummer::calculateTotal
-                                    List<com.hdekker.finance_cash_flow.Transaction> simpleTransactions = 
+                                    List<Transaction> simpleTransactions = 
                                         categoryTransactions.stream()
                                             .map(CategorisedTransaction::transaction)
                                             .collect(Collectors.toList());
                                             
                                     // Use the calculateTotal method to perform the second level grouping and summing
-                                    return HistoricalSummer.calculateTotal(simpleTransactions);
+                                    return Tuples.of(HistoricalSummer.calculateTotal(simpleTransactions), categoryTransactions);
                                 }
                             )
 	                    )
 	                )
 	            .entrySet()
 	            .stream()
-	            .map(es->new SummedTransactionCategory(es.getKey(), es.getValue()))
+	            .map(es->new SummedTransactionCategory(
+	            		es.getKey(), 
+	            		es.getValue().getT2(), 
+	            		es.getValue().getT1()))
 	            .toList();
 	}
 	

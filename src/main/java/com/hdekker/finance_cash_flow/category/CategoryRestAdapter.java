@@ -1,14 +1,6 @@
 package com.hdekker.finance_cash_flow.category;
 
-import java.time.LocalDateTime;
-import java.time.YearMonth;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,11 +13,8 @@ import com.hdekker.finance_cash_flow.CategorisedTransactionReader;
 import com.hdekker.finance_cash_flow.CategoryAllocator;
 import com.hdekker.finance_cash_flow.CategorisedTransaction;
 import com.hdekker.finance_cash_flow.MissingCategorisedTransactionReader;
-import com.hdekker.finance_cash_flow.Transaction;
-import com.hdekker.finance_cash_flow.app.actual.ExpenseFilter;
-import com.hdekker.finance_cash_flow.app.actual.ExpenseFilter.ExpenseIncomeBreakdown;
-import com.hdekker.finance_cash_flow.app.actual.HistoricalSummer;
-import com.hdekker.finance_cash_flow.app.actual.HistoricalSummer.SummedTransactions;
+import com.hdekker.finance_cash_flow.app.actual.HistoricalOverviewFilter;
+import com.hdekker.finance_cash_flow.app.actual.HistoricalOverviewFilter.HistoricalOverview;
 import com.hdekker.finance_cash_flow.app.category.CategoryGroup;
 import com.hdekker.finance_cash_flow.app.category.CategoryGroup.SummedTransactionCategory;
 
@@ -57,10 +46,7 @@ public class CategoryRestAdapter {
 
 	@GetMapping("/category/incomplete")
 	public List<CategorisedTransaction> listIncomplete() {
-		return missingCategorisedTransactionReader.findAll()
-					.stream()
-					.map(t->new CategorisedTransaction(t, null, null, null, null, LocalDateTime.now()))
-					.toList();
+		return missingCategorisedTransactionReader.findAll();
 	}
 	
 	@GetMapping("/category/grouped-and-summed")
@@ -73,50 +59,11 @@ public class CategoryRestAdapter {
 			@PathVariable("objectKey") String objectKey) {
 		return categorisedTransactionReader.read(objectKey);
 	}
-	
-	public record HistoricalOverview(
-			SummedTransactionCategory monthlyIncomeTotal,
-			Map<YearMonth, SummedTransactions> monthlyExpensesTotal,
-			Map<YearMonth, SummedTransactions> difference,
-			List<SummedTransactionCategory> summedTransactionsByCategory) {
-		
-		public Set<YearMonth> yearMonths(){
-			
-			// 1. Collect all unique month keys
-			Set<YearMonth> uniqueMonths = new TreeSet<>();
-
-			for (SummedTransactionCategory category : summedTransactionsByCategory) {
-			    uniqueMonths.addAll(category.summedMonths().keySet());
-			}
-			
-			return uniqueMonths;
-		}
-		
-		
-	}
 
 	@GetMapping("/category/historical-overview")
 	public HistoricalOverview historicalOverview() {
-		
 		List<CategorisedTransaction> trans = list();
-		ExpenseIncomeBreakdown breakdown = ExpenseFilter.breakdown(trans);
-		List<SummedTransactionCategory> summed = CategoryGroup.groupByCategoryAndByYearMonthAndSum(breakdown.expense());
-		List<Transaction> expenseTransactions = breakdown.expense().stream().map(ct->ct.transaction()).toList();
-		Stream<Transaction> incomeTransactions = breakdown.income().stream().map(ct->ct.transaction());
-		Map<YearMonth, SummedTransactions> monthlyExpensesTotal = HistoricalSummer.calculateTotal(
-				expenseTransactions
-			);
-		List<SummedTransactionCategory> income = CategoryGroup.groupByCategoryAndByYearMonthAndSum(breakdown.income());
-		
-		Map<YearMonth, SummedTransactions> difference = HistoricalSummer.calculateTotal(
-				Stream.concat(incomeTransactions, expenseTransactions.stream()).toList()
-			);
-		
-		return new HistoricalOverview(income.get(0), 
-				monthlyExpensesTotal, 
-				difference,
-				summed);
-		
+		return HistoricalOverviewFilter.calculate(trans);
 	}
 
 }

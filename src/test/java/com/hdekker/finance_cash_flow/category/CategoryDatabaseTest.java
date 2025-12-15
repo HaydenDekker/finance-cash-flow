@@ -17,7 +17,6 @@ import com.hdekker.finance_cash_flow.CategorisedTransaction.ExpenseType;
 import com.hdekker.finance_cash_flow.CategorisedTransaction.FinancialFrequency;
 import com.hdekker.finance_cash_flow.CategorisedTransaction.Necessity;
 import com.hdekker.finance_cash_flow.MissingCategorisedTransactionReader;
-import com.hdekker.finance_cash_flow.Transaction;
 import com.hdekker.finance_cash_flow.TransactionCategory;
 import com.hdekker.finance_cash_flow.TransactionDeleter;
 import com.hdekker.finance_cash_flow.TransactionPersister;
@@ -93,11 +92,12 @@ public class CategoryDatabaseTest {
 		transactionPersister.persist(data.stub2); // will have no associated CT
 		ct = categoryAllocator.allocate(ct);
 		
-		List<Transaction> listMissing = missingCategorisedTransactionReader.findAll();
+		List<CategorisedTransaction> listMissing = missingCategorisedTransactionReader.findAll();
 		
 		assertThat(listMissing)
 			.hasSize(1);
 		assertThat(listMissing.get(0)
+				.transaction()
 				.description())
 			.isEqualTo(data.stub2.description());
 		

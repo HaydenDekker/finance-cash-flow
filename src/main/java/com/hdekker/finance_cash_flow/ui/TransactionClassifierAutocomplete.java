@@ -22,7 +22,7 @@ import com.vaadin.flow.router.HasUrlParameter;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.WildcardParameter;
 
-@Route("transaction-classifier-autocomplete")
+@Route(value = "transaction-classifier-autocomplete", layout = MainLayout.class)
 public class TransactionClassifierAutocomplete extends VerticalLayout implements AfterNavigationObserver, HasUrlParameter<String> {
 	
 	/**
@@ -79,7 +79,8 @@ public class TransactionClassifierAutocomplete extends VerticalLayout implements
 			
 			matchingPayees = categoryRestAdapter.listIncomplete()
 				.stream()
-				.filter(ct->ct.transaction().description().contains(vc.getValue()))
+				.filter(ct->ct.transaction().description().trim().toUpperCase().replaceAll("\\s+", " ")
+							.contains(vc.getValue().trim().toUpperCase().replaceAll("\\s+", " ")))
 				.toList();
 			
 			categorisedTransaction.setItems(matchingPayees);

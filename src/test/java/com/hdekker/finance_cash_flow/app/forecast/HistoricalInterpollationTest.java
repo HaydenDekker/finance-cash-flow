@@ -21,9 +21,11 @@ public class HistoricalInterpollationTest {
 					.get(0)
 					.transactionExpenses());
 		
-		double estimate = result.quadraticResult().evaluate(YearMonth.of(2025, 07));
+		double estimate = result.quadraticResult().evaluate(
+				YearMonth.from(
+						TestData.startingDate.plusMonths(10)));
 		assertThat(estimate)
-				.isCloseTo(127, offset(2.0));
+				.isCloseTo(124, offset(2.0));
 	}
 
 }

@@ -11,11 +11,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.hdekker.finance_cash_flow.TransactionCategory;
+import com.hdekker.finance_cash_flow.app.actual.HistoricalOverviewFilter.HistoricalOverview;
 import com.hdekker.finance_cash_flow.app.actual.HistoricalSummer.SummedTransactions;
-import com.hdekker.finance_cash_flow.app.category.CategoryGroup.SummedTransactionCategory;
 import com.hdekker.finance_cash_flow.category.CategoryRestAdapter;
-import com.hdekker.finance_cash_flow.category.CategoryRestAdapter.HistoricalOverview;
 import com.vaadin.flow.component.grid.ColumnTextAlign;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.H2;

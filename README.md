@@ -34,6 +34,9 @@ Initial tests for the `historical averaging` feature:
 - (done) Display total monthly income
 - (done) Display monthly net position
 - (In Progress) View - Historical Average - Initially a table will do. Stacked Bar chart for individual categories, line chart for total expense.
+
+Tests for `fixed forcast`
+-  Can detect latest expense in a group, can carry that forward by month.
  
 
 ## Future Goals

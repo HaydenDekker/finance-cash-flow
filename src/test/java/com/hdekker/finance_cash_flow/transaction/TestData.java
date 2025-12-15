@@ -32,19 +32,21 @@ public class TestData {
     String mockCSVData = "\"3/12/2025\",\"-80.2\",\"" + descriptionStub + "\"";
     String mockCSVDataDoubleDigitDay = "\"24/12/2025\",\"-80.2\",\"" + descriptionStub + "\"";
     
+    public static LocalDate startingDate = LocalDate.now().minusYears(1);
+    
     public static List<Transaction> testTransactions(){
     	return List.of(
-    		new Transaction(LocalDate.of(2024,5,14), 300.0, "Income"),
-    		new Transaction(LocalDate.of(2024,5,15), 3.0, "Groceries"),
-    		new Transaction(LocalDate.of(2024,6,15), 6.0, "Fuel"),
-    		new Transaction(LocalDate.of(2024,7,15), 11.0, "Fuel"),
-    		new Transaction(LocalDate.of(2024,8,15), 18.0, "Groceries"),
-    		new Transaction(LocalDate.of(2024,9,15), 27.0, "Rego"),
-    		new Transaction(LocalDate.of(2024,10,15), 38.0, "Groceries"),
-    		new Transaction(LocalDate.of(2024,11,15), 51.0, "Fuel"),
-    		new Transaction(LocalDate.of(2025,1,15), 66.0, "Groceries"),
-    		new Transaction(LocalDate.of(2025,2,15), 83.0, "Fuel"),
-    		new Transaction(LocalDate.of(2025,5,15), 102.0, "Rego")
+    		new Transaction(startingDate, 300.0, "Income"),
+    		new Transaction(startingDate.plusDays(1), 3.0, "Groceries"),
+    		new Transaction(startingDate.plusMonths(1), 6.0, "Fuel"),
+    		new Transaction(startingDate.plusMonths(2), 11.0, "Fuel"),
+    		new Transaction(startingDate.plusMonths(3), 18.0, "Groceries"),
+    		new Transaction(startingDate.plusMonths(4), 27.0, "Rego"),
+    		new Transaction(startingDate.plusMonths(5), 38.0, "Groceries"),
+    		new Transaction(startingDate.plusMonths(6), 51.0, "Fuel"),
+    		new Transaction(startingDate.plusMonths(7), 66.0, "Groceries"),
+    		new Transaction(startingDate.plusMonths(8), 83.0, "Fuel"),
+    		new Transaction(startingDate.plusMonths(9), 102.0, "Rego")
     	);
     }
     
