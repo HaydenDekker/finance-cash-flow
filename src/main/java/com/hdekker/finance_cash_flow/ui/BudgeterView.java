@@ -54,7 +54,7 @@ public class BudgeterView extends VerticalLayout implements AfterNavigationObser
 	@Override
 	public void afterNavigation(AfterNavigationEvent event) {
 		
-		BudgetOverview historicalOverview = adapter.historicalOverview();
+		BudgetOverview historicalOverview = adapter.budgetOverview();
 		Set<YearMonth> yearMonths = historicalOverview.yearMonths();
 		log.info("" + yearMonths.size() + " months in dataset.");
 		

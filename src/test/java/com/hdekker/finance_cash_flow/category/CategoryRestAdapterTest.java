@@ -15,6 +15,7 @@ import com.hdekker.finance_cash_flow.TransactionDeleter;
 import com.hdekker.finance_cash_flow.TransactionPersister;
 import com.hdekker.finance_cash_flow.CategorisedTransaction.ExpenseType;
 import com.hdekker.finance_cash_flow.CategorisedTransaction.FinancialFrequency;
+import com.hdekker.finance_cash_flow.CategorisedTransaction.ForecastGroup;
 import com.hdekker.finance_cash_flow.CategorisedTransaction.Necessity;
 import com.hdekker.finance_cash_flow.transaction.TestData;
 
@@ -47,7 +48,7 @@ class CategoryRestAdapterTest {
     					data.stub, 
     					TransactionCategory.ENTERTAINMENT, 
     					Necessity.REQUIRED,
-    					"Test Expense",
+    					new ForecastGroup("Test Expense"),
     					FinancialFrequency.AD_HOC,
     					ExpenseType.FIXED,
     					dateTime));

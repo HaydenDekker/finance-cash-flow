@@ -12,6 +12,7 @@ import com.hdekker.finance_cash_flow.TransactionCategory;
 import com.hdekker.finance_cash_flow.app.actual.ExpenseFilter;
 import com.hdekker.finance_cash_flow.CategorisedTransaction.ExpenseType;
 import com.hdekker.finance_cash_flow.CategorisedTransaction.FinancialFrequency;
+import com.hdekker.finance_cash_flow.CategorisedTransaction.ForecastGroup;
 import com.hdekker.finance_cash_flow.CategorisedTransaction.Necessity;
 
 public class TestData {
@@ -83,6 +84,12 @@ public class TestData {
 			"Rego", TransactionCategory.TRANSPORTATION,
 			"Income", TransactionCategory.INCOME);
 	
+	static Map<String, ExpenseType> forecastMethodMap = Map.of(
+			"Groceries", ExpenseType.VARIABLE,
+			"Fuel", ExpenseType.VARIABLE,
+			"Rego", ExpenseType.KNOWN_VARIABLE,
+			"Income", ExpenseType.FIXED);
+	
 	static TransactionAssignement assign(Transaction transaction) {
 		return new TransactionAssignement(
 				transaction, 
@@ -90,7 +97,8 @@ public class TestData {
 						transaction, 
 						categoryMap.get(transaction.description()), 
 						Necessity.DISCRETIONARY,
-						transaction.description(), // just use description as group for test
+						// just use description as group for test
+						new ForecastGroup(transaction.description() + "_forecast_group"),
 						FinancialFrequency.AD_HOC,
 						ExpenseType.FIXED,
 						LocalDateTime.now()));

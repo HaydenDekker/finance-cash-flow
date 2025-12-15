@@ -31,6 +31,8 @@ public record BudgetOverview (
 		    uniqueMonths.addAll(category.summedMonths().keySet());
 		}
 		
+		uniqueMonths.addAll(monthlyIncomeTotal.summedMonths().keySet());
+		
 		return uniqueMonths;
 	}
 		

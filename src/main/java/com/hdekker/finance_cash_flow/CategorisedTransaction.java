@@ -8,7 +8,7 @@ public record CategorisedTransaction(
 		Transaction transaction,
 		TransactionCategory category,
 		Necessity necessity,
-		String forcastGroup,
+		ForecastGroup forcastGroup,
 		FinancialFrequency financialFrequency,
 		ExpenseType expenseType,
 		LocalDateTime assignmentTimeStamp) { // TODO remove timestamp
@@ -44,6 +44,8 @@ public record CategorisedTransaction(
 		KNOWN_VARIABLE,
 		VARIABLE
 	}
+	
+	public record ForecastGroup(String name) {}
 	
 	public YearMonth getTransactionYearMonth() {
 	    return YearMonth.from(this.transaction().localDate()); 

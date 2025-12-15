@@ -15,6 +15,7 @@ import com.hdekker.finance_cash_flow.CategoryAllocator;
 import com.hdekker.finance_cash_flow.CategorisedTransaction;
 import com.hdekker.finance_cash_flow.CategorisedTransaction.ExpenseType;
 import com.hdekker.finance_cash_flow.CategorisedTransaction.FinancialFrequency;
+import com.hdekker.finance_cash_flow.CategorisedTransaction.ForecastGroup;
 import com.hdekker.finance_cash_flow.CategorisedTransaction.Necessity;
 import com.hdekker.finance_cash_flow.MissingCategorisedTransactionReader;
 import com.hdekker.finance_cash_flow.TransactionCategory;
@@ -51,7 +52,7 @@ public class CategoryDatabaseTest {
 				data.stub,
 				TransactionCategory.ENTERTAINMENT, 
 				Necessity.REQUIRED,
-				"Test Expense",
+				new ForecastGroup("Test Expense"),
 				FinancialFrequency.AD_HOC,
 				ExpenseType.FIXED,
 				LocalDateTime.now());
@@ -84,7 +85,7 @@ public class CategoryDatabaseTest {
 				data.stub, 
 				TransactionCategory.ENTERTAINMENT, 
 				Necessity.REQUIRED,
-				"Test Expense",
+				new ForecastGroup("Test Expense"),
 				FinancialFrequency.AD_HOC,
 				ExpenseType.FIXED,
 				LocalDateTime.now()); 

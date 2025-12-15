@@ -6,6 +6,7 @@ import com.hdekker.finance_cash_flow.CategorisedTransaction;
 import com.hdekker.finance_cash_flow.TransactionCategory;
 import com.hdekker.finance_cash_flow.CategorisedTransaction.ExpenseType;
 import com.hdekker.finance_cash_flow.CategorisedTransaction.FinancialFrequency;
+import com.hdekker.finance_cash_flow.CategorisedTransaction.ForecastGroup;
 import com.hdekker.finance_cash_flow.CategorisedTransaction.Necessity;
 import com.hdekker.finance_cash_flow.transaction.database.TransactionEntitiy;
 
@@ -109,7 +110,7 @@ public class CatorgarisedTransactionEntity {
 	    e.setNecessity(ct.necessity());
 	    e.setFinancialFrequency(ct.financialFrequency());
 	    e.setExpenseType(ct.expenseType());
-	    e.setForcastGroup(ct.forcastGroup());
+	    e.setForcastGroup(ct.forcastGroup().name());
 	    return e;
 	    
 	}
@@ -120,7 +121,7 @@ public class CatorgarisedTransactionEntity {
 	    		getTransaction().toTransaction(), 
 	    		getCategory(), 
 	    		getNecessity(),
-	    		(getForcastGroup() == null)? "": getForcastGroup(),
+	    		(getForcastGroup() == null)? new ForecastGroup(""): new ForecastGroup(getForcastGroup()),
 	    		getFinancialFrequency(),
 	    		getExpenseType(),
 	    		getCategoryTimeStamp());

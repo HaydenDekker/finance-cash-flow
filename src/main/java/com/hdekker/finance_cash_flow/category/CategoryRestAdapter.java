@@ -1,6 +1,8 @@
 package com.hdekker.finance_cash_flow.category;
 
+import java.time.YearMonth;
 import java.util.List;
+import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +19,8 @@ import com.hdekker.finance_cash_flow.MissingCategorisedTransactionReader;
 import com.hdekker.finance_cash_flow.app.budget.BudgetOverview;
 import com.hdekker.finance_cash_flow.app.category.CategoryGroup;
 import com.hdekker.finance_cash_flow.app.category.CategoryGroup.SummedTransactionCategory;
+import com.hdekker.finance_cash_flow.app.forecast.ForecastGroupMapper;
+import com.hdekker.finance_cash_flow.app.forecast.ForecastMethodFactory;
 
 @RestController
 public class CategoryRestAdapter {
@@ -61,9 +65,19 @@ public class CategoryRestAdapter {
 	}
 
 	@GetMapping("/category/budget-overview")
-	public BudgetOverview historicalOverview() {
+	public BudgetOverview budgetOverview() {
 		List<CategorisedTransaction> trans = list();
-		return BudgetOverview.calculate(trans);
+		List<CategorisedTransaction> forcastedTransactions = ForecastGroupMapper.map(trans)
+				.entrySet()
+				.stream()
+				.filter(es->!es.getKey().name().trim().equals(""))
+				.map(es-> ForecastMethodFactory.buildFor(
+								es.getValue().get(0).expenseType())
+							.forcast(es.getValue(), YearMonth.now().plusYears(1)))
+				.flatMap(forecast->forecast.forcastedTransaction().stream())
+				.toList();
+		
+		return BudgetOverview.calculate(Stream.concat(trans.stream(), forcastedTransactions.stream()).toList());
 	}
 	
 

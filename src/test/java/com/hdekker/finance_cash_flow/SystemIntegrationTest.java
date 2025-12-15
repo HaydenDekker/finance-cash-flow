@@ -49,7 +49,7 @@ public class SystemIntegrationTest {
 		testCase.transactions().forEach(t->transactionRestAdapter.save(t.transaction()));
 		testCase.transactions().forEach(ta-> categoryRestAdapter.set(ta.categorisedTransaction()));
 		
-		BudgetOverview ho = categoryRestAdapter.historicalOverview();
+		BudgetOverview ho = categoryRestAdapter.budgetOverview();
 		
 		Set<YearMonth> allMonths = testCase.trans().stream()
 			.map(ct->ct.getTransactionYearMonth())

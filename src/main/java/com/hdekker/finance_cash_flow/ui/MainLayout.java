@@ -19,7 +19,7 @@ public class MainLayout extends VerticalLayout implements RouterLayout {
 		H1 header = new H1("Cash Flow Kabana");
 		HorizontalLayout controls = new HorizontalLayout();
 		Anchor aTransactions = new Anchor("transaction-view", "transactions");
-		Anchor aClassification = new Anchor("transaction-calssifier", "calssification");
+		Anchor aClassification = new Anchor("transaction-classifier", "classifier");
 		Anchor aBudgeter = new Anchor("budgeter", "budgeter");
 		controls.add(header, aTransactions, aClassification, aBudgeter);
 		controls.setAlignItems(Alignment.BASELINE);

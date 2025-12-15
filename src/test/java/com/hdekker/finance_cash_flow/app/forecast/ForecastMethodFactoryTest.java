@@ -3,7 +3,6 @@ package com.hdekker.finance_cash_flow.app.forecast;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.List;
-
 import org.junit.jupiter.api.Test;
 
 import com.hdekker.finance_cash_flow.CategorisedTransaction;
@@ -31,8 +30,16 @@ public class ForecastMethodFactoryTest {
 		assertThat(forecast.forcastedTransaction())
 			.hasSize(12);
 		
+		CategorisedTransaction latest = ForecastMethodFactory.getLatestTransactionInGroup(income.categorisedTransaction());
 		
+		assertThat(latest.getTransactionYearMonth().plusMonths(1))
+			.isEqualTo(forecast.forcastedTransaction()
+					.get(0)
+					.getTransactionYearMonth()
+			);
+			
 		
 	}
+	
 
 }

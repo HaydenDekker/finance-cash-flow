@@ -105,7 +105,7 @@ public class TransactionClassifierAutocomplete extends VerticalLayout implements
 						LocalDateTime.now()));
 			});
 			
-			UI.getCurrent().navigate("transaction-calssifier");
+			UI.getCurrent().navigate("transaction-classifier");
 			
 		});
 		

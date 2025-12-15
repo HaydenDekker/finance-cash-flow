@@ -14,6 +14,7 @@ import com.hdekker.finance_cash_flow.CategorisedTransaction;
 import com.hdekker.finance_cash_flow.Transaction;
 import com.hdekker.finance_cash_flow.CategorisedTransaction.ExpenseType;
 import com.hdekker.finance_cash_flow.CategorisedTransaction.FinancialFrequency;
+import com.hdekker.finance_cash_flow.CategorisedTransaction.ForecastGroup;
 import com.hdekker.finance_cash_flow.CategorisedTransaction.Necessity;
 import com.hdekker.finance_cash_flow.TransactionCategory;
 import com.hdekker.finance_cash_flow.category.CategoryRestAdapter;
@@ -34,7 +35,7 @@ import com.vaadin.flow.router.Route;
 
 import reactor.core.publisher.Mono;
 
-@Route(value = "transaction-calssifier", layout = MainLayout.class)
+@Route(value = "transaction-classifier", layout = MainLayout.class)
 public class TransactionClassifier extends VerticalLayout implements AfterNavigationObserver{
 
 	
@@ -84,6 +85,12 @@ public class TransactionClassifier extends VerticalLayout implements AfterNaviga
 		}).setHeader("Necessity");
 		
 		categorisedTransaction.addColumn(ct->{
+			if(ct.forcastGroup()==null) return "";
+			return ct.forcastGroup().name();
+		}).setHeader("Forecast Group");
+		
+		
+		categorisedTransaction.addColumn(ct->{
 			if(ct.expenseType()==null) return "";
 			return ct.expenseType().name();
 		}).setHeader("Expense Type");
@@ -111,7 +118,7 @@ public class TransactionClassifier extends VerticalLayout implements AfterNaviga
 			
 			TextField forecastGroup = new TextField("Forecast Group");
 			div.add(forecastGroup);
-			if(ct.forcastGroup()!=null) forecastGroup.setValue(ct.forcastGroup());
+			if(ct.forcastGroup()!=null) forecastGroup.setValue(ct.forcastGroup().name());
 			
 			ComboBox<ExpenseType> et = new ComboBox<>("Expense Type");
 			div.add(et);
@@ -132,7 +139,7 @@ public class TransactionClassifier extends VerticalLayout implements AfterNaviga
 						ct.transaction(), 
 						tc.getValue(),
 						discretionary.getValue()==true? Necessity.DISCRETIONARY: Necessity.REQUIRED,
-						forecastGroup.getValue(),
+						new ForecastGroup(forecastGroup.getValue()),
 						ff.getValue(),
 						et.getValue(),
 						LocalDateTime.now()
@@ -160,7 +167,7 @@ public class TransactionClassifier extends VerticalLayout implements AfterNaviga
 			.subscribe(l->{
 				categorisedTransaction.getUI().ifPresent(ui->{
 					ui.access(()->{
-						setTransactions();
+						setTransactions(false);
 						ui.push();
 					});
 				});
@@ -172,14 +179,14 @@ public class TransactionClassifier extends VerticalLayout implements AfterNaviga
 		categoryRestAdapter.set(categorisedTransaction);
 	}
 	
-	void setTransactions() {
+	void setTransactions(boolean scrollToFirstWithoutAllocation) {
 		
 		List<CategorisedTransaction> list = categoryRestAdapter.list();
 		List<CategorisedTransaction> withoutAllocation = categoryRestAdapter.listIncomplete();
 		
 		categorisedTransaction.setItems(Stream.concat(list.stream(), withoutAllocation.stream()).toList());
 		
-		if(withoutAllocation.size()>0) {
+		if(scrollToFirstWithoutAllocation && withoutAllocation.size()>0) {
 			categorisedTransaction.scrollToItem(withoutAllocation.get(0));
 		}
 		
@@ -188,7 +195,9 @@ public class TransactionClassifier extends VerticalLayout implements AfterNaviga
 	@Override
 	public void afterNavigation(AfterNavigationEvent event) {
 		
-		setTransactions();
+		setTransactions(true);
+		
+		
 		
 	}
 
