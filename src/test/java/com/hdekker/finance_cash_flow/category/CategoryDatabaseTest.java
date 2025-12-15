@@ -51,6 +51,7 @@ public class CategoryDatabaseTest {
 				data.stub,
 				TransactionCategory.ENTERTAINMENT, 
 				Necessity.REQUIRED,
+				"Test Expense",
 				FinancialFrequency.AD_HOC,
 				ExpenseType.FIXED,
 				LocalDateTime.now());
@@ -83,6 +84,7 @@ public class CategoryDatabaseTest {
 				data.stub, 
 				TransactionCategory.ENTERTAINMENT, 
 				Necessity.REQUIRED,
+				"Test Expense",
 				FinancialFrequency.AD_HOC,
 				ExpenseType.FIXED,
 				LocalDateTime.now()); 

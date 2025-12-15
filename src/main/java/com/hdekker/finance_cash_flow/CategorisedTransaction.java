@@ -8,9 +8,10 @@ public record CategorisedTransaction(
 		Transaction transaction,
 		TransactionCategory category,
 		Necessity necessity,
+		String forcastGroup,
 		FinancialFrequency financialFrequency,
 		ExpenseType expenseType,
-		LocalDateTime assignmentTimeStamp) {
+		LocalDateTime assignmentTimeStamp) { // TODO remove timestamp
 	
 	public enum Necessity {
 		REQUIRED,

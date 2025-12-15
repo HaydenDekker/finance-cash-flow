@@ -1,4 +1,4 @@
-package com.hdekker.finance_cash_flow.app.actual;
+package com.hdekker.finance_cash_flow.app.budget;
 
 import java.time.YearMonth;
 import java.util.List;
@@ -9,34 +9,33 @@ import java.util.stream.Stream;
 
 import com.hdekker.finance_cash_flow.CategorisedTransaction;
 import com.hdekker.finance_cash_flow.Transaction;
+import com.hdekker.finance_cash_flow.app.actual.ExpenseFilter;
+import com.hdekker.finance_cash_flow.app.actual.HistoricalSummer;
 import com.hdekker.finance_cash_flow.app.actual.ExpenseFilter.ExpenseIncomeBreakdown;
 import com.hdekker.finance_cash_flow.app.actual.HistoricalSummer.SummedTransactions;
 import com.hdekker.finance_cash_flow.app.category.CategoryGroup;
 import com.hdekker.finance_cash_flow.app.category.CategoryGroup.SummedTransactionCategory;
 
-public class HistoricalOverviewFilter {
-	
-	public record HistoricalOverview (
+public record BudgetOverview (
 			SummedTransactionCategory monthlyIncomeTotal,
 			Map<YearMonth, SummedTransactions> monthlyExpensesTotal,
 			Map<YearMonth, SummedTransactions> difference,
 			List<SummedTransactionCategory> summedTransactionsByCategory) {
 		
-		public Set<YearMonth> yearMonths(){
-			
-			// 1. Collect all unique month keys
-			Set<YearMonth> uniqueMonths = new TreeSet<>();
+	public Set<YearMonth> yearMonths(){
+		
+		// 1. Collect all unique month keys
+		Set<YearMonth> uniqueMonths = new TreeSet<>();
 
-			for (SummedTransactionCategory category : summedTransactionsByCategory) {
-			    uniqueMonths.addAll(category.summedMonths().keySet());
-			}
-			
-			return uniqueMonths;
+		for (SummedTransactionCategory category : summedTransactionsByCategory) {
+		    uniqueMonths.addAll(category.summedMonths().keySet());
 		}
 		
+		return uniqueMonths;
 	}
+		
 	
-	public static HistoricalOverview calculate(List<CategorisedTransaction> trans) {
+	public static BudgetOverview calculate(List<CategorisedTransaction> trans) {
 		
 		ExpenseIncomeBreakdown breakdown = ExpenseFilter.breakdown(trans);
 		
@@ -54,7 +53,7 @@ public class HistoricalOverviewFilter {
 				Stream.concat(incomeTransactions, expenseTransactions.stream()).toList()
 			);
 		
-		return new HistoricalOverview(income.get(0), 
+		return new BudgetOverview(income.get(0), 
 				monthlyExpensesTotal, 
 				netCashFlow,
 				summedExpense);

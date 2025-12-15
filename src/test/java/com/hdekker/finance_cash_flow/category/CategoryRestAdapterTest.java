@@ -47,6 +47,7 @@ class CategoryRestAdapterTest {
     					data.stub, 
     					TransactionCategory.ENTERTAINMENT, 
     					Necessity.REQUIRED,
+    					"Test Expense",
     					FinancialFrequency.AD_HOC,
     					ExpenseType.FIXED,
     					dateTime));

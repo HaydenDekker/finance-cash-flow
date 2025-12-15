@@ -26,6 +26,7 @@ import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.NativeLabel;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.router.AfterNavigationEvent;
 import com.vaadin.flow.router.AfterNavigationObserver;
@@ -108,6 +109,10 @@ public class TransactionClassifier extends VerticalLayout implements AfterNaviga
 			div.add(discretionary);
 			if(Necessity.DISCRETIONARY.equals(ct.necessity())) discretionary.setValue(true);
 			
+			TextField forecastGroup = new TextField("Forecast Group");
+			div.add(forecastGroup);
+			if(ct.forcastGroup()!=null) forecastGroup.setValue(ct.forcastGroup());
+			
 			ComboBox<ExpenseType> et = new ComboBox<>("Expense Type");
 			div.add(et);
 			et.setItems(Arrays.asList(ExpenseType.values()));
@@ -127,6 +132,7 @@ public class TransactionClassifier extends VerticalLayout implements AfterNaviga
 						ct.transaction(), 
 						tc.getValue(),
 						discretionary.getValue()==true? Necessity.DISCRETIONARY: Necessity.REQUIRED,
+						forecastGroup.getValue(),
 						ff.getValue(),
 						et.getValue(),
 						LocalDateTime.now()

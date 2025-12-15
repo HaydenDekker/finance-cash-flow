@@ -1,6 +1,7 @@
 package com.hdekker.finance_cash_flow.category;
 
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,8 +14,7 @@ import com.hdekker.finance_cash_flow.CategorisedTransactionReader;
 import com.hdekker.finance_cash_flow.CategoryAllocator;
 import com.hdekker.finance_cash_flow.CategorisedTransaction;
 import com.hdekker.finance_cash_flow.MissingCategorisedTransactionReader;
-import com.hdekker.finance_cash_flow.app.actual.HistoricalOverviewFilter;
-import com.hdekker.finance_cash_flow.app.actual.HistoricalOverviewFilter.HistoricalOverview;
+import com.hdekker.finance_cash_flow.app.budget.BudgetOverview;
 import com.hdekker.finance_cash_flow.app.category.CategoryGroup;
 import com.hdekker.finance_cash_flow.app.category.CategoryGroup.SummedTransactionCategory;
 
@@ -60,10 +60,11 @@ public class CategoryRestAdapter {
 		return categorisedTransactionReader.read(objectKey);
 	}
 
-	@GetMapping("/category/historical-overview")
-	public HistoricalOverview historicalOverview() {
+	@GetMapping("/category/budget-overview")
+	public BudgetOverview historicalOverview() {
 		List<CategorisedTransaction> trans = list();
-		return HistoricalOverviewFilter.calculate(trans);
+		return BudgetOverview.calculate(trans);
 	}
+	
 
 }

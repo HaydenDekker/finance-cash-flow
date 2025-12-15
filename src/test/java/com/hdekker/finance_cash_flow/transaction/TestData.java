@@ -90,6 +90,7 @@ public class TestData {
 						transaction, 
 						categoryMap.get(transaction.description()), 
 						Necessity.DISCRETIONARY,
+						transaction.description(), // just use description as group for test
 						FinancialFrequency.AD_HOC,
 						ExpenseType.FIXED,
 						LocalDateTime.now()));

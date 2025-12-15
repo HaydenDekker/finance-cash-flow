@@ -20,7 +20,7 @@ A personal finance management tool for tracking expenses, analyzing historical d
 - **Controls**: Manipulate scenarios to gauge where to tighten.
 
 ## Testing Strategy
-Initial tests for the `historical averaging` feature:
+Initial tests for the `historical summary` feature:
 - (complete) **Data Import**: Validates CSV import from bank transactions list. Validate CSV files can be split into a list of CSV lines as string.
 - (complete) **Category Allocation** Tests categorization. Inputs: Transactions without categories (e.g., 'groceries'); outputs: Correctly assigned to Food & Groceries.
 - (complete) **Average Calculation** Interpolate historical spend for set of transactions. Check that a reasonable estimate is produced given set of test data.
@@ -32,10 +32,11 @@ Initial tests for the `historical averaging` feature:
 - (Complete) - Display actuals - Category (row) by YearMonth (column) and cost is the value. Display historical averages, filtered by category. Graph should be cost by month. 
 - (done) Display total monthly spend across all categories
 - (done) Display total monthly income
-- (done) Display monthly net position
-- (In Progress) View - Historical Average - Initially a table will do. Stacked Bar chart for individual categories, line chart for total expense.
+- (complete) Display monthly net position
+- (complete) View - Historical summary - Initially a table will do. Stacked Bar chart for individual categories, line chart for total expense.
 
-Tests for `fixed forcast`
+Tests for `forcasts`
+-  Can assign categorised transactions to a forcast group.
 -  Can detect latest expense in a group, can carry that forward by month.
  
 

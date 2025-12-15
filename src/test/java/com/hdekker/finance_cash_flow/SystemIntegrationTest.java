@@ -13,9 +13,8 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import com.hdekker.finance_cash_flow.app.actual.HistoricalOverviewFilter.HistoricalOverview;
+import com.hdekker.finance_cash_flow.app.budget.BudgetOverview;
 import com.hdekker.finance_cash_flow.category.CategoryRestAdapter;
-import com.hdekker.finance_cash_flow.historical.HistoricalInterpollationRestAdapter;
 import com.hdekker.finance_cash_flow.transaction.TransactionRestAdapter;
 import com.hdekker.finance_cash_flow.transaction.TestData;
 import com.hdekker.finance_cash_flow.transaction.TestData.TestCase;
@@ -29,9 +28,6 @@ public class SystemIntegrationTest {
 	
 	@Autowired
 	TransactionRestAdapter transactionRestAdapter;
-	
-	@Autowired
-	HistoricalInterpollationRestAdapter historicalInterpollationRestAdapter;
 	
 	@Autowired
 	TransactionDeleter transactionDeleter;
@@ -52,9 +48,8 @@ public class SystemIntegrationTest {
 		transactions = testCase.transactions();
 		testCase.transactions().forEach(t->transactionRestAdapter.save(t.transaction()));
 		testCase.transactions().forEach(ta-> categoryRestAdapter.set(ta.categorisedTransaction()));
-		historicalInterpollationRestAdapter.listAll();
 		
-		HistoricalOverview ho = categoryRestAdapter.historicalOverview();
+		BudgetOverview ho = categoryRestAdapter.historicalOverview();
 		
 		Set<YearMonth> allMonths = testCase.trans().stream()
 			.map(ct->ct.getTransactionYearMonth())

@@ -33,8 +33,16 @@ public class CatorgarisedTransactionEntity {
     FinancialFrequency financialFrequency;
 	ExpenseType expenseType;
     LocalDateTime categoryTimeStamp;
+    String forcastGroup;
     
-    
+	public String getForcastGroup() {
+		return forcastGroup;
+	}
+
+	public void setForcastGroup(String forcastGroup) {
+		this.forcastGroup = forcastGroup;
+	}
+
 	public FinancialFrequency getFinancialFrequency() {
 		return financialFrequency;
 	}
@@ -101,6 +109,7 @@ public class CatorgarisedTransactionEntity {
 	    e.setNecessity(ct.necessity());
 	    e.setFinancialFrequency(ct.financialFrequency());
 	    e.setExpenseType(ct.expenseType());
+	    e.setForcastGroup(ct.forcastGroup());
 	    return e;
 	    
 	}
@@ -111,6 +120,7 @@ public class CatorgarisedTransactionEntity {
 	    		getTransaction().toTransaction(), 
 	    		getCategory(), 
 	    		getNecessity(),
+	    		(getForcastGroup() == null)? "": getForcastGroup(),
 	    		getFinancialFrequency(),
 	    		getExpenseType(),
 	    		getCategoryTimeStamp());

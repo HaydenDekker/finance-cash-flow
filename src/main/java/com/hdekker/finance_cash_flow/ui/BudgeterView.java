@@ -11,8 +11,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.hdekker.finance_cash_flow.app.actual.HistoricalOverviewFilter.HistoricalOverview;
 import com.hdekker.finance_cash_flow.app.actual.HistoricalSummer.SummedTransactions;
+import com.hdekker.finance_cash_flow.app.budget.BudgetOverview;
 import com.hdekker.finance_cash_flow.category.CategoryRestAdapter;
 import com.vaadin.flow.component.grid.ColumnTextAlign;
 import com.vaadin.flow.component.grid.Grid;
@@ -54,7 +54,7 @@ public class BudgeterView extends VerticalLayout implements AfterNavigationObser
 	@Override
 	public void afterNavigation(AfterNavigationEvent event) {
 		
-		HistoricalOverview historicalOverview = adapter.historicalOverview();
+		BudgetOverview historicalOverview = adapter.historicalOverview();
 		Set<YearMonth> yearMonths = historicalOverview.yearMonths();
 		log.info("" + yearMonths.size() + " months in dataset.");
 		

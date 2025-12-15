@@ -36,6 +36,7 @@ public class ForecastMethodFactory {
 	            		new Transaction(ld, latestTransaction.transaction().amount(), latestTransaction.transaction().description()),
 	            		latestTransaction.category(),
 	            		latestTransaction.necessity(),
+	            		latestTransaction.forcastGroup(),
 	            		latestTransaction.financialFrequency(),
 	            		latestTransaction.expenseType(),
 	            		latestTransaction.assignmentTimeStamp()

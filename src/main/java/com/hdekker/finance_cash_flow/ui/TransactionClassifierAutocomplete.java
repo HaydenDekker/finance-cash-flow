@@ -64,6 +64,11 @@ public class TransactionClassifierAutocomplete extends VerticalLayout implements
 		}).setHeader("Necessity");
 		
 		categorisedTransaction.addColumn(ct->{
+			if(ct.forcastGroup()==null) return "";
+			return ct.forcastGroup();
+		}).setHeader("Forecast Group");
+		
+		categorisedTransaction.addColumn(ct->{
 			if(ct.expenseType()==null) return "";
 			return ct.expenseType().name();
 		}).setHeader("Expense Type");
@@ -94,6 +99,7 @@ public class TransactionClassifierAutocomplete extends VerticalLayout implements
 						ct.transaction(),
 						trans.category(),
 						trans.necessity(),
+						trans.forcastGroup(),
 						trans.financialFrequency(),
 						trans.expenseType(),
 						LocalDateTime.now()));
