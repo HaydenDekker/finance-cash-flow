@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,12 +32,15 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.router.AfterNavigationEvent;
 import com.vaadin.flow.router.AfterNavigationObserver;
+import com.vaadin.flow.router.BeforeEnterEvent;
+import com.vaadin.flow.router.BeforeEnterObserver;
+import com.vaadin.flow.router.QueryParameters;
 import com.vaadin.flow.router.Route;
 
 import reactor.core.publisher.Mono;
 
 @Route(value = "transaction-classifier", layout = MainLayout.class)
-public class TransactionClassifier extends VerticalLayout implements AfterNavigationObserver{
+public class TransactionClassifier extends VerticalLayout implements AfterNavigationObserver, BeforeEnterObserver{
 
 	
 
@@ -60,6 +64,10 @@ public class TransactionClassifier extends VerticalLayout implements AfterNaviga
 	        return 0;
 	    }
 	};
+	
+	List<String> category = List.of();
+	Optional<String> date = Optional.empty();
+	
 	
 	public TransactionClassifier() {
 		
@@ -184,9 +192,18 @@ public class TransactionClassifier extends VerticalLayout implements AfterNaviga
 		List<CategorisedTransaction> list = categoryRestAdapter.list();
 		List<CategorisedTransaction> withoutAllocation = categoryRestAdapter.listIncomplete();
 		
-		categorisedTransaction.setItems(Stream.concat(list.stream(), withoutAllocation.stream()).toList());
+		List<CategorisedTransaction> items = Stream.concat(list.stream(), withoutAllocation.stream()).toList();
 		
-		if(scrollToFirstWithoutAllocation && withoutAllocation.size()>0) {
+		if(date.isPresent()&&category.size()>0) {
+			items = items.stream()
+					.filter(ct->ct.category()!=null)
+					.filter(ct->category.contains(ct.category().name()))
+					.toList();
+		}
+		
+		categorisedTransaction.setItems(items);
+		
+		if(scrollToFirstWithoutAllocation && category.size()==0 && withoutAllocation.size()>0) {
 			categorisedTransaction.scrollToItem(withoutAllocation.get(0));
 		}
 		
@@ -197,6 +214,14 @@ public class TransactionClassifier extends VerticalLayout implements AfterNaviga
 		
 		setTransactions(true);
 		
+	}
+
+	@Override
+	public void beforeEnter(BeforeEnterEvent event) {
+		
+		QueryParameters param = event.getLocation().getQueryParameters();
+		category = param.getParameters("category");
+		date = param.getSingleParameter("date");
 		
 		
 	}

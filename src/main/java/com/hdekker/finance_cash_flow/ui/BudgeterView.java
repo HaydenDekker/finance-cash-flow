@@ -1,19 +1,23 @@
 package com.hdekker.finance_cash_flow.ui;
 
 import java.time.YearMonth;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.hdekker.finance_cash_flow.TransactionCategory;
 import com.hdekker.finance_cash_flow.app.actual.HistoricalSummer.SummedTransactions;
 import com.hdekker.finance_cash_flow.app.budget.BudgetOverview;
 import com.hdekker.finance_cash_flow.category.CategoryRestAdapter;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.grid.ColumnTextAlign;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.H2;
@@ -35,7 +39,7 @@ public class BudgeterView extends VerticalLayout implements AfterNavigationObser
 	@Autowired
 	CategoryRestAdapter adapter;
 	
-	public record DisplaySummedTransactionCategory(String rowName, Map<YearMonth, SummedTransactions> summedMonths) {}
+	public record DisplaySummedTransactionCategory(String rowName, Map<YearMonth, SummedTransactions> summedMonths, List<TransactionCategory> categoriesIncluded) {}
 	
 	
 	Grid<DisplaySummedTransactionCategory> grid = new Grid<>(DisplaySummedTransactionCategory.class, false);
@@ -48,6 +52,20 @@ public class BudgeterView extends VerticalLayout implements AfterNavigationObser
 		add(grid);
 		
 		grid.setHeightFull();
+		
+		grid.addItemClickListener(e->{
+			
+			String headerText = e.getColumn().getHeaderText();
+			String categoriesList = e.getItem().categoriesIncluded()
+					.stream()
+					.map(tc->"category=" + tc.name())
+					.collect(Collectors.joining("&"));
+			
+			log.info("Clicked on column " + headerText + " for categories " + categoriesList);
+		
+			UI.getCurrent().navigate("transaction-classifier?" + categoriesList + "&" + "date=" + headerText);
+			
+		});
 		
 	}
 
@@ -75,23 +93,33 @@ public class BudgeterView extends VerticalLayout implements AfterNavigationObser
 		Stream<DisplaySummedTransactionCategory> incomeTotal = Stream.of(
 				new DisplaySummedTransactionCategory(
 						"Income Total",
-				historicalOverview.monthlyIncomeTotal().summedMonths())
-				);
+				historicalOverview.monthlyIncomeTotal().summedMonths(),
+				List.of(TransactionCategory.INCOME)
+				));
 		
 		Stream<DisplaySummedTransactionCategory> expenseTotal = Stream.of(
 				new DisplaySummedTransactionCategory(
 						"Expense Total",
-				historicalOverview.monthlyExpensesTotal())
+				historicalOverview.monthlyExpensesTotal(),
+				Arrays.asList(TransactionCategory.values())
+					.stream()
+					.filter(tc->!tc.equals(TransactionCategory.INCOME))
+					.toList())
 				);
 		
 		Stream<DisplaySummedTransactionCategory> netTotal = Stream.of(
 				new DisplaySummedTransactionCategory(
 						"Net flow",
-				historicalOverview.difference())
+				historicalOverview.difference(),
+				Arrays.asList(TransactionCategory.values()))
 				);
 		
 		Stream<DisplaySummedTransactionCategory> items = historicalOverview.summedTransactionsByCategory().stream()
-			.map(st-> new DisplaySummedTransactionCategory(st.category().name(), st.summedMonths()))
+			.map(st-> new DisplaySummedTransactionCategory(
+					st.category().name(), 
+					st.summedMonths(),
+					List.of(st.category())
+					))
 			.sorted((a,b) -> a.rowName().compareTo(b.rowName()));
 			
 		

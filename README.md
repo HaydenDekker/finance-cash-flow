@@ -35,9 +35,12 @@ Initial tests for the `historical summary` feature:
 - (complete) Display monthly net position
 - (complete) View - Historical summary - Initially a table will do. Stacked Bar chart for individual categories, line chart for total expense.
 
-Tests for `forcasts`
--  Can assign categorised transactions to a forcast group.
--  Can detect latest expense in a group, can carry that forward by month.
+Tests for `forecasts`
+-  (completed) Can assign categorised transactions to a forecast group.
+-  (completed) Can detect latest expense in a group, can carry that forward by month.
+
+Test for UI review
+- show list of categorised transactions for a given month when clicking the grid cell on the budgeter view.
  
 
 ## Future Goals
