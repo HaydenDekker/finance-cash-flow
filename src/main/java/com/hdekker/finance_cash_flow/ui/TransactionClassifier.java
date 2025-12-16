@@ -3,6 +3,7 @@ package com.hdekker.finance_cash_flow.ui;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.YearMonth;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
@@ -184,7 +185,9 @@ public class TransactionClassifier extends VerticalLayout implements AfterNaviga
 	}
 
 	public void saveCategoryTransaction(CategorisedTransaction categorisedTransaction) {
+		
 		categoryRestAdapter.set(categorisedTransaction);
+		
 	}
 	
 	void setTransactions(boolean scrollToFirstWithoutAllocation) {
@@ -195,9 +198,12 @@ public class TransactionClassifier extends VerticalLayout implements AfterNaviga
 		List<CategorisedTransaction> items = Stream.concat(list.stream(), withoutAllocation.stream()).toList();
 		
 		if(date.isPresent()&&category.size()>0) {
+			
+			YearMonth dateFilter = YearMonth.parse(date.get());
 			items = items.stream()
 					.filter(ct->ct.category()!=null)
 					.filter(ct->category.contains(ct.category().name()))
+					.filter(ct->ct.getTransactionYearMonth().equals(dateFilter))
 					.toList();
 		}
 		

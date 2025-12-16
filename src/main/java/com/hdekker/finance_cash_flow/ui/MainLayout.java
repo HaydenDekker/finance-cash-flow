@@ -21,7 +21,8 @@ public class MainLayout extends VerticalLayout implements RouterLayout {
 		Anchor aTransactions = new Anchor("transaction-view", "transactions");
 		Anchor aClassification = new Anchor("transaction-classifier", "classifier");
 		Anchor aBudgeter = new Anchor("budgeter", "budgeter");
-		controls.add(header, aTransactions, aClassification, aBudgeter);
+		Anchor multi = new Anchor("multi-classifier", "multi");
+		controls.add(header, aTransactions, aClassification, aBudgeter, multi);
 		controls.setAlignItems(Alignment.BASELINE);
         add(controls);
         header.addClickListener(e->{
