@@ -40,7 +40,7 @@ import com.vaadin.flow.router.Route;
 
 import reactor.core.publisher.Mono;
 
-@Route(value = "transaction-classifier", layout = MainLayout.class)
+//@Route(value = "transaction-classifier", layout = MainLayout.class)
 public class TransactionClassifier extends VerticalLayout implements AfterNavigationObserver, BeforeEnterObserver{
 
 	

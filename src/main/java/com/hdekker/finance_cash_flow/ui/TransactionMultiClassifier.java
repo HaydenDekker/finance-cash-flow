@@ -25,12 +25,14 @@ import com.hdekker.finance_cash_flow.CategorisedTransaction.ForecastGroup;
 import com.hdekker.finance_cash_flow.CategorisedTransaction.Necessity;
 import com.hdekker.finance_cash_flow.TransactionCategory;
 import com.hdekker.finance_cash_flow.category.CategoryRestAdapter;
+import com.vaadin.flow.component.AbstractField;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.Grid.SelectionMode;
+import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.NativeLabel;
 import com.vaadin.flow.component.textfield.TextField;
@@ -41,7 +43,7 @@ import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.QueryParameters;
 
-@Route(value = "multi-classifier", layout = MainLayout.class)
+@Route(value = "transaction-classifier", layout = MainLayout.class)
 public class TransactionMultiClassifier extends VerticalLayout implements AfterNavigationObserver, BeforeEnterObserver{
 
 		
@@ -72,6 +74,69 @@ public class TransactionMultiClassifier extends VerticalLayout implements AfterN
 		List<CategorisedTransaction> items;
 		TextField transactionFilter;
 		
+		public class CategorisedTransactionPropertyDisplay extends FormLayout {
+			
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = -7247949776137434927L;
+			ComboBox<TransactionCategory> tcField;
+			Checkbox discretionaryField; 
+			TextField forecastGroupField;
+			ComboBox<ExpenseType> etField;
+			ComboBox<FinancialFrequency> ffField;
+			
+			CategorisedTransactionPropertyDisplay(){
+				
+				tcField = new ComboBox<TransactionCategory>("Transaction Category");
+				add(tcField);
+				tcField.setItems(Arrays.asList(TransactionCategory.values()));
+				
+				discretionaryField = new Checkbox("Discretionary");
+				add(discretionaryField);
+				
+				forecastGroupField = new TextField("Forecast Group");
+				add(forecastGroupField);
+				
+				etField = new ComboBox<>("Expense Type");
+				add(etField);
+				etField.setItems(Arrays.asList(ExpenseType.values()));
+				
+				ffField = new ComboBox<>("Financial Frequency");
+				add(ffField);
+				ffField.setItems(Arrays.asList(FinancialFrequency.values()));
+				
+			}
+			
+			public void set(CategorisedTransaction ct) {
+				
+				if(ct.category()!=null) tcField.setValue(ct.category());
+				
+				if(Necessity.DISCRETIONARY.equals(ct.necessity())) discretionaryField.setValue(true);
+				
+				if(ct.forcastGroup()!=null) forecastGroupField.setValue(ct.forcastGroup().name());
+				
+				if(ct.expenseType()!=null) etField.setValue(ct.expenseType());
+				
+				if(ct.financialFrequency()!=null) ffField.setValue(ct.financialFrequency());
+			
+			}
+			
+			public CategorisedTransaction get() {
+				return new CategorisedTransaction(
+						null, 
+						tcField.getValue(),
+						discretionaryField.getValue()==true? Necessity.DISCRETIONARY: Necessity.REQUIRED,
+						new ForecastGroup(forecastGroupField.getValue()),
+						ffField.getValue(),
+						etField.getValue(),
+						LocalDateTime.now()
+						);
+				
+			}
+			
+		}
+		
 		public TransactionMultiClassifier() {
 			
 			add(new H2("Transaction Classifier"));
@@ -82,42 +147,26 @@ public class TransactionMultiClassifier extends VerticalLayout implements AfterN
 				filterOnExistingSearchTerm();
 			});
 			
-			FormLayout div = new FormLayout();
+			CategorisedTransactionPropertyDisplay div = new CategorisedTransactionPropertyDisplay();
 			add(div);
+		
+			Button saveButton = new Button("save all");
+			div.add(saveButton);
 			
-			ComboBox<TransactionCategory> tc = new ComboBox<TransactionCategory>("Transaction Category");
-			div.add(tc);
-			tc.setItems(Arrays.asList(TransactionCategory.values()));
-			
-			Checkbox discretionary = new Checkbox("Discretionary");
-			div.add(discretionary);
-			
-			TextField forecastGroup = new TextField("Forecast Group");
-			div.add(forecastGroup);
-			
-			ComboBox<ExpenseType> et = new ComboBox<>("Expense Type");
-			div.add(et);
-			et.setItems(Arrays.asList(ExpenseType.values()));
-			
-			ComboBox<FinancialFrequency> ff = new ComboBox<>("Financial Frequency");
-			div.add(ff);
-			ff.setItems(Arrays.asList(FinancialFrequency.values()));
-			
-			Button save = new Button("save");
-			div.add(save);
-			
-			save.addClickListener(e->{
+			saveButton.addClickListener(e->{
+				
+				CategorisedTransaction properties = div.get();
 				
 				categorisedTransaction.getSelectedItems()
 					.forEach(ct->{
 						
 						CategorisedTransaction newCT = new CategorisedTransaction(
 						ct.transaction(), 
-						tc.getValue(),
-						discretionary.getValue()==true? Necessity.DISCRETIONARY: Necessity.REQUIRED,
-						new ForecastGroup(forecastGroup.getValue()),
-						ff.getValue(),
-						et.getValue(),
+						properties.category(),
+						properties.necessity(),
+						properties.forcastGroup(),
+						properties.financialFrequency(),
+						properties.expenseType(),
 						LocalDateTime.now()
 						);
 				
@@ -167,10 +216,41 @@ public class TransactionMultiClassifier extends VerticalLayout implements AfterN
 			categorisedTransaction.setHeightFull();
 			categorisedTransaction.setSelectionMode(SelectionMode.MULTI);
 			
-			categorisedTransaction.setItemDetailsRenderer(new ComponentRenderer<FormLayout, CategorisedTransaction>(FormLayout::new, (divs, ct)->{
+			categorisedTransaction.setItemDetailsRenderer(new ComponentRenderer<Div, CategorisedTransaction>(Div::new, (divs, ct)->{
 				
 				NativeLabel transactionInfo = new NativeLabel(ct.transaction().toString());
 				divs.add(transactionInfo);
+				
+				CategorisedTransactionPropertyDisplay propForm = new CategorisedTransactionPropertyDisplay();
+				divs.add(propForm);
+				propForm.set(ct);
+
+				Button save = new Button("save item");
+				divs.add(save);
+				
+				save.addClickListener(e->{
+					
+					CategorisedTransaction properties = propForm.get();
+					
+					CategorisedTransaction newCT = new CategorisedTransaction(
+								ct.transaction(), 
+								properties.category(),
+								properties.necessity(),
+								properties.forcastGroup(),
+								properties.financialFrequency(),
+								properties.expenseType(),
+								LocalDateTime.now()
+						);
+					
+					saveCategoryTransaction(newCT);
+					refreshItems(Duration.ofSeconds(1));
+					
+				});
+				
+				Button autoComplete = new Button("Autocomplete");
+				divs.add(autoComplete);
+				
+				autoComplete.addClickListener(e-> div.set(ct));
 				
 			}));
 			
