@@ -1,6 +1,5 @@
 package com.hdekker.finance_cash_flow.category;
 
-import java.time.YearMonth;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -19,8 +18,6 @@ import com.hdekker.finance_cash_flow.MissingCategorisedTransactionReader;
 import com.hdekker.finance_cash_flow.app.budget.BudgetOverview;
 import com.hdekker.finance_cash_flow.app.category.CategoryGroup;
 import com.hdekker.finance_cash_flow.app.category.CategoryGroup.SummedTransactionCategory;
-import com.hdekker.finance_cash_flow.app.forecast.ForecastGroupMapper;
-import com.hdekker.finance_cash_flow.app.forecast.ForecastMethodFactory;
 import com.hdekker.finance_cash_flow.app.forecast.Forecaster;
 
 @RestController
@@ -67,6 +64,7 @@ public class CategoryRestAdapter {
 
 	@GetMapping("/category/budget-overview")
 	public BudgetOverview budgetOverview() {
+		
 		List<CategorisedTransaction> trans = list();
 		List<CategorisedTransaction> forcastedTransactions = Forecaster.forcast(trans);
 		

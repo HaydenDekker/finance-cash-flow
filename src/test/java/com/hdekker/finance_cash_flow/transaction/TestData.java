@@ -100,20 +100,20 @@ public class TestData {
 						// just use description as group for test
 						mockForcastGroup ? new ForecastGroup(transaction.description() + "_forecast_group") : new ForecastGroup(""),
 						FinancialFrequency.AD_HOC,
-						ExpenseType.FIXED,
+						forecastMethodMap.get(transaction.description()),
 						LocalDateTime.now()));
 	}
 
 	public static TestCase basicTestCase() {
 		return new TestCase(
-						testTransactions().stream().map(t->assign(t, false)).toList(),
+						testTransactions().stream().map(t->assign(t, true)).toList(),
 						new ExpectedOutput(YearMonth.of(2025, 07), 127.0, 5.0)
 						);
 	}
 	
 	public static TestCase noForecastGroupTestCase() {
 		return new TestCase(
-						testTransactions().stream().map(t->assign(t, true)).toList(),
+						testTransactions().stream().map(t->assign(t, false)).toList(),
 						new ExpectedOutput(YearMonth.of(2025, 07), 127.0, 5.0)
 						);
 	}

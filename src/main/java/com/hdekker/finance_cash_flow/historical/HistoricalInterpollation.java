@@ -2,22 +2,16 @@ package com.hdekker.finance_cash_flow.historical;
 
 import java.time.YearMonth;
 import java.time.temporal.ChronoUnit;
-import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import com.hdekker.finance_cash_flow.Transaction;
-import com.hdekker.finance_cash_flow.app.actual.HistoricalSummer;
 import com.hdekker.finance_cash_flow.app.actual.HistoricalSummer.SummedTransactions;
-import com.hdekker.finance_cash_flow.app.forecast.HistoricalInterpollationResult;
 import com.hdekker.finance_cash_flow.app.forecast.HistoricalInterpollationResult.QuadraticCoefficients;
-import com.hdekker.finance_cash_flow.app.forecast.HistoricalInterpollationResult.QuadraticResult;
+import com.hdekker.finance_cash_flow.app.forecast.HistoricalInterpollationResult.QuadraticCalculation;
 
 public class HistoricalInterpollation {
 
-    public static HistoricalInterpollationResult interpollate(List<Transaction> transactions) {
-    	
-    	Map<YearMonth, SummedTransactions> data = HistoricalSummer.calculateTotal(transactions);
+    public static QuadraticCalculation interpollate(Map<YearMonth, SummedTransactions> data) {
     	
     	TreeMap<YearMonth, SummedTransactions> sortedData = new TreeMap<>(data);
         if (sortedData.size() < 3) {
@@ -72,9 +66,9 @@ public class HistoricalInterpollation {
         double b = X[1];
         double c = X[2]; 
 
-        return new HistoricalInterpollationResult(
-        		new QuadraticResult(new QuadraticCoefficients(a, b, c), startMonth), 
-        		transactions);
+        return new QuadraticCalculation(
+        		new QuadraticCoefficients(a, b, c),
+        		startMonth);
         
         
         

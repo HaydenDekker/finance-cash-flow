@@ -40,8 +40,8 @@ Initial tests for the `historical summary` feature:
 Tests for `forecasts`
 -  (completed) Can assign categorised transactions to a forecast group.
 -  (completed) Can detect latest expense in a group, can carry that forward by month.
--  If no forecast group is assigned, use method variable for entire category group.
--  Collect all like forcast groups and sum by month before calculating a forecast. (i.e may have Phone group and two phones each month, 1 $60 and other $80, equaling $140 for that group per month for the forecast)
+-  If no forecast group is assigned, use method variable for entire category group and assign the category as the group name. This ensures forcasts will still be relevant by group.
+-  Collect all like forecast groups and sum by month before calculating a forecast. (i.e may have Phone group and two phones each month, 1 $60 and other $80, equaling $140 for that group per month for the forecast)
 -  If forecast group is assigned, use method provided.
 
 Test for UI review

@@ -4,11 +4,16 @@ import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Stream;
 
 import com.hdekker.finance_cash_flow.CategorisedTransaction;
 import com.hdekker.finance_cash_flow.CategorisedTransaction.ExpenseType;
+import com.hdekker.finance_cash_flow.app.actual.HistoricalSummer;
+import com.hdekker.finance_cash_flow.app.actual.HistoricalSummer.SummedTransactions;
+import com.hdekker.finance_cash_flow.app.forecast.HistoricalInterpollationResult.QuadraticCalculation;
 import com.hdekker.finance_cash_flow.Transaction;
+import com.hdekker.finance_cash_flow.historical.HistoricalInterpollation;
 
 public class ForecastMethodFactory {
 	
@@ -28,7 +33,37 @@ public class ForecastMethodFactory {
 	}
 	
 	static ForecasterMethod variable() {
-		return (t, y)-> new Forecast(List.of(), y);
+		return (t, y)-> {
+
+			List<Transaction> transactions = t.stream().map(ct->ct.transaction()).toList();
+			if(transactions.size()<3) return new Forecast(List.of(), y);
+			
+			Map<YearMonth, SummedTransactions> data = HistoricalSummer.calculateTotal(transactions);
+			QuadraticCalculation result = HistoricalInterpollation.interpollate(data);
+			
+			CategorisedTransaction latestTransaction = getLatestTransactionInGroup(t);
+			
+			YearMonth startMonth = latestTransaction.getTransactionYearMonth();
+			
+			long monthsDifference = startMonth.until(y, ChronoUnit.MONTHS);
+			
+			LocalDate firstMonthForForecast = latestTransaction.transaction().localDate().plusMonths(1);
+			
+			List<CategorisedTransaction> forcastedTransactions = Stream.iterate(firstMonthForForecast, current -> current.plusMonths(1))
+		            .limit(monthsDifference)
+		            .map(ld-> new CategorisedTransaction(
+		            		new Transaction(ld, result.evaluate(YearMonth.from(ld)), "Combined category"), // TODO how to pull up all transactions later...
+		            		latestTransaction.category(),
+		            		latestTransaction.necessity(),
+		            		latestTransaction.forcastGroup(),
+		            		latestTransaction.financialFrequency(),
+		            		latestTransaction.expenseType(),
+		            		latestTransaction.assignmentTimeStamp()
+		            		))
+		            .toList();
+			
+			return new Forecast(forcastedTransactions, y);
+		};
 	}
 	
 	static ForecasterMethod knownVariable() {
@@ -52,6 +87,7 @@ public class ForecastMethodFactory {
 			long monthsDifference = startMonth.until(yearMonthTo, ChronoUnit.MONTHS);
 			
 			LocalDate firstMonthForForecast = latestTransaction.transaction().localDate().plusMonths(1);
+			
 			List<CategorisedTransaction> forcastedTransactions = Stream.iterate(firstMonthForForecast, current -> current.plusMonths(1))
 	            .limit(monthsDifference)
 	            .map(ld-> new CategorisedTransaction(

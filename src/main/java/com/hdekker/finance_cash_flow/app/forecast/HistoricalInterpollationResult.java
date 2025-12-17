@@ -2,13 +2,9 @@ package com.hdekker.finance_cash_flow.app.forecast;
 
 import java.time.YearMonth;
 import java.time.temporal.ChronoUnit;
-import java.util.List;
-
-import com.hdekker.finance_cash_flow.Transaction;
 
 public record HistoricalInterpollationResult(
-		QuadraticResult quadraticResult,
-		List<Transaction> transactions
+		QuadraticCalculation quadraticCalculation
 		) {
 	
 	public record QuadraticCoefficients(double a, double b, double c) {}
@@ -17,7 +13,7 @@ public record HistoricalInterpollationResult(
 	 * A Java record to represent a quadratic function f(x) = a*x^2 + b*x + c.
 	 * Records are perfect for carrying immutable data and providing utility methods.
 	 */
-	public record QuadraticResult(QuadraticCoefficients coefficients, YearMonth startMonth) {
+	public record QuadraticCalculation(QuadraticCoefficients coefficients, YearMonth startMonth) {
 
 	    /**
 	     * Calculates the value of the quadratic function for a given input x.
