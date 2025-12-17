@@ -3,19 +3,21 @@
 A personal finance management tool for tracking expenses, analyzing historical data, and forecasting future budgets using local file processing and AI.
 
 ## Core Features
-- **Local File Processing**: Import Bank CSV (Complete), PDF receipts, photos (via OCR), and database aggregations.
-- **7 Core Expense Categories**:
-  - Housing, Utilities & Services, Food & Groceries, Transportation
-  - Personal Care & Health, Entertainment, Savings & Debt
-- **Category Attribute***
-  - Frequency: Expenses have a transaction frequency associated
-  - Type: transactions expenses have a type of truly fixed, known variable, truly variable
+- **Data Imports**: Import Bank CSV (Complete), PDF receipts, photos (via OCR), and database aggregations.
+- **Categories**
   - Necessity: Required, Discretionary
+  - Housing, Utilities & Services, Food & Groceries, Transportation, Personal Care & Health, Entertainment, Savings & Debt
+  
+- **Forecasts** 
+  - Groups: Control of how transactions affect future funds.
+  - Frequency: Expenses have a transaction frequency associated
+  - Type: Transactions expenses have a type of truly fixed, known variable, truly variable
+  - Sinking Fund Allocation for annual costs giving oversight to monthly budget requirements
 
 - **Forecasting System**:
   - Historical averaging (3, 6, 12 months)
   - Zero-Based Budget Check
-  - Sinking Fund Allocation for annual costs
+  
 - **Scenario Modeling**: Base, Worst-Case, Best-Case financial projections.
 - **Controls**: Manipulate scenarios to gauge where to tighten.
 
@@ -38,9 +40,13 @@ Initial tests for the `historical summary` feature:
 Tests for `forecasts`
 -  (completed) Can assign categorised transactions to a forecast group.
 -  (completed) Can detect latest expense in a group, can carry that forward by month.
+-  If no forecast group is assigned, use method variable for entire category group.
+-  Collect all like forcast groups and sum by month before calculating a forecast. (i.e may have Phone group and two phones each month, 1 $60 and other $80, equaling $140 for that group per month for the forecast)
+-  If forecast group is assigned, use method provided.
 
 Test for UI review
-- show list of categorised transactions for a given month when clicking the grid cell on the budgeter view.
+- (completed) show list of categorised transactions for a given month when clicking the grid cell on the budgeter view.
+- Show CSS coloured/highlighted line for the current day.
  
 
 ## Future Goals

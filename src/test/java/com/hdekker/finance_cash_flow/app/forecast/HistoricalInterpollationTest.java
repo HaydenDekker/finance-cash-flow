@@ -17,8 +17,7 @@ public class HistoricalInterpollationTest {
 	public void givenListOfTransactions_ExpectPredictsNextValue() {
 		
 		HistoricalInterpollationResult result = HistoricalInterpollation.interpollate(
-				TestData.testCases()
-					.get(0)
+				TestData.basicTestCase()
 					.transactionExpenses());
 		
 		double estimate = result.quadraticResult().evaluate(

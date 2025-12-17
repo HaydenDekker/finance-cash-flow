@@ -17,7 +17,7 @@ public class ExpenseFilterTest {
 	public void givenListOfTransactions_ExpectExpensesFiltered() {
 		
 
-		List<CategorisedTransaction> transactions = TestData.testCases().get(0).trans();
+		List<CategorisedTransaction> transactions = TestData.basicTestCase().trans();
 		
 		assertThat(transactions.stream().filter(ct-> ct.category().equals(TransactionCategory.INCOME)).findAny())
 			.isPresent();

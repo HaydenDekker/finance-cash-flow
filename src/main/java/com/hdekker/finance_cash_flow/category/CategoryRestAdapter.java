@@ -21,6 +21,7 @@ import com.hdekker.finance_cash_flow.app.category.CategoryGroup;
 import com.hdekker.finance_cash_flow.app.category.CategoryGroup.SummedTransactionCategory;
 import com.hdekker.finance_cash_flow.app.forecast.ForecastGroupMapper;
 import com.hdekker.finance_cash_flow.app.forecast.ForecastMethodFactory;
+import com.hdekker.finance_cash_flow.app.forecast.Forecaster;
 
 @RestController
 public class CategoryRestAdapter {
@@ -67,15 +68,7 @@ public class CategoryRestAdapter {
 	@GetMapping("/category/budget-overview")
 	public BudgetOverview budgetOverview() {
 		List<CategorisedTransaction> trans = list();
-		List<CategorisedTransaction> forcastedTransactions = ForecastGroupMapper.map(trans)
-				.entrySet()
-				.stream()
-				.filter(es->!es.getKey().name().trim().equals(""))
-				.map(es-> ForecastMethodFactory.buildFor(
-								es.getValue().get(0).expenseType())
-							.forcast(es.getValue(), YearMonth.now().plusYears(1)))
-				.flatMap(forecast->forecast.forcastedTransaction().stream())
-				.toList();
+		List<CategorisedTransaction> forcastedTransactions = Forecaster.forcast(trans);
 		
 		return BudgetOverview.calculate(Stream.concat(trans.stream(), forcastedTransactions.stream()).toList());
 	}

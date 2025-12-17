@@ -90,7 +90,7 @@ public class TestData {
 			"Rego", ExpenseType.KNOWN_VARIABLE,
 			"Income", ExpenseType.FIXED);
 	
-	static TransactionAssignement assign(Transaction transaction) {
+	static TransactionAssignement assign(Transaction transaction, Boolean mockForcastGroup) {
 		return new TransactionAssignement(
 				transaction, 
 				new CategorisedTransaction(
@@ -98,19 +98,24 @@ public class TestData {
 						categoryMap.get(transaction.description()), 
 						Necessity.DISCRETIONARY,
 						// just use description as group for test
-						new ForecastGroup(transaction.description() + "_forecast_group"),
+						mockForcastGroup ? new ForecastGroup(transaction.description() + "_forecast_group") : new ForecastGroup(""),
 						FinancialFrequency.AD_HOC,
 						ExpenseType.FIXED,
 						LocalDateTime.now()));
 	}
 
-	public static List<TestCase> testCases() {
-		return List.of(
-				new TestCase(
-						testTransactions().stream().map(TestData::assign).toList(),
+	public static TestCase basicTestCase() {
+		return new TestCase(
+						testTransactions().stream().map(t->assign(t, false)).toList(),
 						new ExpectedOutput(YearMonth.of(2025, 07), 127.0, 5.0)
-						)
-				);
+						);
+	}
+	
+	public static TestCase noForecastGroupTestCase() {
+		return new TestCase(
+						testTransactions().stream().map(t->assign(t, true)).toList(),
+						new ExpectedOutput(YearMonth.of(2025, 07), 127.0, 5.0)
+						);
 	}
 
 

@@ -1,0 +1,7 @@
+/* Add your styles here */
+
+vaadin-grid::part(today-cell) {
+    border-right: 2px solid rgb(0, 202, 101);
+    /* Optional: use box-shadow if you don't want the border 
+       to increase the cell size and cause jumping */
+}

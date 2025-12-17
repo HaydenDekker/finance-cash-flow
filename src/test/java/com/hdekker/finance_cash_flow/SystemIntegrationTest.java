@@ -36,7 +36,8 @@ public class SystemIntegrationTest {
 	CategorisedTransactionDeleter categorisedTransactionDeleter;
 	
 	public static List<TestCase> testCases(){
-		return TestData.testCases();
+		return List.of(TestData.basicTestCase(),
+				TestData.noForecastGroupTestCase());
 	}
 	
 	List<TransactionAssignement> transactions;

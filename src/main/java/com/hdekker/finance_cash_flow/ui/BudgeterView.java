@@ -81,13 +81,24 @@ public class BudgeterView extends VerticalLayout implements AfterNavigationObser
 		grid.addColumn(DisplaySummedTransactionCategory::rowName)
 		    .setHeader("Category")
 		    .setSortable(true)
-		    .setKey("categoryName");
+		    .setKey("categoryName")
+		    .setWidth("300px");
 		
 		for (YearMonth month : yearMonths) {
-		    grid.addColumn(category -> Optional.ofNullable(category.summedMonths().get(month)).map(st->st.amount()).orElse(0.0))
+		    grid.addColumn(category -> Optional.ofNullable(category.summedMonths().get(month))
+		    		.map(st->st.amount())
+		    		.map(d->String.format("%.2f", d))
+		    		.orElse("0.0"))
 		        .setHeader(month.toString())
 		        .setKey(month.toString()) // Use the month name as the key
-		        .setTextAlign(ColumnTextAlign.END); // Align values nicely
+		        .setTextAlign(ColumnTextAlign.END)
+		        .setPartNameGenerator(item -> {
+		            if (month.equals(YearMonth.now())) {
+		                return "today-cell";
+		            }
+		            return null;
+		        })
+		        .setWidth("150px");
 		}
 		
 		Stream<DisplaySummedTransactionCategory> incomeTotal = Stream.of(

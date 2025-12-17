@@ -16,8 +16,7 @@ public class ForecastMethodFactoryTest {
 	@Test
 	public void givenIncomeCategorisedTransactionList_ExpectForcastedFixedMethodReturnsExpectedValue() {
 		
-		List<CategorisedTransaction> transactions = TestData.testCases()
-															.get(0)
+		List<CategorisedTransaction> transactions = TestData.basicTestCase()
 															.trans();
 		
 		BudgetOverview overview = BudgetOverview.calculate(transactions);

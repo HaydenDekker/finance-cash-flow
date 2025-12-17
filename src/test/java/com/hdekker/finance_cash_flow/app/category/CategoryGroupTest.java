@@ -14,7 +14,7 @@ public class CategoryGroupTest {
 	@Test
 	public void givenCatergorisedTransactionList_ExpectCanGroupByCategoryAndByYearMonthAndSummed() {
 		
-		List<CategorisedTransaction> transactions = TestData.testCases().get(0).transactions().stream()
+		List<CategorisedTransaction> transactions = TestData.basicTestCase().transactions().stream()
 				.map(ta-> ta.categorisedTransaction())
 				.toList();
 		

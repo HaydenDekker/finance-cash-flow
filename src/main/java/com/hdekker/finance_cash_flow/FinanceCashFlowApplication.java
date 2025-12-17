@@ -5,9 +5,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import com.vaadin.flow.component.page.AppShellConfigurator;
 import com.vaadin.flow.component.page.Push;
+import com.vaadin.flow.theme.Theme;
 
 @SpringBootApplication
 @Push
+@Theme("default")
 public class FinanceCashFlowApplication implements AppShellConfigurator{
 	
 	private static final long serialVersionUID = 4747759585237212767L;
