@@ -94,7 +94,8 @@ public class TestData {
 		return new TransactionAssignement(
 				transaction, 
 				new CategorisedTransaction(
-						transaction, 
+						transaction,
+						"",
 						categoryMap.get(transaction.description()), 
 						Necessity.DISCRETIONARY,
 						// just use description as group for test

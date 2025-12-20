@@ -1,6 +1,6 @@
 package com.hdekker.finance_cash_flow.app.forecast;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.*;
 
 import java.time.YearMonth;
 import java.util.List;
@@ -12,8 +12,6 @@ import org.junit.jupiter.api.Test;
 import com.hdekker.finance_cash_flow.Transaction;
 import com.hdekker.finance_cash_flow.app.actual.HistoricalSummer;
 import com.hdekker.finance_cash_flow.app.actual.HistoricalSummer.SummedTransactions;
-import com.hdekker.finance_cash_flow.app.forecast.HistoricalInterpollationResult.QuadraticCalculation;
-import com.hdekker.finance_cash_flow.historical.HistoricalInterpollation;
 import com.hdekker.finance_cash_flow.transaction.TestData;
 
 public class HistoricalInterpollationTest {
@@ -27,7 +25,7 @@ public class HistoricalInterpollationTest {
 		
 		Map<YearMonth, SummedTransactions> data = HistoricalSummer.calculateTotal(testData);
 		
-		QuadraticCalculation result = HistoricalInterpollation.interpollate(data);
+		QuadraticCalculation result = QuadraticCalculation.interpollate(data);
 		
 		double estimate = result.evaluate(
 				YearMonth.from(

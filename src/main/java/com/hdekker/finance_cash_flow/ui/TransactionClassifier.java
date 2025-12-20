@@ -1,5 +1,6 @@
 package com.hdekker.finance_cash_flow.ui;
 
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
 
@@ -12,9 +13,13 @@ import java.time.YearMonth;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.hdekker.finance_cash_flow.CategorisedTransaction;
@@ -23,17 +28,22 @@ import com.hdekker.finance_cash_flow.CategorisedTransaction.ExpenseType;
 import com.hdekker.finance_cash_flow.CategorisedTransaction.FinancialFrequency;
 import com.hdekker.finance_cash_flow.CategorisedTransaction.ForecastGroup;
 import com.hdekker.finance_cash_flow.CategorisedTransaction.Necessity;
+import com.hdekker.finance_cash_flow.app.actual.AutoCompletePromptTemplate;
+import com.hdekker.finance_cash_flow.app.actual.AutoCompletePromptTemplate.SearchKeyword;
 import com.hdekker.finance_cash_flow.TransactionCategory;
 import com.hdekker.finance_cash_flow.category.CategoryRestAdapter;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.combobox.ComboBox;
+import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.Grid.SelectionMode;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.NativeLabel;
+import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.router.AfterNavigationEvent;
@@ -45,7 +55,7 @@ import com.vaadin.flow.router.QueryParameters;
 @Route(value = "transaction-classifier", layout = MainLayout.class)
 public class TransactionClassifier extends VerticalLayout implements AfterNavigationObserver, BeforeEnterObserver{
 
-		
+		Logger log = LoggerFactory.getLogger(TransactionClassifier.class);
 
 		/**
 		 * 
@@ -82,10 +92,14 @@ public class TransactionClassifier extends VerticalLayout implements AfterNaviga
 			ComboBox<TransactionCategory> tcField;
 			Checkbox discretionaryField; 
 			TextField forecastGroupField;
+			TextField keywordField;
 			ComboBox<ExpenseType> etField;
 			ComboBox<FinancialFrequency> ffField;
 			
 			CategorisedTransactionPropertyDisplay(){
+				
+				keywordField = new TextField("Search keyword");
+				add(keywordField);
 				
 				tcField = new ComboBox<TransactionCategory>("Transaction Category");
 				add(tcField);
@@ -96,6 +110,7 @@ public class TransactionClassifier extends VerticalLayout implements AfterNaviga
 				
 				forecastGroupField = new TextField("Forecast Group");
 				add(forecastGroupField);
+				
 				
 				etField = new ComboBox<>("Expense Type");
 				add(etField);
@@ -119,11 +134,14 @@ public class TransactionClassifier extends VerticalLayout implements AfterNaviga
 				
 				if(ct.financialFrequency()!=null) ffField.setValue(ct.financialFrequency());
 			
+				if(ct.transactionDescriptionSearchKeyword()!=null) keywordField.setValue(ct.transactionDescriptionSearchKeyword());
+				
 			}
 			
 			public CategorisedTransaction get() {
 				return new CategorisedTransaction(
 						null, 
+						keywordField.getValue(),
 						tcField.getValue(),
 						discretionaryField.getValue()==true? Necessity.DISCRETIONARY: Necessity.REQUIRED,
 						new ForecastGroup(forecastGroupField.getValue()),
@@ -140,11 +158,85 @@ public class TransactionClassifier extends VerticalLayout implements AfterNaviga
 			
 			add(new H2("Transaction Classifier"));
 			
+			HorizontalLayout controls = new HorizontalLayout();
 			transactionFilter = new TextField("Transaction filter");
-			add(transactionFilter);
+			
+			controls.setAlignItems(Alignment.BASELINE);
+			add(controls);
+			controls.add(transactionFilter);
+			
 			transactionFilter.addValueChangeListener(vc->{
 				filterOnExistingSearchTerm();
 			});
+			
+			Dialog searchPromptDialog = new Dialog("search prompt");
+			searchPromptDialog.setHeaderTitle("Search keyword auto creation prompt");
+			searchPromptDialog.setWidth("90%");
+			searchPromptDialog.setHeight("80%");
+			
+			TextArea textArea = new TextArea("prompt response input");
+			searchPromptDialog.add(textArea);
+			textArea.setWidth("100%");
+			textArea.setHeightFull();
+			
+			textArea.addValueChangeListener(vc->{
+				
+				List<SearchKeyword> result = AutoCompletePromptTemplate.parserAIResponse(vc.getValue());
+				log.info("" + result.size() + " in response.");
+				
+				Map<SearchKeyword, List<CategorisedTransaction>> resultMap = 
+					result.stream()
+				            .collect(Collectors.toMap(
+				                keyword -> keyword, // Key: The string from the first list
+				                keyword -> items.stream()
+				                    .filter(item -> item.transaction().description().contains(keyword.bestSearchTerm()))
+				                    .collect(Collectors.toList())
+				            ));
+				
+				resultMap.forEach((s,tL)->{
+					
+					tL.forEach(tran->{
+						categoryRestAdapter.set(
+								new CategorisedTransaction(
+										tran.transaction(),
+										s.bestSearchTerm(),
+										tran.category(),
+										tran.necessity(),
+										tran.forcastGroup()==null? new ForecastGroup(""): tran.forcastGroup(),
+										tran.financialFrequency(),
+										tran.expenseType(),
+										tran.assignmentTimeStamp())
+								);
+					});
+	
+				});
+				
+			});
+			
+			Button getAutoSearchTermPrompt = new Button("Auto search prompt");
+			
+			getAutoSearchTermPrompt.addClickListener(event -> {
+				
+				Map<String, List<CategorisedTransaction>> descMap = items.stream()
+					.collect(Collectors.groupingBy(t->t.transaction().description()));
+				
+				log.info("" + descMap.size() + " unique descriptions from " + items.size() + " transactions");
+				
+				String descriptions = descMap.keySet()
+					.stream()
+					.collect(Collectors.joining(","));
+			    // Execute JS to write to the clipboard
+				getAutoSearchTermPrompt.getElement().executeJs(
+			        "navigator.clipboard.writeText($0)", AutoCompletePromptTemplate.appendItems(descriptions)
+			    );
+			    
+			    Notification.show("Copied to clipboard!");
+			    
+			    searchPromptDialog.open();
+			    
+			});
+			
+			controls.add(getAutoSearchTermPrompt);
 			
 			CategorisedTransactionPropertyDisplay div = new CategorisedTransactionPropertyDisplay();
 			add(div);
@@ -160,7 +252,8 @@ public class TransactionClassifier extends VerticalLayout implements AfterNaviga
 					.forEach(ct->{
 						
 						CategorisedTransaction newCT = new CategorisedTransaction(
-						ct.transaction(), 
+						ct.transaction(),
+						properties.transactionDescriptionSearchKeyword(),
 						properties.category(),
 						properties.necessity(),
 						properties.forcastGroup(),
@@ -186,6 +279,10 @@ public class TransactionClassifier extends VerticalLayout implements AfterNaviga
 			categorisedTransaction.addColumn(ct->{
 				return ct.transaction().amount() + " " + ct.transaction().description();
 			}).setHeader("Transaction");
+			
+			categorisedTransaction.addColumn(ct->{
+				return ct.transactionDescriptionSearchKeyword();
+			}).setHeader("Search Keyword");
 			
 			categorisedTransaction.addColumn(ct->{
 				if(ct.category()==null) return "";
@@ -233,6 +330,7 @@ public class TransactionClassifier extends VerticalLayout implements AfterNaviga
 					
 					CategorisedTransaction newCT = new CategorisedTransaction(
 								ct.transaction(), 
+								properties.transactionDescriptionSearchKeyword(),
 								properties.category(),
 								properties.necessity(),
 								properties.forcastGroup(),

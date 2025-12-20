@@ -10,7 +10,8 @@ public class Forecaster {
 	
 	private static CategorisedTransaction setForecastGroupAsCategoryName(CategorisedTransaction tran) {
 		return new CategorisedTransaction(
-				tran.transaction(), 
+				tran.transaction(),
+				tran.transactionDescriptionSearchKeyword(),
 				tran.category(), 
 				tran.necessity(), 
 				new ForecastGroup(tran.category().name()),

@@ -20,7 +20,8 @@ public class MissingCategorisedTransactionReaderImpl implements MissingCategoris
 	public List<CategorisedTransaction> findAll() {
 		return repo.findUncategorisedTransactions().stream()
 					.map(e->e.toTransaction())
-					.map(t->new CategorisedTransaction(t, null, null, null, null, null, LocalDateTime.now()))
+					.map(t->new CategorisedTransaction(
+							t, null, null, null, null, null, null, LocalDateTime.now()))
 					.toList();
 	}
 

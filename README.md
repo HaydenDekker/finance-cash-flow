@@ -40,16 +40,19 @@ Initial tests for the `historical summary` feature:
 Tests for `forecasts`
 -  (completed) Can assign categorised transactions to a forecast group.
 -  (completed) Can detect latest expense in a group, can carry that forward by month.
--  If no forecast group is assigned, use method variable for entire category group and assign the category as the group name. This ensures forcasts will still be relevant by group.
--  Collect all like forecast groups and sum by month before calculating a forecast. (i.e may have Phone group and two phones each month, 1 $60 and other $80, equaling $140 for that group per month for the forecast)
--  If forecast group is assigned, use method provided.
+-  (complete) If no forecast group is assigned, use method variable for entire category group and assign the category as the group name. This ensures forcasts will still be relevant by group.
+-  (complete) Collect all like forecast groups and sum by month before calculating a forecast. (i.e may have Phone group and two phones each month, 1 $60 and other $80, equaling $140 for that group per month for the forecast)
+-  (complete) If forecast group is assigned, use method provided.
 
 Test for UI review
 - (completed) show list of categorised transactions for a given month when clicking the grid cell on the budgeter view.
 - Show CSS coloured/highlighted line for the current day.
+
+Test for Autocompletion
+- (complete) expect button copies to clipboard, prompt to extract payee search keywords.
  
 
 ## Future Goals
 - Use a grouping attribute to collect or differentiate like expenses. e.g All SE W payee's can be South East Water group. When searching by group all expenses can be displayed.
 - Enhanced LLM-powered expense categorization
-- Web-based dashboard with interactive graphs
+- Existing transaction check before replacing existing transaction.

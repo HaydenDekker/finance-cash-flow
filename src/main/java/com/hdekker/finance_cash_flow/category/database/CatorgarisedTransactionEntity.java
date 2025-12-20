@@ -35,7 +35,18 @@ public class CatorgarisedTransactionEntity {
 	ExpenseType expenseType;
     LocalDateTime categoryTimeStamp;
     String forcastGroup;
+    String searchKeyword;
     
+    
+    
+	public String getSearchKeyword() {
+		return searchKeyword;
+	}
+
+	public void setSearchKeyword(String searchKeyword) {
+		this.searchKeyword = searchKeyword;
+	}
+
 	public String getForcastGroup() {
 		return forcastGroup;
 	}
@@ -111,6 +122,7 @@ public class CatorgarisedTransactionEntity {
 	    e.setFinancialFrequency(ct.financialFrequency());
 	    e.setExpenseType(ct.expenseType());
 	    e.setForcastGroup(ct.forcastGroup().name());
+	    e.setSearchKeyword(ct.transactionDescriptionSearchKeyword());
 	    return e;
 	    
 	}
@@ -119,6 +131,7 @@ public class CatorgarisedTransactionEntity {
 		
 	    return new CategorisedTransaction(
 	    		getTransaction().toTransaction(), 
+	    		getSearchKeyword(),
 	    		getCategory(), 
 	    		getNecessity(),
 	    		(getForcastGroup() == null)? new ForecastGroup(""): new ForecastGroup(getForcastGroup()),

@@ -50,6 +50,7 @@ public class CategoryDatabaseTest {
 		TestData data = new TestData();
 		CategorisedTransaction ct = new CategorisedTransaction(
 				data.stub,
+				"Test keyword",
 				TransactionCategory.ENTERTAINMENT, 
 				Necessity.REQUIRED,
 				new ForecastGroup("Test Expense"),
@@ -83,6 +84,7 @@ public class CategoryDatabaseTest {
 		TestData data = new TestData();
 		CategorisedTransaction ct = new CategorisedTransaction(
 				data.stub, 
+				"Test keyword",
 				TransactionCategory.ENTERTAINMENT, 
 				Necessity.REQUIRED,
 				new ForecastGroup("Test Expense"),

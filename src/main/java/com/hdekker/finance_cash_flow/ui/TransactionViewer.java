@@ -2,7 +2,6 @@ package com.hdekker.finance_cash_flow.ui;
 
 import java.io.File;
 import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +11,7 @@ import com.hdekker.finance_cash_flow.TransactionLister;
 import com.hdekker.finance_cash_flow.transaction.TransactionRestAdapter;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.H2;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.upload.Upload;
 import com.vaadin.flow.router.AfterNavigationEvent;
@@ -38,6 +38,8 @@ public class TransactionViewer extends VerticalLayout implements AfterNavigation
 	@Autowired
 	TransactionRestAdapter restAdapter;
 	
+	List<Transaction> transactions;
+	
 	Upload upload = new Upload(UploadHandler.toTempFile(
 			(UploadMetadata metadata, File file) -> {
 				log.info("Uploaded document.");
@@ -45,10 +47,14 @@ public class TransactionViewer extends VerticalLayout implements AfterNavigation
 			}
 		));
 
-
 	public TransactionViewer() {
 		
-		add(new H2("Transactions"));
+		HorizontalLayout headerAndControls = new HorizontalLayout();
+		headerAndControls.add(new H2("Transactions"));
+		
+		//headerAndControls.add(getAutoSearchTermPrompt);
+		add(headerAndControls);
+		
 		add(upload);
 		add(transactionGrid);
 		setHeightFull();
@@ -65,7 +71,7 @@ public class TransactionViewer extends VerticalLayout implements AfterNavigation
 	@Override
 	public void afterNavigation(AfterNavigationEvent event) {
 		
-		List<Transaction> transactions = transactionLister.list();
+		transactions = transactionLister.list();
 		transactionGrid.setItems(transactions);
 		
 	}

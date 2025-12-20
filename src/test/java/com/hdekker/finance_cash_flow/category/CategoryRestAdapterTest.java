@@ -46,6 +46,7 @@ class CategoryRestAdapterTest {
     	CategorisedTransaction tran = categoryRestAdapter.set(
     			new CategorisedTransaction(
     					data.stub, 
+    					"Test keyword",
     					TransactionCategory.ENTERTAINMENT, 
     					Necessity.REQUIRED,
     					new ForecastGroup("Test Expense"),

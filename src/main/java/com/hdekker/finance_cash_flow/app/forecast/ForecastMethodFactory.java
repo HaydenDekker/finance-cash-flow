@@ -11,9 +11,7 @@ import com.hdekker.finance_cash_flow.CategorisedTransaction;
 import com.hdekker.finance_cash_flow.CategorisedTransaction.ExpenseType;
 import com.hdekker.finance_cash_flow.app.actual.HistoricalSummer;
 import com.hdekker.finance_cash_flow.app.actual.HistoricalSummer.SummedTransactions;
-import com.hdekker.finance_cash_flow.app.forecast.HistoricalInterpollationResult.QuadraticCalculation;
 import com.hdekker.finance_cash_flow.Transaction;
-import com.hdekker.finance_cash_flow.historical.HistoricalInterpollation;
 
 public class ForecastMethodFactory {
 	
@@ -36,10 +34,13 @@ public class ForecastMethodFactory {
 		return (t, y)-> {
 
 			List<Transaction> transactions = t.stream().map(ct->ct.transaction()).toList();
-			if(transactions.size()<3) return new Forecast(List.of(), y);
 			
 			Map<YearMonth, SummedTransactions> data = HistoricalSummer.calculateTotal(transactions);
-			QuadraticCalculation result = HistoricalInterpollation.interpollate(data);
+					
+			if(data.size()<2) return new Forecast(List.of(), y);
+			
+			LinearInterpolation result = LinearInterpolation.fit(data);
+			//QuadraticCalculation result = QuadraticCalculation.interpollate(data);
 			
 			CategorisedTransaction latestTransaction = getLatestTransactionInGroup(t);
 			
@@ -53,6 +54,7 @@ public class ForecastMethodFactory {
 		            .limit(monthsDifference)
 		            .map(ld-> new CategorisedTransaction(
 		            		new Transaction(ld, result.evaluate(YearMonth.from(ld)), "Combined category"), // TODO how to pull up all transactions later...
+		            		latestTransaction.transactionDescriptionSearchKeyword(),
 		            		latestTransaction.category(),
 		            		latestTransaction.necessity(),
 		            		latestTransaction.forcastGroup(),
@@ -91,7 +93,11 @@ public class ForecastMethodFactory {
 			List<CategorisedTransaction> forcastedTransactions = Stream.iterate(firstMonthForForecast, current -> current.plusMonths(1))
 	            .limit(monthsDifference)
 	            .map(ld-> new CategorisedTransaction(
-	            		new Transaction(ld, latestTransaction.transaction().amount(), latestTransaction.transaction().description()),
+	            		new Transaction(ld, 
+	            				latestTransaction.transaction().amount(), 
+	            				latestTransaction.transaction().description()
+	            				),
+	            		latestTransaction.transactionDescriptionSearchKeyword(),
 	            		latestTransaction.category(),
 	            		latestTransaction.necessity(),
 	            		latestTransaction.forcastGroup(),

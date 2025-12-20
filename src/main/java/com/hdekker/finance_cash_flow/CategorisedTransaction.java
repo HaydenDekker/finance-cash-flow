@@ -6,6 +6,7 @@ import java.time.YearMonth;
 
 public record CategorisedTransaction(
 		Transaction transaction,
+		String transactionDescriptionSearchKeyword,
 		TransactionCategory category,
 		Necessity necessity,
 		ForecastGroup forcastGroup,
