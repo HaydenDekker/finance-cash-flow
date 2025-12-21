@@ -42,6 +42,7 @@ public class TestData {
     		new Transaction(startingDate.plusMonths(1), 6.0, "Fuel"),
     		new Transaction(startingDate.plusMonths(2), 11.0, "Fuel"),
     		new Transaction(startingDate.plusMonths(3), 18.0, "Groceries"),
+    		new Transaction(startingDate.plusMonths(3), 30.0, "Groceries"),
     		new Transaction(startingDate.plusMonths(4), 27.0, "Rego"),
     		new Transaction(startingDate.plusMonths(5), 38.0, "Groceries"),
     		new Transaction(startingDate.plusMonths(6), 51.0, "Fuel"),
@@ -51,23 +52,15 @@ public class TestData {
     	);
     }
     
-    public record TransactionAssignement(
-			Transaction transaction, 
-			CategorisedTransaction categorisedTransaction) {}
-	
 	public record ExpectedResults() {}
 	
 	public record ExpectedOutput(YearMonth yearMonth, Double amount, Double difference) {}
 	
-	public record TestCase(List<TransactionAssignement> transactions, ExpectedOutput expectedOutput) {
-
-		public List<CategorisedTransaction> trans() {
-			return transactions().stream().map(ta->ta.categorisedTransaction()).toList();
-		}
+	public record TestCase(List<CategorisedTransaction> transactions) {
 		
 		public List<Transaction> transactionExpenses() {
 			return ExpenseFilter.breakdown(
-					trans())
+					transactions)
 					.expense()
 					.stream()
 						.map(ct->ct.transaction())
@@ -90,9 +83,8 @@ public class TestData {
 			"Rego", ExpenseType.KNOWN_VARIABLE,
 			"Income", ExpenseType.FIXED);
 	
-	static TransactionAssignement assign(Transaction transaction, Boolean mockForcastGroup) {
-		return new TransactionAssignement(
-				transaction, 
+	static CategorisedTransaction assign(Transaction transaction, Boolean mockForcastGroup) {
+		return 
 				new CategorisedTransaction(
 						transaction,
 						"",
@@ -102,21 +94,25 @@ public class TestData {
 						mockForcastGroup ? new ForecastGroup(transaction.description() + "_forecast_group") : new ForecastGroup(""),
 						FinancialFrequency.AD_HOC,
 						forecastMethodMap.get(transaction.description()),
-						LocalDateTime.now()));
+						LocalDateTime.now());
 	}
 
 	public static TestCase basicTestCase() {
 		return new TestCase(
-						testTransactions().stream().map(t->assign(t, true)).toList(),
-						new ExpectedOutput(YearMonth.of(2025, 07), 127.0, 5.0)
+						testTransactions().stream().map(t->assign(t, true)).toList()
 						);
 	}
 	
 	public static TestCase noForecastGroupTestCase() {
 		return new TestCase(
-						testTransactions().stream().map(t->assign(t, false)).toList(),
-						new ExpectedOutput(YearMonth.of(2025, 07), 127.0, 5.0)
+						testTransactions().stream().map(t->assign(t, false)).toList()
 						);
+	}
+	
+	public static TestCase annualisedExpenseTestCase() {
+		
+		return new TestCase(List.of(new CategorisedTransaction(null, null, null, null, null, null, null, null)));
+		
 	}
 
 

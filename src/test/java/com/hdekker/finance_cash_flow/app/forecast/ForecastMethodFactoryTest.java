@@ -18,8 +18,7 @@ public class ForecastMethodFactoryTest {
 	@Test
 	public void givenIncomeCategorisedTransactionList_ExpectForcastedFixedMethodReturnsExpectedValue() {
 		
-		List<CategorisedTransaction> transactions = TestData.basicTestCase()
-															.trans();
+		List<CategorisedTransaction> transactions = TestData.basicTestCase().transactions();
 		
 		BudgetOverview overview = BudgetOverview.calculate(transactions);
 		SummedTransactionCategory income = overview.monthlyIncomeTotal();
@@ -46,13 +45,13 @@ public class ForecastMethodFactoryTest {
 	public void givenVariableCategorisedTransactionList_ExpectForecastedAveragesAccrossAllValues() {
 		
 		List<CategorisedTransaction> transactions = TestData.basicTestCase()
-				.trans()
+				.transactions()
 				.stream()
 				.filter(ct-> ct.expenseType().equals(ExpenseType.VARIABLE))
 				.toList();
 		
 		assertThat(transactions)
-			.hasSize(8);
+			.hasSize(9);
 		
 		Forecast forecast = ForecastMethodFactory.buildFor(ExpenseType.VARIABLE)
 			.forcast(transactions, YearMonth.from(TestData.startingDate.plusMonths(12)));

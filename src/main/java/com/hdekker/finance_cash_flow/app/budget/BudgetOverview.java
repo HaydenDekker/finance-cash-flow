@@ -19,7 +19,7 @@ import com.hdekker.finance_cash_flow.app.category.CategoryGroup.SummedTransactio
 public record BudgetOverview (
 			SummedTransactionCategory monthlyIncomeTotal,
 			Map<YearMonth, SummedTransactions> monthlyExpensesTotal,
-			Map<YearMonth, SummedTransactions> difference,
+			Map<YearMonth, SummedTransactions> netFlow,
 			List<SummedTransactionCategory> summedTransactionsByCategory) {
 		
 	public Set<YearMonth> yearMonths(){

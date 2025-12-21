@@ -16,7 +16,7 @@ public class ForecastGroupMapperTest {
 	@Test
 	public void givenCategorisedTransactions_ExpectMappedByForcastGroup() {
 		
-		List<CategorisedTransaction> transactions = TestData.basicTestCase().trans();
+		List<CategorisedTransaction> transactions = TestData.basicTestCase().transactions();
 		Map<ForecastGroup, List<CategorisedTransaction>> groups = ForecastGroupMapper.map(transactions);
 		assertThat(groups.keySet())
 			.hasSize(4);

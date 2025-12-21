@@ -121,7 +121,7 @@ public class BudgeterView extends VerticalLayout implements AfterNavigationObser
 		Stream<DisplaySummedTransactionCategory> netTotal = Stream.of(
 				new DisplaySummedTransactionCategory(
 						"Net flow",
-				historicalOverview.difference(),
+				historicalOverview.netFlow(),
 				Arrays.asList(TransactionCategory.values()))
 				);
 		

@@ -43,10 +43,11 @@ Tests for `forecasts`
 -  (complete) If no forecast group is assigned, use method variable for entire category group and assign the category as the group name. This ensures forcasts will still be relevant by group.
 -  (complete) Collect all like forecast groups and sum by month before calculating a forecast. (i.e may have Phone group and two phones each month, 1 $60 and other $80, equaling $140 for that group per month for the forecast)
 -  (complete) If forecast group is assigned, use method provided.
+- show annual/multi-month expense's monthly allocation in actual expenses, i.e an annual rego payment, divide by number of months based on the forecast method... understand that last months net didn't factor in x,y,z annualised payments.
 
 Test for UI review
 - (completed) show list of categorised transactions for a given month when clicking the grid cell on the budgeter view.
-- Show CSS coloured/highlighted line for the current day.
+- (completed) Show CSS coloured/highlighted line for the current day.
 
 Test for Autocompletion
 - (complete) expect button copies to clipboard, prompt to extract payee search keywords.

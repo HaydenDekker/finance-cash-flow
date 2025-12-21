@@ -18,7 +18,6 @@ import com.hdekker.finance_cash_flow.category.CategoryRestAdapter;
 import com.hdekker.finance_cash_flow.transaction.TransactionRestAdapter;
 import com.hdekker.finance_cash_flow.transaction.TestData;
 import com.hdekker.finance_cash_flow.transaction.TestData.TestCase;
-import com.hdekker.finance_cash_flow.transaction.TestData.TransactionAssignement;
 
 @SpringBootTest
 public class SystemIntegrationTest {
@@ -40,7 +39,7 @@ public class SystemIntegrationTest {
 				TestData.noForecastGroupTestCase());
 	}
 	
-	List<TransactionAssignement> transactions;
+	List<CategorisedTransaction> transactions;
 	
 	@ParameterizedTest
 	@MethodSource("testCases")
@@ -48,11 +47,11 @@ public class SystemIntegrationTest {
 	
 		transactions = testCase.transactions();
 		testCase.transactions().forEach(t->transactionRestAdapter.save(t.transaction()));
-		testCase.transactions().forEach(ta-> categoryRestAdapter.set(ta.categorisedTransaction()));
+		testCase.transactions().forEach(ta-> categoryRestAdapter.set(ta));
 		
 		BudgetOverview ho = categoryRestAdapter.budgetOverview();
 		
-		Set<YearMonth> allMonths = testCase.trans().stream()
+		Set<YearMonth> allMonths = testCase.transactions().stream()
 			.map(ct->ct.getTransactionYearMonth())
 			.collect(Collectors.toSet());
 		
@@ -62,12 +61,13 @@ public class SystemIntegrationTest {
 		assertThat(ho.monthlyExpensesTotal().keySet())
 			.hasSize(allMonths.size());
 		
+		
 	}
 	
 	@AfterEach
 	public void cleanUpDatabase() {
 		transactions.forEach(t->{
-			categorisedTransactionDeleter.delete(t.categorisedTransaction());
+			categorisedTransactionDeleter.delete(t);
 			transactionDeleter.delete(t.transaction());
 		});
 	}

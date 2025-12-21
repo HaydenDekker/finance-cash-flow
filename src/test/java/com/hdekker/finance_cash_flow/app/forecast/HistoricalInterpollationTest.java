@@ -31,7 +31,7 @@ public class HistoricalInterpollationTest {
 				YearMonth.from(
 						TestData.startingDate.plusMonths(10)));
 		assertThat(estimate)
-				.isCloseTo(124, offset(2.0));
+				.isCloseTo(115, offset(2.0));
 	}
 
 }

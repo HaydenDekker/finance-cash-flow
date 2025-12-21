@@ -17,7 +17,7 @@ public class ForecasterTest {
 	public void givenListOfItemsWithNoForecastGroupSet_ExpectGroupNameAsCategoryANDTypeVariableUsedForAllCalculations() {
 		
 		TestCase testCase = TestData.noForecastGroupTestCase();
-		List<CategorisedTransaction> forecastedTransactions = Forecaster.forcast(testCase.trans());
+		List<CategorisedTransaction> forecastedTransactions = Forecaster.forcast(testCase.transactions());
 		
 		assertThat(forecastedTransactions)
 			.isNotEmpty();
