@@ -20,6 +20,7 @@ public record BudgetOverview (
 			SummedTransactionCategory monthlyIncomeTotal,
 			Map<YearMonth, SummedTransactions> monthlyExpensesTotal,
 			Map<YearMonth, SummedTransactions> netFlow,
+			List<SummedTransactionCategory> amortisedTransactions,
 			List<SummedTransactionCategory> summedTransactionsByCategory) {
 		
 	public Set<YearMonth> yearMonths(){
@@ -58,6 +59,7 @@ public record BudgetOverview (
 		return new BudgetOverview(income.get(0), 
 				monthlyExpensesTotal, 
 				netCashFlow,
+				null,
 				summedExpense);
 		
 	}

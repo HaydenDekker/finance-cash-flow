@@ -19,10 +19,10 @@ public class BudgetOverviewTest {
 		TestCase tc = TestData.basicTestCase();
 		BudgetOverview bo = BudgetOverview.calculate(tc.transactions());
 		
-		LocalDate targetDate = TestData.startingDate.plusMonths(3);
+		YearMonth targetDate = TestData.yearMonthOfStartingDate.plusMonths(3);
 		Double expenseTotalAtTargetMonth = 48.0;
 		
-		SummedTransactions net = bo.netFlow().get(YearMonth.from(targetDate));
+		SummedTransactions net = bo.netFlow().get(targetDate);
 		
 		assertThat(net.amount())
 			.isEqualTo(expenseTotalAtTargetMonth);
@@ -32,8 +32,16 @@ public class BudgetOverviewTest {
 	@Test
 	public void givenAnualisedExpense_ExpectSinkCalculatedOnCategory() {
 		
-		TestCase tc = TestData.basicTestCase();
+		TestCase tc = TestData.annualisedExpenseTestCase();
 		BudgetOverview bo = BudgetOverview.calculate(tc.transactions());
+		Double amount = bo.amortisedTransactions()
+			.get(0)
+			.summedMonths()
+			.get(TestData.yearMonthOfStartingDate)
+			.amount();
+		
+		assertThat(amount)
+			.isEqualTo(20.0);
 		
 	}
 

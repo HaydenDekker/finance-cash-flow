@@ -33,7 +33,8 @@ public class TestData {
     String mockCSVData = "\"3/12/2025\",\"-80.2\",\"" + descriptionStub + "\"";
     String mockCSVDataDoubleDigitDay = "\"24/12/2025\",\"-80.2\",\"" + descriptionStub + "\"";
     
-    public static LocalDate startingDate = LocalDate.now().minusYears(1);
+    private static LocalDate startingDate = LocalDate.now().minusYears(1);
+    public static YearMonth yearMonthOfStartingDate = YearMonth.from(startingDate);
     
     public static List<Transaction> testTransactions(){
     	return List.of(
@@ -111,7 +112,16 @@ public class TestData {
 	
 	public static TestCase annualisedExpenseTestCase() {
 		
-		return new TestCase(List.of(new CategorisedTransaction(null, null, null, null, null, null, null, null)));
+		return new TestCase(List.of(
+				new CategorisedTransaction(
+						new Transaction(startingDate, 120, "Annual expense stub"), 
+						"House Insurance", 
+						TransactionCategory.HOUSING, 
+						Necessity.REQUIRED, 
+						new ForecastGroup("House Insurance"), 
+						FinancialFrequency.ANNUALLY, 
+						ExpenseType.KNOWN_VARIABLE, 
+						LocalDateTime.now())));
 		
 	}
 

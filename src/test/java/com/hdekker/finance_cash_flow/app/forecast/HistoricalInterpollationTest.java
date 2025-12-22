@@ -28,10 +28,11 @@ public class HistoricalInterpollationTest {
 		QuadraticCalculation result = QuadraticCalculation.interpollate(data);
 		
 		double estimate = result.evaluate(
-				YearMonth.from(
-						TestData.startingDate.plusMonths(10)));
+						TestData.yearMonthOfStartingDate.plusMonths(10));
+		
 		assertThat(estimate)
 				.isCloseTo(115, offset(2.0));
+		
 	}
 
 }

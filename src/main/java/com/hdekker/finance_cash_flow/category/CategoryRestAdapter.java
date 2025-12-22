@@ -66,9 +66,9 @@ public class CategoryRestAdapter {
 	public BudgetOverview budgetOverview() {
 		
 		List<CategorisedTransaction> trans = list();
-		List<CategorisedTransaction> forcastedTransactions = List.of();// Forecaster.forcast(trans);
-		
+		List<CategorisedTransaction> forcastedTransactions = List.of(); // Forecaster.forcast(trans);
 		return BudgetOverview.calculate(Stream.concat(trans.stream(), forcastedTransactions.stream()).toList());
+		
 	}
 	
 

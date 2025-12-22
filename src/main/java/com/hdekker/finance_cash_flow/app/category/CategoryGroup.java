@@ -17,7 +17,7 @@ public class CategoryGroup {
 	
 	public record SummedTransactionCategory (
 			TransactionCategory category, 
-			List<CategorisedTransaction> categorisedTransaction,
+			List<CategorisedTransaction> categorisedTransactions,
 			Map<YearMonth, SummedTransactions> summedMonths) {}
 
 	public static List<SummedTransactionCategory> groupByCategoryAndByYearMonthAndSum(

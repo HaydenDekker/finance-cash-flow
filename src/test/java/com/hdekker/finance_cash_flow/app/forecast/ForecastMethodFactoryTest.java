@@ -24,13 +24,13 @@ public class ForecastMethodFactoryTest {
 		SummedTransactionCategory income = overview.monthlyIncomeTotal();
 		
 		Forecast forecast = ForecastMethodFactory.fixed().forcast(
-				income.categorisedTransaction(), 
-				income.categorisedTransaction().get(
-						income.categorisedTransaction().size()-1).getTransactionYearMonth().plusYears(1));
+				income.categorisedTransactions(), 
+				income.categorisedTransactions().get(
+						income.categorisedTransactions().size()-1).getTransactionYearMonth().plusYears(1));
 		assertThat(forecast.forcastedTransaction())
 			.hasSize(12);
 		
-		CategorisedTransaction latest = ForecastMethodFactory.getLatestTransactionInGroup(income.categorisedTransaction());
+		CategorisedTransaction latest = ForecastMethodFactory.getLatestTransactionInGroup(income.categorisedTransactions());
 		
 		assertThat(latest.getTransactionYearMonth().plusMonths(1))
 			.isEqualTo(forecast.forcastedTransaction()
@@ -54,7 +54,7 @@ public class ForecastMethodFactoryTest {
 			.hasSize(9);
 		
 		Forecast forecast = ForecastMethodFactory.buildFor(ExpenseType.VARIABLE)
-			.forcast(transactions, YearMonth.from(TestData.startingDate.plusMonths(12)));
+			.forcast(transactions, TestData.yearMonthOfStartingDate.plusMonths(12));
 		
 		assertThat(forecast.forcastedTransaction())
 			.isNotEmpty();
