@@ -18,7 +18,6 @@ import com.hdekker.finance_cash_flow.MissingCategorisedTransactionReader;
 import com.hdekker.finance_cash_flow.app.budget.BudgetOverview;
 import com.hdekker.finance_cash_flow.app.category.CategoryGroup;
 import com.hdekker.finance_cash_flow.app.category.CategoryGroup.SummedTransactionCategory;
-import com.hdekker.finance_cash_flow.app.forecast.Forecaster;
 
 @RestController
 public class CategoryRestAdapter {

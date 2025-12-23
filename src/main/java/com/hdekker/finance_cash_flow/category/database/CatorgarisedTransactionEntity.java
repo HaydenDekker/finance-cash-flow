@@ -1,6 +1,5 @@
 package com.hdekker.finance_cash_flow.category.database;
 
-import java.time.LocalDateTime;
 
 import com.hdekker.finance_cash_flow.CategorisedTransaction;
 import com.hdekker.finance_cash_flow.TransactionCategory;
@@ -33,7 +32,6 @@ public class CatorgarisedTransactionEntity {
     Necessity necessity;
     FinancialFrequency financialFrequency;
 	ExpenseType expenseType;
-    LocalDateTime categoryTimeStamp;
     String forcastGroup;
     String searchKeyword;
     
@@ -102,21 +100,13 @@ public class CatorgarisedTransactionEntity {
 	public void setCategory(TransactionCategory category) {
 		this.category = category;
 	}
-
-	public LocalDateTime getCategoryTimeStamp() {
-		return categoryTimeStamp;
-	}
-
-	public void setCategoryTimeStamp(LocalDateTime categoryTimeStamp) {
-		this.categoryTimeStamp = categoryTimeStamp;
-	}
+	
 
 	public static CatorgarisedTransactionEntity from(CategorisedTransaction ct) {
 		
 	    CatorgarisedTransactionEntity e = new CatorgarisedTransactionEntity();
 	    e.setId(ct.transaction().createId());
 	    e.setTransaction(TransactionEntitiy.from(ct.transaction()));
-	    e.setCategoryTimeStamp(ct.assignmentTimeStamp());
 	    e.setCategory(ct.category());
 	    e.setNecessity(ct.necessity());
 	    e.setFinancialFrequency(ct.financialFrequency());
@@ -136,8 +126,7 @@ public class CatorgarisedTransactionEntity {
 	    		getNecessity(),
 	    		(getForcastGroup() == null)? new ForecastGroup(""): new ForecastGroup(getForcastGroup()),
 	    		getFinancialFrequency(),
-	    		getExpenseType(),
-	    		getCategoryTimeStamp());
+	    		getExpenseType());
 	    
 	}
 

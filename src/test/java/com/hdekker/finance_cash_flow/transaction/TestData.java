@@ -1,7 +1,6 @@
 package com.hdekker.finance_cash_flow.transaction;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.YearMonth;
 import java.util.List;
 import java.util.Map;
@@ -94,8 +93,8 @@ public class TestData {
 						// just use description as group for test
 						mockForcastGroup ? new ForecastGroup(transaction.description() + "_forecast_group") : new ForecastGroup(""),
 						FinancialFrequency.AD_HOC,
-						forecastMethodMap.get(transaction.description()),
-						LocalDateTime.now());
+						forecastMethodMap.get(transaction.description())
+						);
 	}
 
 	public static TestCase basicTestCase() {
@@ -120,8 +119,7 @@ public class TestData {
 						Necessity.REQUIRED, 
 						new ForecastGroup("House Insurance"), 
 						FinancialFrequency.ANNUALLY, 
-						ExpenseType.KNOWN_VARIABLE, 
-						LocalDateTime.now())));
+						ExpenseType.KNOWN_VARIABLE)));
 		
 	}
 

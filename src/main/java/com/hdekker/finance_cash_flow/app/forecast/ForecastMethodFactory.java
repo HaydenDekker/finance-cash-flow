@@ -59,8 +59,7 @@ public class ForecastMethodFactory {
 		            		latestTransaction.necessity(),
 		            		latestTransaction.forcastGroup(),
 		            		latestTransaction.financialFrequency(),
-		            		latestTransaction.expenseType(),
-		            		latestTransaction.assignmentTimeStamp()
+		            		latestTransaction.expenseType()
 		            		))
 		            .toList();
 			
@@ -102,8 +101,8 @@ public class ForecastMethodFactory {
 	            		latestTransaction.necessity(),
 	            		latestTransaction.forcastGroup(),
 	            		latestTransaction.financialFrequency(),
-	            		latestTransaction.expenseType(),
-	            		latestTransaction.assignmentTimeStamp()
+	            		latestTransaction.expenseType()
+	            		
 	            		))
 	            .toList();
 			

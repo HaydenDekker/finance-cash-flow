@@ -16,8 +16,7 @@ public class Forecaster {
 				tran.necessity(), 
 				new ForecastGroup(tran.category().name()),
 				tran.financialFrequency(),
-				ExpenseType.VARIABLE, 
-				tran.assignmentTimeStamp());
+				ExpenseType.VARIABLE);
 	}
 	
 	public static List<CategorisedTransaction> forcast(List<CategorisedTransaction> transactions){

@@ -2,7 +2,6 @@ package com.hdekker.finance_cash_flow.app.budget;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.time.LocalDate;
 import java.time.YearMonth;
 
 import org.junit.jupiter.api.Test;
@@ -33,15 +32,18 @@ public class BudgetOverviewTest {
 	public void givenAnualisedExpense_ExpectSinkCalculatedOnCategory() {
 		
 		TestCase tc = TestData.annualisedExpenseTestCase();
+		
 		BudgetOverview bo = BudgetOverview.calculate(tc.transactions());
-		Double amount = bo.amortisedTransactions()
-			.get(0)
-			.summedMonths()
-			.get(TestData.yearMonthOfStartingDate)
-			.amount();
+		
+		Double amount = bo.amortizedExpense()
+			.stream()
+			.filter(ae->ae.applicableMonth().equals(TestData.yearMonthOfStartingDate))
+			.findAny()
+			.get()
+			.amortizedValue();
 		
 		assertThat(amount)
-			.isEqualTo(20.0);
+			.isEqualTo(10.0);
 		
 	}
 

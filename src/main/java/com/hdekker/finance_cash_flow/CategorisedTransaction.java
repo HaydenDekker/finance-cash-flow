@@ -1,6 +1,5 @@
 package com.hdekker.finance_cash_flow;
 
-import java.time.LocalDateTime;
 import java.time.Period;
 import java.time.YearMonth;
 
@@ -11,8 +10,7 @@ public record CategorisedTransaction(
 		Necessity necessity,
 		ForecastGroup forcastGroup,
 		FinancialFrequency financialFrequency,
-		ExpenseType expenseType,
-		LocalDateTime assignmentTimeStamp) { // TODO remove timestamp
+		ExpenseType expenseType) {
 	
 	public enum Necessity {
 		REQUIRED,

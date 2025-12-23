@@ -1,6 +1,5 @@
 package com.hdekker.finance_cash_flow.category;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +20,7 @@ public class MissingCategorisedTransactionReaderImpl implements MissingCategoris
 		return repo.findUncategorisedTransactions().stream()
 					.map(e->e.toTransaction())
 					.map(t->new CategorisedTransaction(
-							t, null, null, null, null, null, null, LocalDateTime.now()))
+							t, null, null, null, null, null, null))
 					.toList();
 	}
 

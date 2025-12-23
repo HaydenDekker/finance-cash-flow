@@ -12,7 +12,7 @@ import com.hdekker.finance_cash_flow.TransactionCategory;
 public class ExpenseFilter {
 	
 	final static Predicate<CategorisedTransaction> IS_INCOME = (ct)-> TransactionCategory.INCOME.equals(ct.category());
-
+	
 	public record ExpenseIncomeBreakdown(List<CategorisedTransaction> income, List<CategorisedTransaction> expense) {}
 	
 	public static ExpenseIncomeBreakdown breakdown(List<CategorisedTransaction> transactions) {

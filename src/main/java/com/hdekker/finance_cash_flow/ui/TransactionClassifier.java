@@ -8,7 +8,6 @@ import reactor.core.publisher.Mono;
 
 import java.time.Duration;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.YearMonth;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -146,8 +145,7 @@ public class TransactionClassifier extends VerticalLayout implements AfterNaviga
 						discretionaryField.getValue()==true? Necessity.DISCRETIONARY: Necessity.REQUIRED,
 						new ForecastGroup(forecastGroupField.getValue()),
 						ffField.getValue(),
-						etField.getValue(),
-						LocalDateTime.now()
+						etField.getValue()
 						);
 				
 			}
@@ -204,8 +202,7 @@ public class TransactionClassifier extends VerticalLayout implements AfterNaviga
 										tran.necessity(),
 										tran.forcastGroup()==null? new ForecastGroup(""): tran.forcastGroup(),
 										tran.financialFrequency(),
-										tran.expenseType(),
-										tran.assignmentTimeStamp())
+										tran.expenseType())
 								);
 					});
 	
@@ -258,8 +255,7 @@ public class TransactionClassifier extends VerticalLayout implements AfterNaviga
 						properties.necessity(),
 						properties.forcastGroup(),
 						properties.financialFrequency(),
-						properties.expenseType(),
-						LocalDateTime.now()
+						properties.expenseType()
 						);
 				
 						saveCategoryTransaction(newCT);
@@ -335,8 +331,7 @@ public class TransactionClassifier extends VerticalLayout implements AfterNaviga
 								properties.necessity(),
 								properties.forcastGroup(),
 								properties.financialFrequency(),
-								properties.expenseType(),
-								LocalDateTime.now()
+								properties.expenseType()
 						);
 					
 					saveCategoryTransaction(newCT);

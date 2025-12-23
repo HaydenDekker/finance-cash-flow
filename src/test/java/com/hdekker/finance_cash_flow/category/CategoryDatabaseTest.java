@@ -2,7 +2,6 @@ package com.hdekker.finance_cash_flow.category;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -55,8 +54,7 @@ public class CategoryDatabaseTest {
 				Necessity.REQUIRED,
 				new ForecastGroup("Test Expense"),
 				FinancialFrequency.AD_HOC,
-				ExpenseType.FIXED,
-				LocalDateTime.now());
+				ExpenseType.FIXED);
 		
 		// need transient saved beforehand
 		transactionPersister.persist(data.stub);
@@ -89,8 +87,7 @@ public class CategoryDatabaseTest {
 				Necessity.REQUIRED,
 				new ForecastGroup("Test Expense"),
 				FinancialFrequency.AD_HOC,
-				ExpenseType.FIXED,
-				LocalDateTime.now()); 
+				ExpenseType.FIXED); 
 		
 		// need transient saved beforehand
 		transactionPersister.persist(data.stub);

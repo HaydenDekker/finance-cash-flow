@@ -1,7 +1,6 @@
 package com.hdekker.finance_cash_flow.category;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import java.time.LocalDateTime;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -37,8 +36,7 @@ class CategoryRestAdapterTest {
     @Test
     void givenTransaction_ExpectCanAssignToCategory() {
     	
-    	LocalDateTime dateTime = LocalDateTime.now();
-    	
+   
     	TestData data = new TestData();
     	
     	transactionPersister.persist(data.stub);
@@ -51,14 +49,10 @@ class CategoryRestAdapterTest {
     					Necessity.REQUIRED,
     					new ForecastGroup("Test Expense"),
     					FinancialFrequency.AD_HOC,
-    					ExpenseType.FIXED,
-    					dateTime));
+    					ExpenseType.FIXED));
     
     	assertThat(tran)
     		.isNotNull();
-    	
-    	assertThat(dateTime)
-    		.isEqualTo(tran.assignmentTimeStamp());
     	
     	List<CategorisedTransaction> listAssignements = categoryRestAdapter.list();
     	assertThat(listAssignements)
