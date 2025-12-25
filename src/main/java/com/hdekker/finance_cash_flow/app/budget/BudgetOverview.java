@@ -51,7 +51,6 @@ public record BudgetOverview (
 		
 	}
 	
-	
 	public Set<YearMonth> yearMonths(){
 		
 		// 1. Collect all unique month keys
@@ -66,7 +65,7 @@ public record BudgetOverview (
 		return uniqueMonths;
 	}
 	
-	public static List<AmortizedExpense> splitOutAmortizedValues(List<CategorisedTransaction> expenses) {
+	private static List<AmortizedExpense> splitOutAmortizedValues(List<CategorisedTransaction> expenses) {
 		
 		return expenses.stream()
 			.filter(ct-> ct.financialFrequency().equals(FinancialFrequency.ANNUALLY))

@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -14,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.hdekker.finance_cash_flow.TransactionCategory;
+import com.hdekker.finance_cash_flow.app.actual.HistoricalSummer.SummedTransactions;
 import com.hdekker.finance_cash_flow.app.budget.BudgetOverview;
 import com.hdekker.finance_cash_flow.app.budget.HasAmount;
 import com.hdekker.finance_cash_flow.category.CategoryRestAdapter;
@@ -39,10 +41,13 @@ public class BudgeterView extends VerticalLayout implements AfterNavigationObser
 	@Autowired
 	CategoryRestAdapter adapter;
 	
-	public record DisplaySummedTransactionCategory(String rowName, Map<YearMonth, ? extends HasAmount> summedMonths, List<TransactionCategory> categoriesIncluded) {}
+	public record TransactionSummaryDisplay(
+			String rowName,
+			Function<YearMonth, String> displayString,
+			List<TransactionCategory> categoriesIncluded) {}
 	
 	
-	Grid<DisplaySummedTransactionCategory> grid = new Grid<>(DisplaySummedTransactionCategory.class, false);
+	Grid<TransactionSummaryDisplay> grid = new Grid<>(TransactionSummaryDisplay.class, false);
 	
 	public BudgeterView() {
 		
@@ -68,6 +73,14 @@ public class BudgeterView extends VerticalLayout implements AfterNavigationObser
 		});
 		
 	}
+	
+	private String formatDouble(HasAmount hasAmount) {
+		
+		return String.format("%.2f", 
+				Optional.ofNullable(hasAmount)
+						.map(st->st.amount())
+						.orElse(0.0));
+	}
 
 	@Override
 	public void afterNavigation(AfterNavigationEvent event) {
@@ -78,17 +91,14 @@ public class BudgeterView extends VerticalLayout implements AfterNavigationObser
 		
 		grid.removeAllColumns();
 		
-		grid.addColumn(DisplaySummedTransactionCategory::rowName)
+		grid.addColumn(TransactionSummaryDisplay::rowName)
 		    .setHeader("Category")
 		    .setSortable(true)
 		    .setKey("categoryName")
 		    .setWidth("300px");
 		
 		for (YearMonth month : yearMonths) {
-		    grid.addColumn(category -> Optional.ofNullable(category.summedMonths().get(month))
-		    		.map(st->st.amount())
-		    		.map(d->String.format("%.2f", d))
-		    		.orElse("0.0"))
+		    grid.addColumn(category -> category.displayString().apply(month))
 		        .setHeader(month.toString())
 		        .setKey(month.toString()) // Use the month name as the key
 		        .setTextAlign(ColumnTextAlign.END)
@@ -101,48 +111,63 @@ public class BudgeterView extends VerticalLayout implements AfterNavigationObser
 		        .setWidth("150px");
 		}
 		
-		Stream<DisplaySummedTransactionCategory> incomeTotal = Stream.of(
-				new DisplaySummedTransactionCategory(
+		Stream<TransactionSummaryDisplay> incomeTotal = Stream.of(
+				new TransactionSummaryDisplay(
 						"Income Total",
-				budgetOverview.monthlyIncomeTotal().summedMonths(),
+				(ym)-> formatDouble(
+						budgetOverview.monthlyIncomeTotal()
+							.summedMonths()
+							.get(ym)
+						),
 				List.of(TransactionCategory.INCOME)
 				));
 		
-		Stream<DisplaySummedTransactionCategory> expenseTotal = Stream.of(
-				new DisplaySummedTransactionCategory(
+		Stream<TransactionSummaryDisplay> expenseTotal = Stream.of(
+				new TransactionSummaryDisplay(
 						"Expense Total",
-				budgetOverview.monthlyExpensesTotal(),
+				(ym)-> formatDouble(
+						budgetOverview.monthlyExpensesTotal()
+							.get(ym)),
 				Arrays.asList(TransactionCategory.values())
 					.stream()
 					.filter(tc->!tc.equals(TransactionCategory.INCOME))
 					.toList())
 				);
 		
-		Stream<DisplaySummedTransactionCategory> netTotal = Stream.of(
-				new DisplaySummedTransactionCategory(
+		Stream<TransactionSummaryDisplay> netTotal = Stream.of(
+				new TransactionSummaryDisplay(
 						"Net flow",
-				budgetOverview.netFlow(),
+				(ym)-> formatDouble(
+						budgetOverview.netFlow().get(ym)
+					),
 				Arrays.asList(TransactionCategory.values()))
 				);
+	
+		Map<YearMonth, ? extends HasAmount> amortizedExpenses = budgetOverview.netAmortizedExpenses();
 		
-		Stream<DisplaySummedTransactionCategory> amortized = Stream.of(
-				new DisplaySummedTransactionCategory(
+		Stream<TransactionSummaryDisplay> amortized = Stream.of(
+				new TransactionSummaryDisplay(
 						"Amortized Expense",
-				budgetOverview.netAmortizedExpenses(),
+				(ym) -> formatDouble(amortizedExpenses.get(ym)),
 				Arrays.asList(TransactionCategory.values()))
 				);
-		
-		
-		Stream<DisplaySummedTransactionCategory> items = budgetOverview.summedTransactionsByCategory().stream()
-			.map(st-> new DisplaySummedTransactionCategory(
+	
+		Stream<TransactionSummaryDisplay> items = budgetOverview.summedTransactionsByCategory().stream()
+			.map(st-> new TransactionSummaryDisplay(
 					st.category().name(), 
-					st.summedMonths(),
+					(ym)-> formatDouble(st.summedMonths().get(ym)) + "/" + "yes",
 					List.of(st.category())
 					))
 			.sorted((a,b) -> a.rowName().compareTo(b.rowName()));
-			
 		
-		List<DisplaySummedTransactionCategory> combined = List.of(incomeTotal, expenseTotal, netTotal, amortized, items)
+		
+		List<TransactionSummaryDisplay> combined = List.of(
+					incomeTotal, 
+					expenseTotal, 
+					netTotal, 
+					amortized,
+					items
+				)
 				.stream()
 				.flatMap(s->s)
 				.toList();
