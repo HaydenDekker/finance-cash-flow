@@ -6,10 +6,11 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import com.hdekker.finance_cash_flow.Transaction;
+import com.hdekker.finance_cash_flow.app.budget.HasAmount;
 
 public class HistoricalSummer {
 	
-	public record SummedTransactions(List<Transaction> transactions, Double amount) {}
+	public record SummedTransactions(List<Transaction> transactions, Double amount) implements HasAmount {}
   
     public static Map<YearMonth, SummedTransactions> calculateTotal(List<Transaction> transactions){
         return transactions.stream()

@@ -14,8 +14,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.hdekker.finance_cash_flow.TransactionCategory;
-import com.hdekker.finance_cash_flow.app.actual.HistoricalSummer.SummedTransactions;
 import com.hdekker.finance_cash_flow.app.budget.BudgetOverview;
+import com.hdekker.finance_cash_flow.app.budget.HasAmount;
 import com.hdekker.finance_cash_flow.category.CategoryRestAdapter;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.grid.ColumnTextAlign;
@@ -39,7 +39,7 @@ public class BudgeterView extends VerticalLayout implements AfterNavigationObser
 	@Autowired
 	CategoryRestAdapter adapter;
 	
-	public record DisplaySummedTransactionCategory(String rowName, Map<YearMonth, SummedTransactions> summedMonths, List<TransactionCategory> categoriesIncluded) {}
+	public record DisplaySummedTransactionCategory(String rowName, Map<YearMonth, ? extends HasAmount> summedMonths, List<TransactionCategory> categoriesIncluded) {}
 	
 	
 	Grid<DisplaySummedTransactionCategory> grid = new Grid<>(DisplaySummedTransactionCategory.class, false);
@@ -128,8 +128,7 @@ public class BudgeterView extends VerticalLayout implements AfterNavigationObser
 		Stream<DisplaySummedTransactionCategory> amortized = Stream.of(
 				new DisplaySummedTransactionCategory(
 						"Amortized Expense",
-				null,
-				//budgetOverview.sortAmortizedExpenses(),
+				budgetOverview.netAmortizedExpenses(),
 				Arrays.asList(TransactionCategory.values()))
 				);
 		

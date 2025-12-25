@@ -27,7 +27,7 @@ public record BudgetOverview (
 			List<AmortizedExpense> amortizedExpense,
 			List<SummedTransactionCategory> summedTransactionsByCategory) {
 	
-	public record AmortizedExpenseGroup(List<AmortizedExpense> items) {
+	public record AmortizedExpenseGroup(List<AmortizedExpense> items) implements HasAmount {
 		
 		public Double amount() {
 			return items.stream()

@@ -64,9 +64,14 @@ public class CategoryRestAdapter {
 	@GetMapping("/category/budget-overview")
 	public BudgetOverview budgetOverview() {
 		
-		List<CategorisedTransaction> trans = list();
-		List<CategorisedTransaction> forcastedTransactions = List.of(); // Forecaster.forcast(trans);
-		return BudgetOverview.calculate(Stream.concat(trans.stream(), forcastedTransactions.stream()).toList());
+		List<CategorisedTransaction> trans = list()
+				.stream()
+				.filter(ct->ct.financialFrequency()!=null)
+				.filter(ct->ct.category()!=null)
+				.toList();
+		// List<CategorisedTransaction> forcastedTransactions = List.of(); // Forecaster.forcast(trans);
+		// , forcastedTransactions.stream()).toList()
+		return BudgetOverview.calculate(trans);
 		
 	}
 	
