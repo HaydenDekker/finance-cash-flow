@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import com.hdekker.finance_cash_flow.CategorisedTransaction;
@@ -25,7 +26,32 @@ public record BudgetOverview (
 			Map<YearMonth, SummedTransactions> netFlow,
 			List<AmortizedExpense> amortizedExpense,
 			List<SummedTransactionCategory> summedTransactionsByCategory) {
+	
+	public record AmortizedExpenseGroup(List<AmortizedExpense> items) {
 		
+		public Double amount() {
+			return items.stream()
+				.collect(Collectors.summingDouble(AmortizedExpense::amortizedValue));
+		}
+	}
+	
+	public Map<YearMonth, AmortizedExpenseGroup> netAmortizedExpenses(){
+		
+		Map<YearMonth, AmortizedExpenseGroup> byYearMonth = amortizedExpense().stream()
+			.collect(
+				Collectors.groupingBy(
+						ae->ae.applicableMonth(),
+						Collectors.collectingAndThen(
+							Collectors.toList(),
+							(l)-> new AmortizedExpenseGroup(l))
+						)
+				);
+		
+		return byYearMonth;
+		
+	}
+	
+	
 	public Set<YearMonth> yearMonths(){
 		
 		// 1. Collect all unique month keys

@@ -72,8 +72,8 @@ public class BudgeterView extends VerticalLayout implements AfterNavigationObser
 	@Override
 	public void afterNavigation(AfterNavigationEvent event) {
 		
-		BudgetOverview historicalOverview = adapter.budgetOverview();
-		Set<YearMonth> yearMonths = historicalOverview.yearMonths();
+		BudgetOverview budgetOverview = adapter.budgetOverview();
+		Set<YearMonth> yearMonths = budgetOverview.yearMonths();
 		log.info("" + yearMonths.size() + " months in dataset.");
 		
 		grid.removeAllColumns();
@@ -104,14 +104,14 @@ public class BudgeterView extends VerticalLayout implements AfterNavigationObser
 		Stream<DisplaySummedTransactionCategory> incomeTotal = Stream.of(
 				new DisplaySummedTransactionCategory(
 						"Income Total",
-				historicalOverview.monthlyIncomeTotal().summedMonths(),
+				budgetOverview.monthlyIncomeTotal().summedMonths(),
 				List.of(TransactionCategory.INCOME)
 				));
 		
 		Stream<DisplaySummedTransactionCategory> expenseTotal = Stream.of(
 				new DisplaySummedTransactionCategory(
 						"Expense Total",
-				historicalOverview.monthlyExpensesTotal(),
+				budgetOverview.monthlyExpensesTotal(),
 				Arrays.asList(TransactionCategory.values())
 					.stream()
 					.filter(tc->!tc.equals(TransactionCategory.INCOME))
@@ -121,11 +121,20 @@ public class BudgeterView extends VerticalLayout implements AfterNavigationObser
 		Stream<DisplaySummedTransactionCategory> netTotal = Stream.of(
 				new DisplaySummedTransactionCategory(
 						"Net flow",
-				historicalOverview.netFlow(),
+				budgetOverview.netFlow(),
 				Arrays.asList(TransactionCategory.values()))
 				);
 		
-		Stream<DisplaySummedTransactionCategory> items = historicalOverview.summedTransactionsByCategory().stream()
+		Stream<DisplaySummedTransactionCategory> amortized = Stream.of(
+				new DisplaySummedTransactionCategory(
+						"Amortized Expense",
+				null,
+				//budgetOverview.sortAmortizedExpenses(),
+				Arrays.asList(TransactionCategory.values()))
+				);
+		
+		
+		Stream<DisplaySummedTransactionCategory> items = budgetOverview.summedTransactionsByCategory().stream()
 			.map(st-> new DisplaySummedTransactionCategory(
 					st.category().name(), 
 					st.summedMonths(),
@@ -134,7 +143,7 @@ public class BudgeterView extends VerticalLayout implements AfterNavigationObser
 			.sorted((a,b) -> a.rowName().compareTo(b.rowName()));
 			
 		
-		List<DisplaySummedTransactionCategory> combined = List.of(incomeTotal, expenseTotal, netTotal, items)
+		List<DisplaySummedTransactionCategory> combined = List.of(incomeTotal, expenseTotal, netTotal, amortized, items)
 				.stream()
 				.flatMap(s->s)
 				.toList();

@@ -35,12 +35,9 @@ public class BudgetOverviewTest {
 		
 		BudgetOverview bo = BudgetOverview.calculate(tc.transactions());
 		
-		Double amount = bo.amortizedExpense()
-			.stream()
-			.filter(ae->ae.applicableMonth().equals(TestData.yearMonthOfStartingDate))
-			.findAny()
-			.get()
-			.amortizedValue();
+		double amount = bo.netAmortizedExpenses()
+			.get(TestData.yearMonthOfStartingDate)
+			.amount();
 		
 		assertThat(amount)
 			.isEqualTo(10.0);
