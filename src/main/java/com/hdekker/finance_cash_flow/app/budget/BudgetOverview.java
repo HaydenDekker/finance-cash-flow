@@ -33,6 +33,13 @@ public record BudgetOverview (
 			return items.stream()
 				.collect(Collectors.summingDouble(AmortizedExpense::amortizedValue));
 		}
+		
+		public Double credits() {
+			return items.stream()
+					.filter(ae->ae.amortizedValue()>0)
+					.map(ae->ae.amortizedValue())
+					.collect(Collectors.summingDouble(d->d));
+		}
 	}
 	
 	public Map<YearMonth, AmortizedExpenseGroup> netAmortizedExpenses(){
@@ -48,6 +55,64 @@ public record BudgetOverview (
 				);
 		
 		return byYearMonth;
+		
+	}
+	
+	private Map<TransactionCategory, 
+		Map<YearMonth, AmortizedExpenseGroup>> amortizedExpenses(){
+		
+		return amortizedExpense.stream()
+			.collect(
+				Collectors.groupingBy(ae->ae.categorisedTransaction().category(),
+					Collectors.groupingBy(ae->ae.applicableMonth(),
+							Collectors.collectingAndThen(
+			                        Collectors.toList(),
+			                        list -> new AmortizedExpenseGroup(list)
+			                    )
+					)
+				));
+		
+	}
+	
+	
+	public Map<TransactionCategory,
+			Map<YearMonth, MonthlyExpenseSummary>> monthlyExpenseSummary(){
+		
+		 Map<YearMonth, AmortizedExpenseGroup> netA = netAmortizedExpenses();
+		 
+		List<CategorisedTransaction> allTransactions = summedTransactionsByCategory.stream()
+			.flatMap(d-> d.categorisedTransactions().stream())
+			.toList();
+		
+		Map<TransactionCategory, Map<YearMonth, List<CategorisedTransaction>>> groupedData = allTransactions.stream()
+			    .collect(Collectors.groupingBy(
+			        CategorisedTransaction::category,
+			        Collectors.groupingBy(CategorisedTransaction::getTransactionYearMonth)
+			    ));
+		
+		return allTransactions.stream()
+	            .collect(Collectors.groupingBy(
+	                CategorisedTransaction::category, // Outer Map Key
+	                Collectors.groupingBy(
+	                    CategorisedTransaction::getTransactionYearMonth, // Inner Map Key
+	                    Collectors.collectingAndThen(
+	                        Collectors.toList(), 
+	                        transactions -> {
+	                            // Logic to build the summary for this specific Category + Month
+	                            YearMonth month = transactions.get(0).getTransactionYearMonth();
+	                            AmortizedExpenseGroup group = netA.getOrDefault(
+	                            		month, 
+	                            		new AmortizedExpenseGroup(List.of())
+	                            	);
+
+	                            return new MonthlyExpenseSummary(
+	                                    group,
+	                                    transactions
+	                                );
+	                        }
+	                    )
+	                )
+	            ));
 		
 	}
 	
@@ -71,14 +136,20 @@ public record BudgetOverview (
 			.filter(ct-> ct.financialFrequency().equals(FinancialFrequency.ANNUALLY))
 			.flatMap(ct-> {
 			
+					Double amortizedCredit = ct.transaction().amount() *-1;
 					Double amortizedValue = ct.transaction().amount() / 12;
 			
-					return Stream.iterate(
+					Stream<AmortizedExpense> amortizedExpenseStream = Stream.iterate(
 							ct.transaction().localDate(), (d)-> d.plusMonths(1))
 							.limit(12)
 							.map(ld-> YearMonth.from(ld))
 							.map(ym-> new AmortizedExpense(ct, ym, amortizedValue));
-							
+					
+					Stream<AmortizedExpense> amortizedCreditStream = Stream.of(
+							new AmortizedExpense(ct, ct.getTransactionYearMonth(), amortizedCredit));
+					
+					return Stream.concat(amortizedCreditStream, amortizedExpenseStream);
+			
 			})
 			.toList();
 					

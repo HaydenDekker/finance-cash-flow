@@ -38,17 +38,17 @@ public class TestData {
     public static List<Transaction> testTransactions(){
     	return List.of(
     		new Transaction(startingDate, 300.0, "Income"),
-    		new Transaction(startingDate.plusDays(1), 3.0, "Groceries"),
-    		new Transaction(startingDate.plusMonths(1), 6.0, "Fuel"),
-    		new Transaction(startingDate.plusMonths(2), 11.0, "Fuel"),
-    		new Transaction(startingDate.plusMonths(3), 18.0, "Groceries"),
-    		new Transaction(startingDate.plusMonths(3), 30.0, "Groceries"),
-    		new Transaction(startingDate.plusMonths(4), 27.0, "Rego"),
-    		new Transaction(startingDate.plusMonths(5), 38.0, "Groceries"),
-    		new Transaction(startingDate.plusMonths(6), 51.0, "Fuel"),
-    		new Transaction(startingDate.plusMonths(7), 66.0, "Groceries"),
-    		new Transaction(startingDate.plusMonths(8), 83.0, "Fuel"),
-    		new Transaction(startingDate.plusMonths(9), 102.0, "Rego")
+    		new Transaction(startingDate.plusDays(1), -3.0, "Groceries"),
+    		new Transaction(startingDate.plusMonths(1), -6.0, "Fuel"),
+    		new Transaction(startingDate.plusMonths(2), -11.0, "Fuel"),
+    		new Transaction(startingDate.plusMonths(3), -18.0, "Groceries"),
+    		new Transaction(startingDate.plusMonths(3), -30.0, "Groceries"),
+    		new Transaction(startingDate.plusMonths(4), -27.0, "Rego"),
+    		new Transaction(startingDate.plusMonths(5), -38.0, "Groceries"),
+    		new Transaction(startingDate.plusMonths(6), -51.0, "Fuel"),
+    		new Transaction(startingDate.plusMonths(7), -66.0, "Groceries"),
+    		new Transaction(startingDate.plusMonths(8), -83.0, "Fuel"),
+    		new Transaction(startingDate.plusMonths(9), -102.0, "Rego")
     	);
     }
     
@@ -113,13 +113,45 @@ public class TestData {
 		
 		return new TestCase(List.of(
 				new CategorisedTransaction(
-						new Transaction(startingDate, 120, "Annual expense stub"), 
+						new Transaction(startingDate, -120, "Annual expense stub"), 
 						"House Insurance", 
 						TransactionCategory.HOUSING, 
 						Necessity.REQUIRED, 
 						new ForecastGroup("House Insurance"), 
 						FinancialFrequency.ANNUALLY, 
 						ExpenseType.KNOWN_VARIABLE)));
+		
+	}
+	
+	public static TestCase mixedFrequencyExpensesForSingleMonth() {
+		
+		return new TestCase(List.of(
+				new CategorisedTransaction(
+						new Transaction(startingDate, -120, "Annual expense stub"), 
+						"House Insurance", 
+						TransactionCategory.HOUSING, 
+						Necessity.REQUIRED, 
+						new ForecastGroup("House Insurance"), 
+						FinancialFrequency.ANNUALLY, 
+						ExpenseType.KNOWN_VARIABLE),
+				new CategorisedTransaction(
+						new Transaction(startingDate, -25, "Addhoc expense"), 
+						"Bedding", 
+						TransactionCategory.HOUSING, 
+						Necessity.REQUIRED, 
+						new ForecastGroup("House Insurance"), 
+						FinancialFrequency.AD_HOC, 
+						ExpenseType.VARIABLE),
+				new CategorisedTransaction(
+						new Transaction(startingDate, -56, "Addhoc expense 2"), 
+						"Party Supplies", 
+						TransactionCategory.ENTERTAINMENT, 
+						Necessity.REQUIRED, 
+						new ForecastGroup("Party"), 
+						FinancialFrequency.AD_HOC, 
+						ExpenseType.VARIABLE)
+				)
+				);
 		
 	}
 

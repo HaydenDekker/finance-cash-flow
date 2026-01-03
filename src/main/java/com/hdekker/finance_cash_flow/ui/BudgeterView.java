@@ -18,6 +18,7 @@ import com.hdekker.finance_cash_flow.TransactionCategory;
 import com.hdekker.finance_cash_flow.app.actual.HistoricalSummer.SummedTransactions;
 import com.hdekker.finance_cash_flow.app.budget.BudgetOverview;
 import com.hdekker.finance_cash_flow.app.budget.HasAmount;
+import com.hdekker.finance_cash_flow.app.budget.MonthlyExpenseSummary;
 import com.hdekker.finance_cash_flow.category.CategoryRestAdapter;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.grid.ColumnTextAlign;
@@ -74,12 +75,15 @@ public class BudgeterView extends VerticalLayout implements AfterNavigationObser
 		
 	}
 	
-	private String formatDouble(HasAmount hasAmount) {
-		
-		return String.format("%.2f", 
-				Optional.ofNullable(hasAmount)
-						.map(st->st.amount())
-						.orElse(0.0));
+	private String tryFormat(HasAmount hasAmount) {
+		return Optional.ofNullable(hasAmount)
+				.map(st->st.amount())
+				.map(d->formatDouble(d))
+				.orElse("0.0");
+	}
+	
+	private String formatDouble(Double value) {
+		return String.format("%.2f", value);	
 	}
 
 	@Override
@@ -114,7 +118,7 @@ public class BudgeterView extends VerticalLayout implements AfterNavigationObser
 		Stream<TransactionSummaryDisplay> incomeTotal = Stream.of(
 				new TransactionSummaryDisplay(
 						"Income Total",
-				(ym)-> formatDouble(
+				(ym)-> tryFormat(
 						budgetOverview.monthlyIncomeTotal()
 							.summedMonths()
 							.get(ym)
@@ -125,7 +129,7 @@ public class BudgeterView extends VerticalLayout implements AfterNavigationObser
 		Stream<TransactionSummaryDisplay> expenseTotal = Stream.of(
 				new TransactionSummaryDisplay(
 						"Expense Total",
-				(ym)-> formatDouble(
+				(ym)-> tryFormat(
 						budgetOverview.monthlyExpensesTotal()
 							.get(ym)),
 				Arrays.asList(TransactionCategory.values())
@@ -137,7 +141,7 @@ public class BudgeterView extends VerticalLayout implements AfterNavigationObser
 		Stream<TransactionSummaryDisplay> netTotal = Stream.of(
 				new TransactionSummaryDisplay(
 						"Net flow",
-				(ym)-> formatDouble(
+				(ym)-> tryFormat(
 						budgetOverview.netFlow().get(ym)
 					),
 				Arrays.asList(TransactionCategory.values()))
@@ -148,14 +152,23 @@ public class BudgeterView extends VerticalLayout implements AfterNavigationObser
 		Stream<TransactionSummaryDisplay> amortized = Stream.of(
 				new TransactionSummaryDisplay(
 						"Amortized Expense",
-				(ym) -> formatDouble(amortizedExpenses.get(ym)),
+				(ym) -> tryFormat(amortizedExpenses.get(ym)),
 				Arrays.asList(TransactionCategory.values()))
 				);
+		
+		Map<TransactionCategory,
+			Map<YearMonth, MonthlyExpenseSummary>> monthlyExpenseSummary = budgetOverview.monthlyExpenseSummary();
+	
 	
 		Stream<TransactionSummaryDisplay> items = budgetOverview.summedTransactionsByCategory().stream()
 			.map(st-> new TransactionSummaryDisplay(
 					st.category().name(), 
-					(ym)-> formatDouble(st.summedMonths().get(ym)) + "/" + "yes",
+					(ym)-> {
+						Map<YearMonth, MonthlyExpenseSummary> data = monthlyExpenseSummary.get(st.category());
+						MonthlyExpenseSummary summary = data.get(ym);
+						if(summary==null) return "0.0";
+						return formatDouble(summary.netRealisedExpense()) + "/" + formatDouble(summary.netAmortizedCredit());
+					},
 					List.of(st.category())
 					))
 			.sorted((a,b) -> a.rowName().compareTo(b.rowName()));
