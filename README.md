@@ -36,14 +36,14 @@ Initial tests for the `historical summary` feature:
 - (done) Display total monthly income
 - (complete) Display monthly net position
 - (complete) View - Historical summary - Initially a table will do. Stacked Bar chart for individual categories, line chart for total expense.
+- (complete) show annual/multi-month expense's monthly allocation in actual expenses, i.e an annual rego payment, divide by number of months based on the forecast method... helping us understand that a large payment in the month was already accounted for by previous months. Each category should include the amortized value by taking the total monthly expense, - any annual expense + the amortised expense. This shows the total known/required expense for the month.
 
 Tests for `forecasts`
 -  (completed) Can assign categorised transactions to a forecast group.
 -  (completed) Can detect latest expense in a group, can carry that forward by month.
 -  (complete) If no forecast group is assigned, use method variable for entire category group and assign the category as the group name. This ensures forcasts will still be relevant by group.
 -  (complete) Collect all like forecast groups and sum by month before calculating a forecast. (i.e may have Phone group and two phones each month, 1 $60 and other $80, equaling $140 for that group per month for the forecast)
--  (complete) If forecast group is assigned, use method provided.
-- show annual/multi-month expense's monthly allocation in actual expenses, i.e an annual rego payment, divide by number of months based on the forecast method... understand that last months net didn't factor in x,y,z annualised payments. Amortized payments. Each category should include the amortized value by taking the total monthly expense, - any annual expense + the amortised expense. This shows the total known/required expense for the month. 
+-  (complete) If forecast group is assigned, use method provided. 
 - A second category value should show the total annual monthly expense component for the month. This way you can see a big payment occurred, but know it was accounted for in the amortised value.
 - the total expense for the month should exclude amortised components.
 - the amortised expense for the month should include the annual offset and amortised component against the total expense.
@@ -55,7 +55,9 @@ Test for UI review
 
 Test for Autocompletion
 - (complete) expect button copies to clipboard, prompt to extract payee search keywords.
- 
+- On upload of new transactions, use existing search keywords to match transactions.
+- On Click of Auto Categorise, If transactions are keyword matched, auto apply the category based on the previous category if the following are true, the categories all match, only a single forecast group is assigned.
+
 
 ## Future Goals
 - Use a grouping attribute to collect or differentiate like expenses. e.g All SE W payee's can be South East Water group. When searching by group all expenses can be displayed.

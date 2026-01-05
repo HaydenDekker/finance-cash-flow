@@ -50,5 +50,9 @@ public record CategorisedTransaction(
 	    return YearMonth.from(this.transaction().localDate()); 
 	}
 	
+	public boolean hasTransactionKeyword() {
+		return transactionDescriptionSearchKeyword() == null || transactionDescriptionSearchKeyword().equals("");
+	}
+	
 	
 }

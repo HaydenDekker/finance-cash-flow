@@ -187,7 +187,11 @@ public class TransactionClassifier extends VerticalLayout implements AfterNaviga
 				            .collect(Collectors.toMap(
 				                keyword -> keyword, // Key: The string from the first list
 				                keyword -> items.stream()
-				                    .filter(item -> item.transaction().description().contains(keyword.bestSearchTerm()))
+				                    .filter(item -> item.transaction()
+				                    		.descriptionContainsAllKeywords(
+				                    				Arrays.asList(keyword.bestSearchTerm().split(" "))
+				                    		)
+				                    )
 				                    .collect(Collectors.toList())
 				            ));
 				
@@ -215,6 +219,7 @@ public class TransactionClassifier extends VerticalLayout implements AfterNaviga
 			getAutoSearchTermPrompt.addClickListener(event -> {
 				
 				Map<String, List<CategorisedTransaction>> descMap = items.stream()
+					.filter(CategorisedTransaction::hasTransactionKeyword)
 					.collect(Collectors.groupingBy(t->t.transaction().description()));
 				
 				log.info("" + descMap.size() + " unique descriptions from " + items.size() + " transactions");
@@ -227,7 +232,7 @@ public class TransactionClassifier extends VerticalLayout implements AfterNaviga
 			        "navigator.clipboard.writeText($0)", AutoCompletePromptTemplate.appendItems(descriptions)
 			    );
 			    
-			    Notification.show("Copied to clipboard!");
+			    Notification.show("Copied " + descMap.size() + "items to clipboard!");
 			    
 			    searchPromptDialog.open();
 			    
@@ -278,7 +283,8 @@ public class TransactionClassifier extends VerticalLayout implements AfterNaviga
 			
 			categorisedTransaction.addColumn(ct->{
 				return ct.transactionDescriptionSearchKeyword();
-			}).setHeader("Search Keyword");
+			}).setHeader("Search Keyword")
+			.setSortable(true);
 			
 			categorisedTransaction.addColumn(ct->{
 				if(ct.category()==null) return "";

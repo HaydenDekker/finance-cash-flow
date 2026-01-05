@@ -1,6 +1,7 @@
 package com.hdekker.finance_cash_flow.app.budget;
 
 import java.time.YearMonth;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -59,7 +60,7 @@ public record BudgetOverview (
 	}
 	
 	private Map<TransactionCategory, 
-		Map<YearMonth, AmortizedExpenseGroup>> amortizedExpenses(){
+		Map<YearMonth, AmortizedExpenseGroup>> amortisedExpenses(){
 		
 		return amortizedExpense.stream()
 			.collect(
@@ -74,11 +75,8 @@ public record BudgetOverview (
 		
 	}
 	
-	
 	public Map<TransactionCategory,
 			Map<YearMonth, MonthlyExpenseSummary>> monthlyExpenseSummary(){
-		
-		 Map<YearMonth, AmortizedExpenseGroup> netA = netAmortizedExpenses();
 		 
 		List<CategorisedTransaction> allTransactions = summedTransactionsByCategory.stream()
 			.flatMap(d-> d.categorisedTransactions().stream())
@@ -97,24 +95,31 @@ public record BudgetOverview (
 	                    CategorisedTransaction::getTransactionYearMonth, // Inner Map Key
 	                    Collectors.collectingAndThen(
 	                        Collectors.toList(), 
-	                        transactions -> {
-	                            // Logic to build the summary for this specific Category + Month
-	                            YearMonth month = transactions.get(0).getTransactionYearMonth();
-	                            AmortizedExpenseGroup group = netA.getOrDefault(
-	                            		month, 
-	                            		new AmortizedExpenseGroup(List.of())
-	                            	);
-
-	                            return new MonthlyExpenseSummary(
-	                                    group,
-	                                    transactions
-	                                );
-	                        }
+	                        this::buildMonthlyExpenseSummary
 	                    )
 	                )
 	            ));
 		
 	}
+	
+	private MonthlyExpenseSummary buildMonthlyExpenseSummary(
+            List<CategorisedTransaction> transactions) {
+    	
+    	if(transactions.size()==0) return new MonthlyExpenseSummary(null, List.of());
+    	
+    	TransactionCategory category = transactions.get(0).category();
+    	YearMonth month = transactions.get(0).getTransactionYearMonth();
+
+        //   • `amortisedMap` already contains:  Category → Month → AmortizedExpenseGroup
+        Map<YearMonth, AmortizedExpenseGroup> monthMapForThisCategory =
+        		amortisedExpenses().getOrDefault(category, Collections.emptyMap());
+
+        AmortizedExpenseGroup group = monthMapForThisCategory
+                .getOrDefault(month, new AmortizedExpenseGroup(List.of()));
+
+        return new MonthlyExpenseSummary(group, transactions);
+    }
+    
 	
 	public Set<YearMonth> yearMonths(){
 		
