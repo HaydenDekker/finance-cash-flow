@@ -154,6 +154,126 @@ public class TestData {
 				);
 		
 	}
+	
+	public static TestCase repeatedTransactionSingleProivderAllComplete() {
+		
+		return new TestCase(List.of(
+				new CategorisedTransaction(
+						new Transaction(startingDate, -120, "Annual expense stub"), 
+						"Expensive Supermarket", 
+						TransactionCategory.FOOD_GROCERIES, 
+						Necessity.REQUIRED, 
+						new ForecastGroup("Food"), 
+						FinancialFrequency.AD_HOC, 
+						ExpenseType.VARIABLE),
+				new CategorisedTransaction(
+						new Transaction(startingDate.plusMonths(1), -25, "Addhoc expense"), 
+						"Expensive Supermarket", 
+						TransactionCategory.FOOD_GROCERIES, 
+						Necessity.REQUIRED, 
+						new ForecastGroup("Food"), 
+						FinancialFrequency.AD_HOC, 
+						ExpenseType.VARIABLE)
+				)
+				);
+		
+	}
+
+	public static TestCase repeatedTransactionSingleProivder() {
+		
+		return new TestCase(List.of(
+				new CategorisedTransaction(
+						new Transaction(startingDate.plusMonths(2), -56, "Addhoc expense 2"), 
+						"Expensive Supermarket", 
+						null, 
+						null, 
+						null, 
+						null, 
+						null),
+				new CategorisedTransaction(
+						new Transaction(startingDate, -120, "Annual expense stub"), 
+						"Expensive Supermarket", 
+						TransactionCategory.FOOD_GROCERIES, 
+						Necessity.REQUIRED, 
+						new ForecastGroup("Food"), 
+						FinancialFrequency.AD_HOC, 
+						ExpenseType.VARIABLE),
+				new CategorisedTransaction(
+						new Transaction(startingDate.plusMonths(1), -25, "Addhoc expense"), 
+						"Expensive Supermarket", 
+						TransactionCategory.FOOD_GROCERIES, 
+						Necessity.REQUIRED, 
+						new ForecastGroup("Food"), 
+						FinancialFrequency.AD_HOC, 
+						ExpenseType.VARIABLE)
+				)
+				);
+		
+	}
+	
+public static TestCase repeatedTransactionSingleProivderWithMultipleForcastGroup() {
+		
+		return new TestCase(List.of(
+				new CategorisedTransaction(
+						new Transaction(startingDate, -120, "Annual expense stub"), 
+						"Expensive Supermarket", 
+						TransactionCategory.FOOD_GROCERIES, 
+						Necessity.REQUIRED, 
+						new ForecastGroup("Takeout"), 
+						FinancialFrequency.AD_HOC, 
+						ExpenseType.VARIABLE),
+				new CategorisedTransaction(
+						new Transaction(startingDate.plusMonths(1), -25, "Addhoc expense"), 
+						"Expensive Supermarket", 
+						TransactionCategory.FOOD_GROCERIES, 
+						Necessity.REQUIRED, 
+						new ForecastGroup("Food"), 
+						FinancialFrequency.AD_HOC, 
+						ExpenseType.VARIABLE),
+				new CategorisedTransaction(
+						new Transaction(startingDate.plusMonths(2), -56, "Addhoc expense 2"), 
+						"Expensive Supermarket", 
+						null, 
+						null, 
+						null, 
+						null, 
+						null)
+				)
+				);
+		
+	}
+
+public static TestCase repeatedTransactionSingleProivderNoCategorisations() {
+	
+	return new TestCase(List.of(
+			new CategorisedTransaction(
+					new Transaction(startingDate, -120, "Annual expense stub"), 
+					"Expensive Supermarket", 
+					null, 
+					null, 
+					null, 
+					null, 
+					null),
+			new CategorisedTransaction(
+					new Transaction(startingDate.plusMonths(1), -25, "Addhoc expense"), 
+					"Expensive Supermarket", 
+					null, 
+					null, 
+					new ForecastGroup(""), 
+					null, 
+					null),
+			new CategorisedTransaction(
+					new Transaction(startingDate.plusMonths(2), -56, "Addhoc expense 2"), 
+					"Expensive Supermarket", 
+					null, 
+					null, 
+					null, 
+					null, 
+					null)
+			)
+			);
+	
+}
 
 
 }

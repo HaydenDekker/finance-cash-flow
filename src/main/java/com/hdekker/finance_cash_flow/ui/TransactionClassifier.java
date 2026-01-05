@@ -240,6 +240,14 @@ public class TransactionClassifier extends VerticalLayout implements AfterNaviga
 			
 			controls.add(getAutoSearchTermPrompt);
 			
+			Button autoCategoriseButton = new Button("Auto Categorise");
+			controls.add(autoCategoriseButton);
+			
+			autoCategoriseButton.addClickListener(e->{
+				items = categoryRestAdapter.autoCategorise();
+				categorisedTransaction.setItems(items);
+			});
+			
 			CategorisedTransactionPropertyDisplay div = new CategorisedTransactionPropertyDisplay();
 			add(div);
 		
