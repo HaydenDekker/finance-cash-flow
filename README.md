@@ -38,6 +38,7 @@ Initial tests for the `historical summary` feature:
 - (complete) View - Historical summary - Initially a table will do. Stacked Bar chart for individual categories, line chart for total expense.
 - (complete) show annual/multi-month expense's monthly allocation in actual expenses, i.e an annual rego payment, divide by number of months based on the forecast method... helping us understand that a large payment in the month was already accounted for by previous months. Each category should include the amortized value by taking the total monthly expense, - any annual expense + the amortised expense. This shows the total known/required expense for the month.
 - (complete) show how many transactions are yet to be classified.
+- display discretionary total spend for each month.
 
 Tests for `forecasts`
 -  (completed) Can assign categorised transactions to a forecast group.
@@ -58,7 +59,7 @@ Test for Autocompletion
 - (complete) expect button copies to clipboard, prompt to extract payee search keywords.
 - On upload of new transactions, use existing search keywords to match transactions.
 - (complete) On Click of Auto Categorise, If transactions are keyword matched, auto apply the category based on the previous category if the following are true, the categories all match, only a single forecast group is assigned.
-- On llm categorise copies all uncategorised transactions to prompt requesting the categories are populated by the llm.
+- (complete) On llm categorise copies all uncategorised transactions to prompt requesting the categories are populated by the llm.
 
 
 ## Future Goals
@@ -66,3 +67,4 @@ Test for Autocompletion
 - Enhanced LLM-powered expense categorization
 - Existing transaction check before replacing existing transaction.
 - Some expenseses, domain names, are multi yearly.
+- How to easily break down a category or change name...

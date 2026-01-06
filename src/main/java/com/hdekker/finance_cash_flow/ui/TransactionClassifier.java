@@ -29,6 +29,7 @@ import com.hdekker.finance_cash_flow.CategorisedTransaction.ForecastGroup;
 import com.hdekker.finance_cash_flow.CategorisedTransaction.Necessity;
 import com.hdekker.finance_cash_flow.app.actual.AutoCompletePromptTemplate;
 import com.hdekker.finance_cash_flow.app.actual.AutoCompletePromptTemplate.SearchKeyword;
+import com.hdekker.finance_cash_flow.app.category.AutoCategorisePromptTemplate;
 import com.hdekker.finance_cash_flow.TransactionCategory;
 import com.hdekker.finance_cash_flow.category.CategoryRestAdapter;
 import com.vaadin.flow.component.button.Button;
@@ -154,6 +155,54 @@ public class TransactionClassifier extends VerticalLayout implements AfterNaviga
 		
 		NativeLabel classifiedTransactionCount = new NativeLabel();
 		
+		public void configureLLMCategorisationComponent(Button llmCategoriseButton) {
+			
+			Dialog searchPromptDialog = new Dialog("categorise llm response");
+			searchPromptDialog.setHeaderTitle("Paste llm response here.");
+			searchPromptDialog.setWidth("90%");
+			searchPromptDialog.setHeight("80%");
+			
+			TextArea textArea = new TextArea("prompt response input");
+			searchPromptDialog.add(textArea);
+			textArea.setWidth("100%");
+			textArea.setHeightFull();
+			
+			llmCategoriseButton.addClickListener(e->{
+				
+				List<CategorisedTransaction> incomplete = items.stream()
+					.filter(ct->!ct.isComplete())
+					.collect(Collectors.groupingBy(CategorisedTransaction::transactionDescriptionSearchKeyword))
+					// remove duplicates
+					.entrySet().stream()
+					.map(es->es.getValue().get(0))
+					.toList();
+				
+				String string = AutoCategorisePromptTemplate.prompt(incomplete);
+				
+				llmCategoriseButton.getElement().executeJs(
+				        "navigator.clipboard.writeText($0)", string
+				    );
+				
+				searchPromptDialog.open();
+				
+			});
+			
+			textArea.addValueChangeListener(vc->{
+				
+				List<CategorisedTransaction> categorisedTransactions =  AutoCategorisePromptTemplate.parseLLMResponse(items, vc.getValue());
+				
+				log.info("" + categorisedTransactions.size() + " items found and categorised.");
+				
+				categorisedTransactions.forEach(ct->categoryRestAdapter.set(ct));
+				
+				refreshItems(Duration.ofSeconds(1));
+				
+			});
+			
+			
+			
+		}
+		
 		public TransactionClassifier() {
 			
 			add(new H2("Transaction Classifier"), classifiedTransactionCount);
@@ -242,6 +291,7 @@ public class TransactionClassifier extends VerticalLayout implements AfterNaviga
 			
 			controls.add(getAutoSearchTermPrompt);
 			
+
 			Button autoCategoriseButton = new Button("Auto Categorise");
 			controls.add(autoCategoriseButton);
 			
@@ -249,6 +299,12 @@ public class TransactionClassifier extends VerticalLayout implements AfterNaviga
 				items = categoryRestAdapter.autoCategorise();
 				categorisedTransaction.setItems(items);
 			});
+			
+			Button llmCategoriseButton = new Button("LLM categorisation");
+			controls.add(llmCategoriseButton);
+			
+			configureLLMCategorisationComponent(llmCategoriseButton);
+			
 			
 			CategorisedTransactionPropertyDisplay div = new CategorisedTransactionPropertyDisplay();
 			add(div);
@@ -400,7 +456,7 @@ public class TransactionClassifier extends VerticalLayout implements AfterNaviga
 					.filter(ct->!ct.isComplete())
 					.count();
 			
-			classifiedTransactionCount.setText("" + uncategorisedCount + " uncategorised transactions.");
+			classifiedTransactionCount.setText("" + items.size() + " transactions, " + uncategorisedCount + " uncategorised transactions.");
 			
 			if(date.isPresent()&&category.size()>0) {
 				

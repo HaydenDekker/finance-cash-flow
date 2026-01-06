@@ -11,6 +11,11 @@ public record MonthlyExpenseSummary(
 		List<CategorisedTransaction> categorisedTransactions
 		) {
 	
+	public Double netMonthlyExpense() {
+		return categorisedTransactions.stream()
+				.collect(
+					Collectors.summingDouble(ct->ct.transaction().amount()));
+	}
 	public Double netRealisedExpense() {
 		return categorisedTransactions.stream()
 				.collect(

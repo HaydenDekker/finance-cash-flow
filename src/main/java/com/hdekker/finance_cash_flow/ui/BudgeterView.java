@@ -167,7 +167,9 @@ public class BudgeterView extends VerticalLayout implements AfterNavigationObser
 						Map<YearMonth, MonthlyExpenseSummary> data = monthlyExpenseSummary.get(st.category());
 						MonthlyExpenseSummary summary = data.get(ym);
 						if(summary==null) return "0.0";
-						return formatDouble(summary.netRealisedExpense()) + "/" + formatDouble(summary.netAmortizedCredit());
+						return formatDouble(summary.netMonthlyExpense()) + 
+								"/" + 
+								formatDouble(summary.netAmortizedCredit());
 					},
 					List.of(st.category())
 					))

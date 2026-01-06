@@ -33,8 +33,12 @@ public class MonthlyExpenseSummaryTest {
 				FinancialFrequency.AD_HOC,
 				ExpenseType.VARIABLE
 				);
+		
 		MonthlyExpenseSummary s = new MonthlyExpenseSummary(g, List.of(ct));
 		
+		assertThat(s.netMonthlyExpense())
+			.isEqualTo(20.0);
+			
 		assertThat(s.netAmortizedCredit())
 			.isEqualTo(10.0);
 		
