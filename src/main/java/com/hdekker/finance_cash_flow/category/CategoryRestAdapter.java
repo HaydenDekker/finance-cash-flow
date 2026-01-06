@@ -89,6 +89,8 @@ public class CategoryRestAdapter {
 			.flatMap(lct-> AutoCategoriser.categorise(lct).stream())
 			.toList();
 		
+		autoCategorised.forEach(ct->set(ct));
+		
 		return autoCategorised;
 		
 	}

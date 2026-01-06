@@ -53,6 +53,13 @@ public record CategorisedTransaction(
 	public boolean hasTransactionKeyword() {
 		return transactionDescriptionSearchKeyword() == null || transactionDescriptionSearchKeyword().equals("");
 	}
+
+	public boolean isComplete() {
+		return category()!=null && 
+				necessity() != null && 
+				financialFrequency() != null &&
+				expenseType() != null;
+	}
 	
 	
 }

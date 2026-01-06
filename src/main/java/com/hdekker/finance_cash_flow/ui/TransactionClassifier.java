@@ -152,9 +152,11 @@ public class TransactionClassifier extends VerticalLayout implements AfterNaviga
 			
 		}
 		
+		NativeLabel classifiedTransactionCount = new NativeLabel();
+		
 		public TransactionClassifier() {
 			
-			add(new H2("Transaction Classifier"));
+			add(new H2("Transaction Classifier"), classifiedTransactionCount);
 			
 			HorizontalLayout controls = new HorizontalLayout();
 			transactionFilter = new TextField("Transaction filter");
@@ -387,9 +389,18 @@ public class TransactionClassifier extends VerticalLayout implements AfterNaviga
 		void setTransactions(boolean scrollToFirstWithoutAllocation) {
 			
 			List<CategorisedTransaction> list = categoryRestAdapter.list();
+			
+			// TODO move into application so that a CategorisedTransaction is initialised for each transaction
+			// remove method.
 			List<CategorisedTransaction> withoutAllocation = categoryRestAdapter.listIncomplete();
 			
 			items = Stream.concat(list.stream(), withoutAllocation.stream()).toList();
+			
+			Long uncategorisedCount = items.stream()
+					.filter(ct->!ct.isComplete())
+					.count();
+			
+			classifiedTransactionCount.setText("" + uncategorisedCount + " uncategorised transactions.");
 			
 			if(date.isPresent()&&category.size()>0) {
 				

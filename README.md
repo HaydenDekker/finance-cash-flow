@@ -37,6 +37,7 @@ Initial tests for the `historical summary` feature:
 - (complete) Display monthly net position
 - (complete) View - Historical summary - Initially a table will do. Stacked Bar chart for individual categories, line chart for total expense.
 - (complete) show annual/multi-month expense's monthly allocation in actual expenses, i.e an annual rego payment, divide by number of months based on the forecast method... helping us understand that a large payment in the month was already accounted for by previous months. Each category should include the amortized value by taking the total monthly expense, - any annual expense + the amortised expense. This shows the total known/required expense for the month.
+- (complete) show how many transactions are yet to be classified.
 
 Tests for `forecasts`
 -  (completed) Can assign categorised transactions to a forecast group.
@@ -56,10 +57,12 @@ Test for UI review
 Test for Autocompletion
 - (complete) expect button copies to clipboard, prompt to extract payee search keywords.
 - On upload of new transactions, use existing search keywords to match transactions.
-- On Click of Auto Categorise, If transactions are keyword matched, auto apply the category based on the previous category if the following are true, the categories all match, only a single forecast group is assigned.
+- (complete) On Click of Auto Categorise, If transactions are keyword matched, auto apply the category based on the previous category if the following are true, the categories all match, only a single forecast group is assigned.
+- On llm categorise copies all uncategorised transactions to prompt requesting the categories are populated by the llm.
 
 
 ## Future Goals
 - Use a grouping attribute to collect or differentiate like expenses. e.g All SE W payee's can be South East Water group. When searching by group all expenses can be displayed.
 - Enhanced LLM-powered expense categorization
 - Existing transaction check before replacing existing transaction.
+- Some expenseses, domain names, are multi yearly.

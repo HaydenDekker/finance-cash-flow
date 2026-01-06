@@ -87,7 +87,7 @@ public class TestData {
 		return 
 				new CategorisedTransaction(
 						transaction,
-						"",
+						transaction.description(),
 						categoryMap.get(transaction.description()), 
 						Necessity.DISCRETIONARY,
 						// just use description as group for test
@@ -210,6 +210,37 @@ public class TestData {
 				);
 		
 	}
+	
+public static TestCase repeatedTransactionSingleProivderEmptyForcastGroup() {
+		
+		return new TestCase(List.of(
+				new CategorisedTransaction(
+						new Transaction(startingDate.plusMonths(2), -56, "Addhoc expense 2"), 
+						"Expensive Supermarket", 
+						null, 
+						null, 
+						null, 
+						null, 
+						null),
+				new CategorisedTransaction(
+						new Transaction(startingDate, -120, "Annual expense stub"), 
+						"Expensive Supermarket", 
+						TransactionCategory.FOOD_GROCERIES, 
+						Necessity.REQUIRED, 
+						null, 
+						FinancialFrequency.AD_HOC, 
+						ExpenseType.VARIABLE),
+				new CategorisedTransaction(
+						new Transaction(startingDate.plusMonths(1), -25, "Addhoc expense"), 
+						"Expensive Supermarket", 
+						TransactionCategory.FOOD_GROCERIES, 
+						Necessity.REQUIRED, 
+						null, 
+						FinancialFrequency.AD_HOC, 
+						ExpenseType.VARIABLE)
+				)
+				);
+}
 	
 public static TestCase repeatedTransactionSingleProivderWithMultipleForcastGroup() {
 		
